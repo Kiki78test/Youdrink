@@ -6,7 +6,7 @@ if (!url) {
   console.error("DATABASE_URL manquant : impossible de démarrer.");
   process.exit(1);
 }
-const ssl = process.env.PGSSL === "1" ? { rejectUnauthorized: false } : undefined;
+const ssl = process.env.PGSSL === "1" || /render\.com|sslmode=require/.test(url) ? { rejectUnauthorized: false } : undefined;
 const pool = new Pool({ connectionString: url, ssl, max: 10 });
 
 const SCHEMA = `
@@ -65,8 +65,16 @@ CREATE TABLE IF NOT EXISTS trophies (
 `;
 
 async function migrate() {
-  await pool.query("CREATE EXTENSION IF NOT EXISTS pgcrypto");
-  await pool.query(SCHEMA);
+  // La base peut mettre un moment à accepter les connexions au premier déploiement.
+  for (let i = 1; ; i++) {
+    try { await pool.query("SELECT 1"); break; }
+    catch (e) {
+      console.error(`Base injoignable (essai ${i}) : ${e.message}`);
+      if (i >= 10) throw e;
+      await new Promise(r => setTimeout(r, 3000 * i));
+    }
+  }
+  await pool.query(SCHEMA); // gen_random_uuid() est natif depuis PostgreSQL 13
 }
 
 module.exports = { pool, migrate, q: (text, params) => pool.query(text, params) };
