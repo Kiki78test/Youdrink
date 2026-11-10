@@ -76,6 +76,14 @@ async function migrate() {
   }
   await pool.query(SCHEMA); // gen_random_uuid() est natif depuis PostgreSQL 13
   await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN NOT NULL DEFAULT false");
+  await pool.query("ALTER TABLE party_members ADD COLUMN IF NOT EXISTS meals_ok BOOLEAN NOT NULL DEFAULT false");
+  await pool.query(`CREATE TABLE IF NOT EXISTS meals (
+    id BIGSERIAL PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    t TIMESTAMPTZ NOT NULL,
+    kind TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now())`);
+  await pool.query("CREATE INDEX IF NOT EXISTS meals_user_t ON meals(user_id, t)");
 }
 
 module.exports = { pool, migrate, q: (text, params) => pool.query(text, params) };

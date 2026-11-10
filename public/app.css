@@ -112,3 +112,11 @@ body.isdemo{padding-bottom:200px}
 @media (max-width:380px){.drinks{grid-template-columns:repeat(3,1fr)}.bac{font-size:54px}}
 .doc{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--fg)}
 .doc:hover{border-color:var(--accent)}
+.meals1,.mq{display:flex;flex-direction:column;gap:10px}
+.meals1{border-color:color-mix(in srgb,var(--accent) 55%,transparent)}
+.mq{border-color:color-mix(in srgb,var(--care) 55%,transparent)}
+.mrow{display:grid;grid-template-columns:minmax(0,1fr) 88px minmax(0,1.5fr);gap:8px;align-items:center}
+.mrow.add{grid-template-columns:92px 1fr auto;margin-top:10px}
+.mrow input,.mrow select{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:9px 8px;color:var(--fg);font:inherit;font-size:14px;min-width:0;width:100%}
+.drinks.locked .drink:not(.water){opacity:.35;pointer-events:none}
+@media (max-width:380px){.mrow{grid-template-columns:1fr 1fr}.mrow b{grid-column:1/-1}.mrow.add{grid-template-columns:1fr 1fr}.mrow.add button{grid-column:1/-1}}

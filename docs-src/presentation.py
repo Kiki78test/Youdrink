@@ -75,7 +75,8 @@ S.append(slide(f"""<div class="cols"><div><div class="k">Démarrer</div><h2>Un c
 S.append(slide(f"""<div class="cols"><div><div class="k">L'écran Moi</div><h2>Son taux, son avatar, ses verres</h2>
 <ul><li>Taux estimé en grand, état coloré : sobre, pompette, interdit de conduire, au-dessus du plafond, alerte.</li>
 <li>Jauge avec les seuils 0,5, plafond et 1,2 g/L ; pic de la soirée et heure estimée du retour à 0.</li>
-<li>Huit boissons prêtes, un verre perso (volume et degré), « bu il y a 15 min à 1 h », option « j'ai mangé ».</li>
+<li>Huit boissons prêtes, un verre perso (volume et degré), « bu il y a 15 min à 1 h ».</li>
+<li>Repas du jour demandés avant le premier verre, ajout d'un repas à tout moment, question « avez-vous dîné ? » à l'heure des repas.</li>
 <li>Mes titres et l'historique de mes verres.</li></ul></div>
 <div class="phones">{img("demo-moi-1930")}{img("demo-moi-2235")}</div></div>"""))
 
@@ -118,7 +119,7 @@ S.append(slide("""<div class="k">Le calcul</div><h2>Formule de Widmark, eau corp
 <div class="formula">taux (g/L) = alcool absorbé (g) × 0,8 ÷ eau corporelle (L) − 0,15 g/L par heure</div>
 <div class="cards" style="grid-template-columns:repeat(3,1fr)">
 <div class="card"><b>Alcool d'un verre</b><span>volume × degré × 0,789 g/ml. Un verre standard contient 10 g d'alcool pur.</span></div>
-<div class="card"><b>Absorption</b><span>Progressive : 30 min à jeun, 75 min après un repas.</span></div>
+<div class="card"><b>Repas</b><span>À jeun : absorption en 30 min. Grignotage, repas léger, complet ou copieux : 45 à 90 min, et 5 à 20 % d'alcool en moins dans le sang.</span></div>
 <div class="card"><b>Eau corporelle</b><span>Selon le sexe, l'âge, la taille et le poids (formules de Watson).</span></div></div>
 <p class="muted" style="margin-top:5mm">L'écart avec un éthylotest peut dépasser 0,2 g/L. L'étape 3 ajoutera la saisie d'une mesure réelle et un recalibrage personnel.</p>"""))
 

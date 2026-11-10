@@ -29,15 +29,25 @@ ch("Noter ses verres", f"""<div class="split"><div>
 <tr><td>Cidre</td><td>25 cl</td><td>5 %</td></tr><tr><td>Eau</td><td>25 cl</td><td>0 %</td></tr></table>
 <p><b>Verre perso</b> : indiquez le volume en cl et le degré, puis « Ajouter ». Un degré de 0 compte comme une boisson sans alcool.</p>
 <p><b>Bu plus tôt</b> : « il y a 15 min », « 30 min » ou « 1 h » avant de toucher la boisson. Un verre peut être noté jusqu'à 3 h après coup.</p>
-<p><b>J'ai mangé</b> : l'alcool est absorbé plus lentement (75 min au lieu de 30), le pic est plus bas.</p>
 <p><b>Sam</b> : « Je suis Sam ce soir » limite vos boissons à l'eau et aux boissons sans alcool, et vous donne le titre « Sam de la soirée ». Impossible si vous avez déjà bu de l'alcool dans la soirée.</p>
 <p><b>Supprimer un verre</b> : la croix à droite, pendant 3 h. Chaque suppression apparaît dans le fil de la soirée.</p>
 </div>{shot("soiree-moi", "Écran Moi")}</div>""")
 
+ch("Les repas", f"""<div class="shots">{shot("repas-avant", "Avant le premier verre")}{shot("repas-liste", "Mes repas en cours de soirée")}<figure></figure></div><p>Un repas ralentit le passage de l'alcool dans le sang et baisse le pic : Youdrink tient compte de vos repas pour chaque verre bu de 30 minutes avant le repas jusqu'à la fin de son effet.</p>
+<table><tr><th>Type de repas</th><th>Exemples</th><th>Absorption</th><th>Effet pendant</th><th>Alcool qui passe</th></tr>
+<tr><td>À jeun</td><td>—</td><td>30 min</td><td>—</td><td>100 %</td></tr>
+<tr><td>Grignotage</td><td>apéritif, encas</td><td>45 min</td><td>1 h 30</td><td>95 %</td></tr>
+<tr><td>Repas léger</td><td>salade, sandwich</td><td>60 min</td><td>2 h 30</td><td>90 %</td></tr>
+<tr><td>Repas complet</td><td>plat, féculents</td><td>75 min</td><td>4 h</td><td>85 %</td></tr>
+<tr><td>Repas copieux</td><td>repas de fête</td><td>90 min</td><td>5 h</td><td>80 %</td></tr></table>
+<h3>Avant le premier verre</h3><p>En entrant dans une soirée, une carte « Qu'avez-vous mangé aujourd'hui ? » propose les repas déjà passés de la journée (petit-déjeuner 8 h, déjeuner 12 h 30, goûter 16 h 30, dîner 20 h) : corrigez l'heure et le type, ou choisissez « Rien ». « Valider mes repas » ou « Rien mangé » débloque les boissons alcoolisées ; l'eau reste toujours disponible.</p>
+<h3>Ajouter un repas en cours de soirée</h3><p>Section « Mes repas » de l'écran Moi : heure, type, « Ajouter un repas ». La croix supprime un repas noté par erreur. Les repas des dernières 24 h sont pris en compte, dans toutes vos soirées.</p>
+<h3>La question à l'heure des repas</h3><p>Entre 12 h et 15 h, 16 h et 18 h, puis 19 h et 22 h 30, si aucun repas n'est noté, Youdrink demande « Avez-vous déjeuné ? », « Avez-vous mangé quelque chose ? » ou « Avez-vous dîné ? ». Un bouton par type de repas l'enregistre à l'heure actuelle ; « Pas encore » repose la question 45 minutes plus tard, « Je ne mangerai pas » la fait taire jusqu'au repas suivant.</p>""")
+
 ch("Le taux estimé", """<p>Youdrink estime votre taux minute par minute avec la <b>formule de Widmark</b> et l'<b>eau corporelle de Watson</b> :</p>
 <ul><li><b>Alcool d'un verre</b> : volume × degré × 0,789 g/ml (10 g = un verre standard).</li>
 <li><b>Eau corporelle</b> : selon le sexe, l'âge, la taille et le poids.</li>
-<li><b>Absorption</b> progressive sur 30 min à jeun, 75 min après un repas.</li>
+<li><b>Absorption</b> progressive sur 30 min à jeun, jusqu'à 90 min après un repas copieux, avec une part d'alcool réduite (voir « Les repas »).</li>
 <li><b>Élimination</b> : 0,15 g/L par heure.</li></ul>
 <table><tr><th>État affiché</th><th>Taux estimé</th></tr>
 <tr><td>Sobre</td><td>moins de 0,2 g/L</td></tr><tr><td>Pompette</td><td>0,2 à 0,5 g/L</td></tr>

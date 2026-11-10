@@ -12,12 +12,15 @@ const CODE_RE = /^[A-Z]{4}$/;
 async function snapshot(code) {
   const now = Date.now();
   const { rows: mem } = await q(`
-    SELECT u.id, u.pseudo, u.sex, u.age, u.height, u.weight, u.cap, m.sam, m.fed, m.joined_at
+    SELECT u.id, u.pseudo, u.sex, u.age, u.height, u.weight, u.cap, m.sam, m.fed, m.meals_ok, m.joined_at
     FROM party_members m JOIN users u ON u.id = m.user_id
     WHERE m.party_code=$1 AND m.left_at IS NULL ORDER BY m.joined_at`, [code]);
   const { rows: dr } = await q(`
     SELECT id, user_id, t, label, ml, abv, fed, water, deleted_at FROM drinks
     WHERE party_code=$1 ORDER BY t`, [code]);
+  const { rows: ml } = await q(`
+    SELECT me.user_id, me.t, me.kind FROM meals me JOIN party_members m ON m.user_id = me.user_id
+    WHERE m.party_code=$1 AND m.left_at IS NULL AND me.t > now() - interval '30 hours'`, [code]);
   const log = [];
   const members = mem.map(m => {
     const drinks = dr.filter(d => d.user_id === m.id && !d.deleted_at)
@@ -25,11 +28,12 @@ async function snapshot(code) {
     dr.filter(d => d.user_id === m.id && d.deleted_at)
       .forEach(d => log.push({ key: "del:" + d.id, pid: m.id, kind: "info", t: +d.deleted_at, title: "Verre supprimé",
         text: `${m.pseudo} a supprimé un verre (${d.label}, noté à ${new Date(+d.t).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Paris" })}).` }));
-    const p = { id: m.id, pseudo: m.pseudo, sex: m.sex, age: m.age, height: m.height, weight: m.weight, cap: m.cap, sam: m.sam, joined: +m.joined_at, drinks };
+    const meals = ml.filter(x => x.user_id === m.id).map(x => ({ t: +x.t, kind: x.kind }));
+    const p = { id: m.id, pseudo: m.pseudo, sex: m.sex, age: m.age, height: m.height, weight: m.weight, cap: m.cap, sam: m.sam, joined: +m.joined_at, drinks, meals };
     const { sim, ev, score } = YD.scoreSummary(p, now);
     const pts = sim.pts.filter((x, i) => i % 5 === 0 || Math.abs(x[0] - now) < MIN || i === sim.pts.length - 1)
       .map(([t, b]) => [t, Math.round(b * 1000) / 1000]);
-    return { id: m.id, pseudo: m.pseudo, cap: m.cap, sam: m.sam, fed: m.fed, joined: p.joined, drinks,
+    return { id: m.id, pseudo: m.pseudo, cap: m.cap, sam: m.sam, fed: m.fed, mealsOk: m.meals_ok, joined: p.joined, drinks,
       sim: { pts, cur: sim.cur, prev: sim.prev, peak: sim.peak, peakT: sim.peakT, zeroT: sim.zeroT, grams: sim.grams }, ev, score };
   });
   persistTrophies(code, members).catch(e => console.error("trophées", e.message));
@@ -77,11 +81,16 @@ function attachWs(server) {
   setInterval(() => wss.clients.forEach(ws => { if (!ws.isAlive) return ws.terminate(); ws.isAlive = false; ws.ping(); }), 30000);
 }
 
+async function rebroadcastFor(uid) {
+  const { rows } = await q("SELECT party_code FROM party_members WHERE user_id=$1 AND left_at IS NULL", [uid]);
+  rows.forEach(r => broadcast(r.party_code).catch(() => {}));
+}
+
 /* ---------- routes ---------- */
 async function member(req, res) {
   const code = String(req.params.code || "").toUpperCase();
   if (!CODE_RE.test(code)) { res.status(400).json({ error: "Le code de soirée fait 4 lettres." }); return null; }
-  const { rows } = await q("SELECT sam, fed FROM party_members WHERE party_code=$1 AND user_id=$2 AND left_at IS NULL", [code, req.user.id]);
+  const { rows } = await q("SELECT sam, fed, meals_ok FROM party_members WHERE party_code=$1 AND user_id=$2 AND left_at IS NULL", [code, req.user.id]);
   if (!rows[0]) { res.status(403).json({ error: "Vous ne faites pas partie de cette soirée." }); return null; }
   return { code, ...rows[0] };
 }
@@ -135,6 +144,7 @@ function routes(app) {
 
   app.put("/api/parties/:code/me", requireUser, async (req, res) => {
     const m = await member(req, res); if (!m) return;
+    if (req.body.mealsOk) await q("UPDATE party_members SET meals_ok=true WHERE party_code=$1 AND user_id=$2", [m.code, req.user.id]);
     const sam = req.body.sam === undefined ? m.sam : !!req.body.sam;
     const fed = req.body.fed === undefined ? m.fed : !!req.body.fed;
     if (sam && !m.sam) {
@@ -156,6 +166,10 @@ function routes(app) {
     if (!(abv >= 0 && abv <= 80)) return res.status(400).json({ error: "Indiquez un degré entre 0 et 80 %." });
     if (!(ago >= 0 && ago <= 180)) return res.status(400).json({ error: "Un verre peut être noté jusqu'à 3 h après coup." });
     if (m.sam && !water) return res.status(400).json({ error: "Vous êtes Sam ce soir : seulement des boissons sans alcool." });
+    if (!m.meals_ok && !water) {
+      const { rows: had } = await q("SELECT 1 FROM drinks WHERE party_code=$1 AND user_id=$2 AND abv>0 AND deleted_at IS NULL LIMIT 1", [m.code, req.user.id]);
+      if (!had[0]) return res.status(400).json({ error: "Avant votre premier verre, indiquez vos repas du jour (ou « rien mangé »)." });
+    }
     const { rows: recent } = await q(`SELECT count(*)::int AS n FROM drinks WHERE user_id=$1 AND abv>0 AND deleted_at IS NULL
                                        AND created_at > now() - interval '10 minutes'`, [req.user.id]);
     if (!water && recent[0].n >= 6) return res.status(429).json({ error: "Six verres d'alcool en dix minutes : ce rythme n'est pas crédible. Patientez un peu." });
@@ -174,6 +188,30 @@ function routes(app) {
     if (!rows[0]) return res.status(400).json({ error: "Ce verre ne peut plus être supprimé (plus de 3 h)." });
     res.json({ ok: true });
     broadcast(m.code).catch(() => {});
+  });
+
+  /* Repas (servent au calcul de l'absorption) */
+  const KINDS = ["snack", "light", "full", "big"];
+  app.get("/api/me/meals", requireUser, async (req, res) => {
+    const { rows } = await q("SELECT id, t, kind FROM meals WHERE user_id=$1 AND t > now() - interval '24 hours' ORDER BY t", [req.user.id]);
+    res.json({ meals: rows.map(r => ({ id: +r.id, t: +r.t, kind: r.kind })) });
+  });
+  app.post("/api/me/meals", requireUser, async (req, res) => {
+    const kind = String(req.body.kind || "");
+    const t = +req.body.t, now = Date.now();
+    if (!KINDS.includes(kind)) return res.status(400).json({ error: "Choisissez le type de repas." });
+    if (!(t > now - 24 * 3600e3 && t < now + 15 * 60e3)) return res.status(400).json({ error: "L'heure du repas doit être dans les dernières 24 h." });
+    const { rows: n } = await q("SELECT count(*)::int AS n FROM meals WHERE user_id=$1 AND t > now() - interval '24 hours'", [req.user.id]);
+    if (n[0].n >= 8) return res.status(400).json({ error: "Huit repas en 24 h au plus." });
+    await q("INSERT INTO meals(user_id, t, kind) VALUES($1, to_timestamp($2/1000.0), $3)", [req.user.id, t, kind]);
+    await q("UPDATE party_members SET meals_ok=true WHERE user_id=$1 AND left_at IS NULL", [req.user.id]);
+    res.json({ ok: true });
+    rebroadcastFor(req.user.id);
+  });
+  app.delete("/api/me/meals/:id", requireUser, async (req, res) => {
+    await q("DELETE FROM meals WHERE id=$1 AND user_id=$2", [+req.params.id, req.user.id]);
+    res.json({ ok: true });
+    rebroadcastFor(req.user.id);
   });
 
   /* Suivi des 7 derniers jours (verres standard de 10 g d'alcool pur) */

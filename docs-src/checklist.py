@@ -22,11 +22,13 @@ FAIT = [
     ("ok", "<b>Anti-triche, première série</b> : verre antidaté de 3 h au plus, suppression possible pendant 3 h et visible dans le fil, 6 verres d'alcool au plus en 10 min, Sam limité aux boissons sans alcool."),
     ("ok", "<b>Suppression du compte</b> avec effacement de toutes les données (RGPD)."),
     ("ok", "<b>Appli installable</b> sur le téléphone (icône, plein écran, fonctionne hors ligne pour l'interface)."),
+    ("ok", "<b>Repas</b> (10/11) : repas du jour demandés avant le premier verre (heure et type, ou « rien mangé »), ajout d'un repas à tout moment, question « avez-vous mangé ? » à l'heure des repas ; quatre types de repas qui ralentissent l'absorption et baissent le pic. Remplace l'option « J'ai mangé »."),
     ("ok", "<b>Onglet Documentation</b> (10/11) réservé aux admins : présentation complète, guide complet, check-list, services externes."),
 ]
 A_TESTER = [
     ("test", "<b>Variable Render <code>ADMIN_EMAILS</code></b> : y mettre votre adresse e-mail pour voir le bouton « Docs »."),
     ("test", "<b>Création de compte et profil</b> sur youdrink.onrender.com, depuis le téléphone puis l'ordinateur."),
+    ("test", "<b>Repas</b> : en entrant dans la soirée, renseigner les repas du jour (heure et type) avant le premier verre ; ajouter un repas en cours de soirée ; vérifier la question « avez-vous dîné ? » entre 19 h et 22 h 30."),
     ("test", "<b>Soirée à deux téléphones</b> : créer une soirée, la rejoindre avec le code, noter des verres des deux côtés et vérifier que courbes, classement et notifications arrivent chez l'autre."),
     ("test", "<b>Installation</b> : menu du navigateur → « Ajouter à l'écran d'accueil »."),
     ("test", "<b>Mode démo</b> : curseur et lecture, déblocage des titres, évolution des avatars."),

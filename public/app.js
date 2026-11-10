@@ -46,10 +46,11 @@ function viewMe(p,now){
   const s=p.sim, cap=+my.cap||0.8, [lab,col]=stateOf(s.cur,cap), maxB=Math.max(1.6,cap+0.4);
   const ticks=[0.5,cap,1.2].filter((v,i,a)=>a.indexOf(v)===i&&v<maxB).map(v=>`<span style="left:${v/maxB*100}%">${fmt(v)}</span>`).join("");
   const std=(s.grams/10).toFixed(1).replace(".",",");
-  const sub=s.peakT?`Pic ${fmt(s.peak)} à ${hm(s.peakT)} · ${std} verres standard`+(s.cur>0&&s.zeroT?` · retour à 0 vers ${hm(s.zeroT)}`:""):"Aucun verre d'alcool pour l'instant.";
+  const sub=s.peakT?`Pic ${fmt(s.peak)} à ${hm(s.peakT)} · ${std} verres standard`+(s.cur>0&&s.zeroT?` · retour à 0 vers ${hm(s.zeroT)}`:""):"Aucun verre d'alcool pour l'instant";
   const mine=(my.drinks||[]).slice().sort((a,b)=>b.t-a.t);
   const titles=p.ev.filter(e=>e.kind!=="info");
-  return `<section>
+  const needMeals=!demo&&!p.mealsOk&&!(my.drinks||[]).some(d=>d.abv>0)&&!my.sam;
+  return `${needMeals?viewMealsFirst():mealQuestion()}<section>
   <div class="card" style="display:flex;flex-direction:column;gap:12px">
     <div class="row" style="justify-content:space-between"><span class="label">${esc(my.pseudo)} · taux estimé</span><span class="state" style="color:${col}">${lab}</span></div>
     <div class="row" style="gap:16px;flex-wrap:nowrap">${avatar(p,96)}<div class="bac">${fmt(s.cur)}<small>g/L</small></div></div>
@@ -58,13 +59,14 @@ function viewMe(p,now){
   </div></section>
   <section><h2>${my.sam?"Sam boit de l'eau":"Ajouter un verre"}</h2>
   <div class="field"><span class="label">Bu</span><div class="seg" id="ago">${[[0,"Maintenant"],[15,"il y a 15 min"],[30,"30 min"],[60,"1 h"]].map(([v,l])=>`<button data-v="${v}" aria-pressed="${ago===v}">${l}</button>`).join("")}</div></div>
-  <label class="toggle"><span>J'ai mangé (absorption plus lente)</span><input type="checkbox" id="fed" ${my.fed?"checked":""}></label>
   ${demo?"":`<label class="toggle"><span>Je suis Sam ce soir (zéro alcool)</span><input type="checkbox" id="samT" ${my.sam?"checked":""}></label>`}
-  <div class="drinks">${PRESETS.filter(d=>!my.sam||d.water).map((d,i)=>`<button class="drink${d.water?" water":""}" data-p="${PRESETS.indexOf(d)}"><b>${d.l}</b><span>${d.d}</span></button>`).join("")}</div>
+  ${needMeals?`<div class="banner">Indiquez d'abord vos repas du jour, juste au-dessus : ils changent beaucoup le calcul. L'eau reste disponible.</div>`:""}
+  <div class="drinks${needMeals?" locked":""}">${PRESETS.filter(d=>!my.sam||d.water).map((d,i)=>`<button class="drink${d.water?" water":""}" data-p="${PRESETS.indexOf(d)}"><b>${d.l}</b><span>${d.d}</span></button>`).join("")}</div>
   ${my.sam?"":`<div class="row"><div class="field" style="flex:1;min-width:90px"><span class="label">Volume (cl)</span><input id="cml" type="number" inputmode="decimal" min="1" max="100" placeholder="15"></div><div class="field" style="flex:1;min-width:90px"><span class="label">Degré (%)</span><input id="cabv" type="number" inputmode="decimal" min="0" max="80" placeholder="13"></div><button class="btn" id="cadd" style="align-self:flex-end">Ajouter</button></div>`}
   </section>
+  ${needMeals?"":viewMeals()}
   ${titles.length?`<section><h2>Mes titres</h2><div class="badges">${titles.map(e=>`<span class="badge ${e.kind}">${esc(e.title)}</span>`).join("")}</div></section>`:""}
-  <section><h2>Mes verres</h2>${mine.length?`<div class="list">${mine.map(d=>`<div class="item"><span class="t">${hm(d.t)}</span><div class="grow"><b>${esc(d.l)}</b> <span class="muted">${d.ml/10} cl · ${String(d.abv).replace(".",",")} %${d.fed?" · repas":""}</span></div><button class="x" data-del="${d.id}" aria-label="Supprimer ce verre">×</button></div>`).join("")}</div>`:`<p class="muted">Touchez une boisson ci-dessus pour l'enregistrer. Pensez à l'eau : trois verres débloquent le Chameau.</p>`}</section>`;
+  <section><h2>Mes verres</h2>${mine.length?`<div class="list">${mine.map(d=>`<div class="item"><span class="t">${hm(d.t)}</span><div class="grow"><b>${esc(d.l)}</b> <span class="muted">${d.ml/10} cl · ${String(d.abv).replace(".",",")} %</span></div><button class="x" data-del="${d.id}" aria-label="Supprimer ce verre">×</button></div>`).join("")}</div>`:`<p class="muted">Touchez une boisson ci-dessus pour l'enregistrer. Pensez à l'eau : trois verres débloquent le Chameau.</p>`}</section>`;
 }
 function viewChart(list,now){
   const withD=list.filter(p=>p.sim.pts.length);
@@ -96,6 +98,63 @@ function viewRank(list,now){
   return `<section><h2>Classement des titres</h2><p class="muted" style="font-size:13px">Titre gagné : +10. Titre de honte (plafond, Naufragé, Fusée) : −15. Rester raisonnable rapporte plus que grimper.</p>
   ${r.map((p,i)=>{const [lab,col]=stateOf(p.sim.cur,+p.cap||0.8);const t=p.ev.filter(e=>e.kind!=="info");return `<div class="card player">${avatar(p,48)}<div><b>${i+1}. ${esc(p.pseudo)}</b>${p.id===S.me?' <span class="muted">(vous)</span>':""}${p.sam?' <span class="badge trophy" style="padding:2px 6px;font-size:11px">Sam</span>':""}</div><div class="num" style="color:${col}">${fmt(p.sim.cur)}</div>
   <div class="meta">${lab} · pic ${fmt(p.sim.peak)} · <span class="score">${p.score>0?"+":""}${p.score} pts</span>${t.length?"<br>"+t.map(e=>esc(e.title)).join(", "):""}</div></div>`}).join("")}</section>`;
+}
+
+/* ---------- repas ---------- */
+const {MEALS,MEAL_ORDER}=YD;
+const SLOTS=[{k:"matin",l:"Petit-déjeuner",h:"08:00",def:"light",from:6,to:10.5},{k:"midi",l:"Déjeuner",h:"12:30",def:"full",from:11.5,to:15},
+  {k:"gouter",l:"Goûter",h:"16:30",def:"snack",from:15.5,to:18},{k:"soir",l:"Dîner",h:"20:00",def:"full",from:18.5,to:22.5}];
+const myMeals=()=>demo?(demoPlayers[S.me]?.meals||[]):(S.meals||[]);
+const atHM=hmS=>{const [h,m]=hmS.split(":").map(Number);const d=new Date(NOW());d.setHours(h,m,0,0);if(d.getTime()>NOW()+15*MIN)d.setDate(d.getDate()-1);return d.getTime()};
+const hourNow=()=>{const d=new Date(NOW());return d.getHours()+d.getMinutes()/60};
+function kindSelect(id,val,withNone){return `<select id="${id}">${withNone?`<option value="">Rien</option>`:""}${MEAL_ORDER.map(k=>`<option value="${k}" ${val===k?"selected":""}>${MEALS[k].l}</option>`).join("")}</select>`}
+function viewMealsFirst(){
+  const h=hourNow(), past=SLOTS.filter(x=>x.from<=h);
+  return `<section><div class="card meals1"><span class="label" style="color:var(--accent)">Avant votre premier verre</span>
+  <h2>Qu'avez-vous mangé aujourd'hui ?</h2>
+  <p class="muted" style="margin:0;font-size:13px">Un repas ralentit le passage de l'alcool dans le sang et baisse le pic. Corrigez l'heure si besoin.</p>
+  ${(past.length?past:SLOTS.slice(0,1)).map(x=>`<div class="mrow"><b>${x.l}</b><input type="time" id="mt-${x.k}" value="${x.h}" aria-label="Heure du ${x.l}">${kindSelect("mk-"+x.k,x.def,true)}</div>`).join("")}
+  <div class="row"><button class="btn" id="mealsOk">Valider mes repas</button><button class="btn ghost" id="mealsNone">Rien mangé</button></div></div></section>`;
+}
+function mealSlotNow(){
+  const h=hourNow(); const sl=SLOTS.find(x=>x.k!=="matin"&&h>=x.from+0.5&&h<=x.to); if(!sl) return null;
+  const since=atHM(String(Math.floor(sl.from-1)).padStart(2,"0")+":00");
+  if(myMeals().some(m=>m.t>=since)) return null;
+  const key=`yd_mq_${new Date(NOW()).toDateString()}_${sl.k}`, until=ls.get(key,0);
+  if(until===-1||until>NOW()) return null;
+  return {...sl,key};
+}
+function mealQuestion(){
+  if(demo) return ""; const sl=mealSlotNow(); if(!sl) return "";
+  return `<section><div class="card mq"><span class="label" style="color:var(--care)">Il est ${hm(NOW())}</span><h2>${sl.k==="soir"?"Avez-vous dîné ?":sl.k==="midi"?"Avez-vous déjeuné ?":"Avez-vous mangé quelque chose ?"}</h2>
+  <div class="row">${MEAL_ORDER.map(k=>`<button class="btn small" data-mq="${k}">Oui : ${MEALS[k].l.toLowerCase()}</button>`).join("")}</div>
+  <div class="row"><button class="btn ghost small" data-mqno="45">Pas encore</button><button class="btn ghost small" data-mqno="-1">Je ne mangerai pas</button></div></div></section>`;
+}
+function viewMeals(){
+  const ms=myMeals().slice().sort((a,b)=>b.t-a.t);
+  return `<section><h2>Mes repas</h2>
+  ${ms.length?`<div class="list">${ms.map(m=>`<div class="item"><span class="t">${hm(m.t)}</span><div class="grow"><b>${MEALS[m.kind]?.l||m.kind}</b> <span class="muted">${MEALS[m.kind]?.d||""}</span></div><button class="x" data-mdel="${m.id??m.t}" aria-label="Supprimer ce repas">×</button></div>`).join("")}</div>`:`<p class="muted" style="margin:0">Aucun repas noté ces dernières 24 h : l'alcool est compté à jeun.</p>`}
+  <div class="mrow add"><input type="time" id="mAddT" value="${new Date(NOW()).toTimeString().slice(0,5)}" aria-label="Heure du repas">${kindSelect("mAddK","full",false)}<button class="btn small" id="mAdd">Ajouter un repas</button></div></section>`;
+}
+async function addMeals(list){
+  if(demo){ const p=demoPlayers[S.me]; p.meals=[...(p.meals||[]),...list]; render(); return }
+  for(const m of list) await api("POST","/api/me/meals",m);
+  await api("PUT",`/api/parties/${S.code}/me`,{mealsOk:true});
+  await loadMeals(); await refresh();
+}
+async function loadMeals(){ if(demo) return; try{ S.meals=(await api("GET","/api/me/meals")).meals }catch(e){} }
+function bindMeals(){
+  const ok=$("#mealsOk"); if(ok) ok.onclick=()=>run(async()=>{
+    const list=SLOTS.filter(x=>$("#mk-"+x.k)&&$("#mk-"+x.k).value).map(x=>({kind:$("#mk-"+x.k).value,t:atHM($("#mt-"+x.k).value||x.h)}));
+    if(list.some(m=>m.t>NOW()+15*MIN)) throw new Error("Un repas ne peut pas être dans le futur.");
+    await addMeals(list); flash("Repas enregistrés",list.length?list.map(m=>`${MEALS[m.kind].l} à ${hm(m.t)}`).join(", "):"Aucun repas : l'alcool sera compté à jeun.") });
+  const none=$("#mealsNone"); if(none) none.onclick=()=>run(async()=>{ await addMeals([]); });
+  document.querySelectorAll("[data-mq]").forEach(b=>b.onclick=()=>run(async()=>{ await addMeals([{kind:b.dataset.mq,t:NOW()}]); flash("Bon appétit","Repas noté : l'alcool passera plus lentement.") }));
+  document.querySelectorAll("[data-mqno]").forEach(b=>b.onclick=()=>{ const sl=mealSlotNow(); if(sl) ls.set(sl.key,+b.dataset.mqno<0?-1:NOW()+45*MIN); render() });
+  const ad=$("#mAdd"); if(ad) ad.onclick=()=>run(async()=>{ const t=atHM($("#mAddT").value||"12:00"); await addMeals([{kind:$("#mAddK").value,t}]); flash("Repas ajouté",`${MEALS[$("#mAddK")?.value||"full"]?.l||"Repas"} à ${hm(t)}`) });
+  document.querySelectorAll("[data-mdel]").forEach(b=>b.onclick=()=>run(async()=>{ const id=+b.dataset.mdel;
+    if(demo){const p=demoPlayers[S.me];p.meals=p.meals.filter(m=>m.t!==id);render();return}
+    await api("DELETE","/api/me/meals/"+id); await loadMeals(); await refresh() }));
 }
 
 /* ---------- notifications ---------- */
@@ -198,7 +257,7 @@ function render(){
   const {now,list,log}=compute();
   notify(list,log);
   const meP=list.find(p=>p.id===S.me);
-  my=meP?{pseudo:meP.pseudo,cap:meP.cap,sam:meP.sam,fed:meP.fed,drinks:meP.drinks}:{pseudo:S.user?.pseudo,cap:S.user?.cap||0.8,drinks:[]};
+  my=meP?{pseudo:meP.pseudo,cap:meP.cap,sam:meP.sam,mealsOk:meP.mealsOk,drinks:meP.drinks}:{pseudo:S.user?.pseudo,cap:S.user?.cap||0.8,drinks:[]};
   document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-current",b.dataset.tab===S.tab));
   if(S.tab==="fil") feedUnread=0;
   $("#feedN").hidden=!feedUnread; $("#feedN").textContent=feedUnread;
@@ -239,14 +298,14 @@ function bindOut(){
   on("join",()=>run(async()=>{ const c=$("#joinCode").value.trim().toUpperCase(); if(!/^[A-Z]{4}$/.test(c)) throw new Error("Le code de soirée fait 4 lettres."); const r=await api("POST",`/api/parties/${c}/join`); enterParty(r.code) }));
 }
 function addDrink(d){
-  if(demo){ const p=demoPlayers[S.me]; const t=NOW()-ago*MIN; p.drinks=[...p.drinks,{id:t,t,l:d.l,ml:d.ml,abv:d.abv,fed:!!p.fed,...(d.water?{water:1}:{})}]; ago=0; render(); return }
+  if(demo){ const p=demoPlayers[S.me]; const t=NOW()-ago*MIN; p.drinks=[...p.drinks,{id:t,t,l:d.l,ml:d.ml,abv:d.abv,...(d.water?{water:1}:{})}]; ago=0; render(); return }
   const a=ago; ago=0;
-  run(async()=>{ await api("POST",`/api/parties/${S.code}/drinks`,{label:d.l,ml:d.ml,abv:d.abv,agoMin:a,fed:!!my.fed}); await refresh() });
+  run(async()=>{ await api("POST",`/api/parties/${S.code}/drinks`,{label:d.l,ml:d.ml,abv:d.abv,agoMin:a}); await refresh() });
 }
 function bindMain(){
   document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>addDrink(PRESETS[+b.dataset.p]));
   document.querySelectorAll("#ago button").forEach(b=>b.onclick=()=>{ago=+b.dataset.v;render()});
-  const f=$("#fed"); if(f) f.onchange=()=>{ if(demo){demoPlayers[S.me].fed=f.checked;return} run(()=>api("PUT",`/api/parties/${S.code}/me`,{fed:f.checked})) };
+  bindMeals();
   const ca=$("#cadd"); if(ca) ca.onclick=()=>{const ml=parseFloat($("#cml").value.replace(",","."))*10, abv=parseFloat($("#cabv").value.replace(",","."));if(!(ml>0&&ml<=1000&&abv>=0&&abv<=80)){flash("Verre incomplet","Indiquez un volume en cl et un degré entre 0 et 80 %.");return}addDrink({l:abv?"Verre perso":"Sans alcool",ml,abv,water:abv?0:1})};
   document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ const id=+b.dataset.del;
     if(demo){const p=demoPlayers[S.me];p.drinks=p.drinks.filter(d=>d.id!==id);render();return}
@@ -261,7 +320,7 @@ async function refresh(){ if(!S.code||demo) return; try{ S.snap=await api("GET",
 function enterParty(code){
   S.code=code; S.snap=null; S.screen="party"; S.tab="moi"; feedUnread=0;
   seen=new Set(ls.get("yd_seen_"+code,[])); bootT=Date.now();
-  render(); refresh(); openWs();
+  render(); loadMeals().then(refresh); openWs();
 }
 function closeWs(){ if(S.ws){ S.ws.onclose=null; S.ws.close(); S.ws=null } }
 function openWs(){
@@ -295,16 +354,16 @@ async function afterLogin(){
 /* ---------- démo ---------- */
 
 const DEMO=[
- {id:"demo-lea",pseudo:"Léa",sex:"F",age:28,height:165,weight:58,cap:0.8,fed:1,d:[[15,3],[50,7],[75,2],[110,7],[140,2],[170,7],[200,5],[240,7],[300,7]]},
- {id:"demo-max",pseudo:"Max",sex:"H",age:31,height:182,weight:85,cap:0.8,fed:0,d:[[5,1],[40,1],[60,4],[65,4],[90,1],[130,5],[150,4],[155,4],[180,1],[260,7],[320,7]]},
- {id:"demo-tom",pseudo:"Tom",sex:"H",age:25,height:178,weight:72,cap:0.8,fed:1,d:[[20,1],[70,0],[100,2],[150,7],[180,2],[220,7],[260,7]]},
- {id:"demo-sam",pseudo:"Inès",sex:"F",age:30,height:170,weight:62,cap:0.5,sam:true,fed:1,d:[[30,7],[120,7],[200,7],[280,7]]}];
+ {id:"demo-lea",pseudo:"Léa",sex:"F",age:28,height:165,weight:58,cap:0.8,meals:[[-390,"full"],[60,"full"]],d:[[15,3],[50,7],[75,2],[110,7],[140,2],[170,7],[200,5],[240,7],[300,7]]},
+ {id:"demo-max",pseudo:"Max",sex:"H",age:31,height:182,weight:85,cap:0.8,meals:[[-400,"light"],[140,"snack"]],d:[[5,1],[40,1],[60,4],[65,4],[90,1],[130,5],[150,4],[155,4],[180,1],[260,7],[320,7]]},
+ {id:"demo-tom",pseudo:"Tom",sex:"H",age:25,height:178,weight:72,cap:0.8,meals:[[-380,"full"],[75,"big"]],d:[[20,1],[70,0],[100,2],[150,7],[180,2],[220,7],[260,7]]},
+ {id:"demo-sam",pseudo:"Inès",sex:"F",age:30,height:170,weight:62,cap:0.5,sam:true,meals:[[60,"full"]],d:[[30,7],[120,7],[200,7],[280,7]]}];
 let demoSaved=null;
 function startDemo(){
   demoSaved={me:S.me,tab:S.tab}; demo=true;
   const d=new Date(); d.setHours(19,0,0,0); demoStart=d.getTime(); demoT=demoStart; demoSeen=new Set();
-  demoPlayers={}; DEMO.forEach(x=>{demoPlayers[x.id]={id:x.id,pseudo:x.pseudo,sex:x.sex,age:x.age,height:x.height,weight:x.weight,cap:x.cap,sam:!!x.sam,fed:!!x.fed,joined:demoStart,
-    drinks:x.d.map(([m,i])=>{const P=PRESETS[i];const t=demoStart+m*MIN;return{id:t,t,l:P.l,ml:P.ml,abv:P.abv,fed:!!(x.fed||m>100),...(P.water?{water:1}:{})}})}});
+  demoPlayers={}; DEMO.forEach(x=>{demoPlayers[x.id]={id:x.id,pseudo:x.pseudo,sex:x.sex,age:x.age,height:x.height,weight:x.weight,cap:x.cap,sam:!!x.sam,mealsOk:true,joined:demoStart,meals:(x.meals||[]).map(([m,k])=>({t:demoStart+m*MIN,kind:k})),
+    drinks:x.d.map(([m,i])=>{const P=PRESETS[i];const t=demoStart+m*MIN;return{id:t,t,l:P.l,ml:P.ml,abv:P.abv,...(P.water?{water:1}:{})}})}});
   S.me="demo-lea"; S.tab="moi"; feedUnread=0;
   $("#demoRange").value=0; $("#demoBar").hidden=false; document.body.classList.add("isdemo"); setDemo(0);
 }

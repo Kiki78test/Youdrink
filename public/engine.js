@@ -10,6 +10,26 @@ const PRESETS=[
  {l:"Cidre",d:"25 cl · 5 %",ml:250,abv:5},{l:"Eau",d:"25 cl",ml:250,abv:0,water:1}];
 const GAGES=["boire deux grands verres d'eau d'affilée","faire un compliment sincère à chaque joueur","imiter un animal choisi par le groupe pendant une minute","parler avec un accent pendant 5 minutes","servir de l'eau à toute la tablée","raconter sa pire honte de soirée","chanter un refrain choisi par le groupe","mimer un film que les autres doivent deviner"];
 const ABS_FED=75, ABS_FAST=30, ELIM=0.15, MIN=60000;
+/* Repas : un repas ralentit l'absorption (abs, en min) et réduit la part d'alcool qui passe dans le sang (f),
+   pour les verres bus de 30 min avant le repas jusqu'à `dur` min après. */
+const MEALS={
+  snack:{l:"Grignotage",d:"apéritif, encas",abs:45,dur:90,f:0.95},
+  light:{l:"Repas léger",d:"salade, sandwich",abs:60,dur:150,f:0.9},
+  full:{l:"Repas complet",d:"plat, féculents",abs:75,dur:240,f:0.85},
+  big:{l:"Repas copieux",d:"repas de fête",abs:90,dur:300,f:0.8}};
+const MEAL_ORDER=["snack","light","full","big"];
+function mealFor(meals,t){
+  let best=null;
+  for(const m of meals||[]){const M=MEALS[m.kind]; if(!M) continue;
+    if(t>=m.t-30*MIN&&t<=m.t+M.dur*MIN&&(!best||M.abs>MEALS[best.kind].abs)) best=m;}
+  return best;
+}
+function absorption(p,d){
+  const m=mealFor(p.meals,d.t);
+  if(m) return MEALS[m.kind];
+  if(d.fed&&!(p.meals&&p.meals.length)) return MEALS.full;   // anciennes saisies « j'ai mangé »
+  return {abs:ABS_FAST,f:1};
+}
 function tbw(p){return p.sex==="F" ? -2.097+0.1069*p.height+0.2466*p.weight : 2.447-0.09516*p.age+0.1074*p.height+0.3362*p.weight}
 function simulate(p,now){
   const dr=(p.drinks||[]).filter(d=>d.abv>0).sort((a,b)=>a.t-b.t);
@@ -17,12 +37,13 @@ function simulate(p,now){
   if(!dr.length) return out;
   const k=0.8/Math.max(15,tbw(p));
   out.grams=dr.reduce((s,d)=>s+d.ml*d.abv/100*0.789,0);
-  const lastAbs=dr[dr.length-1].t+ABS_FED*MIN;
+  const ab=dr.map(d=>absorption(p,d));
+  const lastAbs=Math.max(...dr.map((d,i)=>d.t+ab[i].abs*MIN));
   let t=Math.floor(dr[0].t/MIN)*MIN, bac=0; out.pts.push([t,0]);
   const end=Math.max(now,lastAbs)+30*3600e3;
   while(t<end){
     const t0=t; t+=MIN; let g=0;
-    for(const d of dr){const dur=(d.fed?ABS_FED:ABS_FAST)*MIN, a=Math.max(t0,d.t), b=Math.min(t,d.t+dur); if(b>a) g+=d.ml*d.abv/100*0.789*(b-a)/dur;}
+    dr.forEach((d,i)=>{const dur=ab[i].abs*MIN, a=Math.max(t0,d.t), b=Math.min(t,d.t+dur); if(b>a) g+=d.ml*d.abv/100*0.789*ab[i].f*(b-a)/dur;});
     bac=Math.max(0,bac+g*k-ELIM/60);
     out.pts.push([t,bac]);
     if(t<=now-10*MIN) out.prev=bac;
@@ -63,6 +84,6 @@ function events(p,sim,now){
 const scoreOf=ev=>ev.reduce((s,e)=>s+(e.kind==="trophy"?10:e.kind==="shame"?-15:0),0);
 const fmt=b=>(Math.max(0,b)).toFixed(2).replace(".",",");
 function scoreSummary(p,now){ const sim=simulate(p,now); const ev=events(p,sim,now); return {sim,ev,score:scoreOf(ev)}; }
-const api={PRESETS,GAGES,ABS_FED,ABS_FAST,ELIM,MIN,tbw,simulate,events,scoreOf,hash,fmt,scoreSummary};
+const api={PRESETS,GAGES,ABS_FED,ABS_FAST,ELIM,MIN,MEALS,MEAL_ORDER,mealFor,tbw,simulate,events,scoreOf,hash,fmt,scoreSummary};
 if(typeof module!=="undefined"&&module.exports) module.exports=api; else root.YD=api;
 })(typeof self!=="undefined"?self:this);
