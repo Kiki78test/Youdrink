@@ -23,13 +23,12 @@ FAIT = [
     ("ok", "<b>Suppression du compte</b> avec effacement de toutes les données (RGPD)."),
     ("ok", "<b>Appli installable</b> sur le téléphone (icône, plein écran, fonctionne hors ligne pour l'interface)."),
     ("ok", "<b>Repas</b> (10/11) : repas du jour demandés avant le premier verre (heure et type, ou « rien mangé »), ajout d'un repas à tout moment, question « avez-vous mangé ? » à l'heure des repas ; quatre types de repas qui ralentissent l'absorption et baissent le pic. Remplace l'option « J'ai mangé »."),
-    ("ok", "<b>Connexion Google</b> (10/11) : projet Google Cloud « YouDrink », client OAuth Web, <code>GOOGLE_CLIENT_ID</code> sur Render ; bouton « Continuer avec Google » vérifié en ligne."),
+    ("ok", "<b>Connexion Google</b> (10/11) : projet Google Cloud « YouDrink », client OAuth Web, <code>GOOGLE_CLIENT_ID</code> sur Render ; bouton « Continuer avec Google » vérifié en ligne ; application <b>publiée en production</b> (ouverte à tout compte Google)."),
     ("ok", "<b>Pages légales</b> (10/11) : politique de confidentialité et conditions d'utilisation publiques, case de consentement à la création du compte (données de santé)."),
     ("ok", "<b>Onglet Documentation</b> (10/11) réservé aux admins : présentation complète, guide complet, check-list, services externes."),
 ]
 A_TESTER = [
     ("test", "<b>Variable Render <code>ADMIN_EMAILS</code></b> : y mettre votre adresse e-mail pour voir le bouton « Docs »."),
-    ("test", "<b>Google : publier l'application</b> : Branding → page d'accueil <code>https://youdrink.onrender.com</code>, confidentialité <code>/confidentialite</code>, conditions <code>/conditions</code>, domaine autorisé <code>youdrink.onrender.com</code>, e-mail du développeur ; puis Audience → « Publier l'application ». En attendant, ajouter les comptes Google des testeurs dans Audience → Utilisateurs test."),
     ("test", "<b>Variable <code>CONTACT_EMAIL</code></b> sur Render : adresse de contact affichée dans les pages légales."),
     ("test", "<b>Connexion Google</b> : se connecter avec « Continuer avec Google » depuis le téléphone."),
     ("test", "<b>Création de compte et profil</b> sur youdrink.onrender.com, depuis le téléphone puis l'ordinateur."),
@@ -41,7 +40,7 @@ A_TESTER = [
     ("test", "<b>Vraie soirée entre amis</b> : validation de l'étape 1 avant de passer à l'APK."),
 ]
 A_FAIRE = [
-    ("todo", "<b>Nom de domaine</b> (youdrink.fr ou .app) sur Cloudflare, puis branchement sur Render."),
+    ("todo", "<b>Nom de domaine</b> (youdrink.fr ou .app) sur Cloudflare, puis branchement sur Render ; l'ajouter aux origines du client Google et, dans Branding, remettre page d'accueil, confidentialité, conditions et domaine autorisé."),
     ("todo", "<b>Mot de passe oublié</b> par e-mail (Resend, comme Airmony)."),
     ("todo", "<b>Étape 2 — APK Android</b> : notifications push Firebase appli fermée, widget écran d'accueil."),
     ("todo", "<b>Étape 3 — Fiabilité</b> : saisie d'un éthylotest et recalibrage personnel, éthylotest Bluetooth, validation des verres par les amis, indice de fiabilité."),
