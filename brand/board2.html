@@ -1,0 +1,29 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:'B';font-weight:800;src:url(../docs-src/fonts/bricolage-grotesque-latin-800-normal.woff2)}
+@font-face{font-family:'B';font-weight:600;src:url(../docs-src/fonts/bricolage-grotesque-latin-600-normal.woff2)}
+body{margin:0;background:#0a1626;font-family:'B',sans-serif;width:1500px}
+.g{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:18px}
+.c{height:330px;border-radius:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.navy{background:#0d2747}.white{background:#ffffff}.blue{background:#2f8cff}
+.stripes{background:repeating-linear-gradient(90deg,#ffffff 0 26px,#cfe4ff 26px 52px)}
+.ic{width:210px}
+.wm{font-weight:800;font-size:62px;letter-spacing:-1.5px;line-height:1;margin-top:-6px}
+.wm i{font-style:normal;color:#2f8cff}
+.sw{width:170px;height:16px;margin-top:4px}
+.t{position:absolute;left:18px;top:14px;font:600 15px 'B';letter-spacing:.1em;text-transform:uppercase;opacity:.55}
+.app{width:220px;height:220px;border-radius:52px;background:#0d2747;display:flex;align-items:center;justify-content:center;box-shadow:0 14px 30px rgba(0,0,0,.25)}
+.app img{width:180px}
+.round{width:230px;height:230px;border-radius:50%;border:8px solid #ffffff;display:flex;align-items:center;justify-content:center}
+.round img{width:170px}
+</style></head><body><div class="g">
+<div class="c navy"><span class="t" style="color:#fff">Icône</span><div class="app" style="background:#13345e"><img src="potion.svg"></div></div>
+<div class="c navy"><span class="t" style="color:#fff">Logo · fond nuit</span><img class="ic" src="potion.svg" style="width:170px"><div class="wm" style="color:#fff">Alamb'<i>hic</i></div>
+ <svg class="sw" viewBox="0 0 170 16"><path d="M6 10 Q85 0 164 8" stroke="#2f8cff" stroke-width="7" fill="none" stroke-linecap="round"/></svg></div>
+<div class="c white"><span class="t">Logo · fond blanc</span><img class="ic" src="potion-ink.svg" style="width:170px"><div class="wm" style="color:#0d2747">Alamb'<i>hic</i></div>
+ <svg class="sw" viewBox="0 0 170 16"><path d="M6 10 Q85 0 164 8" stroke="#2f8cff" stroke-width="7" fill="none" stroke-linecap="round"/></svg></div>
+<div class="c blue"><span class="t" style="color:#fff">Badge</span><div class="round"><img src="potion.svg"></div></div>
+<div class="c stripes" style="grid-column:span 2"><span class="t" style="color:#0d2747">Rayures bleu et blanc</span>
+ <div style="display:flex;align-items:center;gap:22px;background:#0d2747;padding:26px 40px;border-radius:30px"><img src="potion.svg" style="width:150px"><div><div class="wm" style="color:#fff;font-size:76px">Alamb'<i>hic</i></div><div style="color:#cfe4ff;font:600 22px 'B';margin-top:10px">La potion qui rend raisonnable.</div></div></div></div>
+<div class="c navy" style="grid-column:span 2"><span class="t" style="color:#fff">Slogans possibles</span>
+ <div style="color:#fff;font:800 34px 'B';text-align:center;line-height:1.35">« La potion qui rend raisonnable. »<br><span style="color:#8fd0ff">« Un verre de trop ? Hic ! »</span><br><span style="font:600 22px 'B';color:#cfe4ff">On trinque, on se chambre, on se surveille.</span></div></div>
+</div></body></html>

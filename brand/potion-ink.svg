@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 140" role="img" aria-label="Alamb'hic">
+  <!-- Fiole-alambic qui fait un clin d'œil, potion bleue et bulles -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M100 18 l6 -12 M112 26 l12 -6 M114 40 l13 1" stroke="#ffd34d" stroke-width="6"/>
+  </g>
+  <g transform="rotate(-12 66 80)">
+    <path d="M58 22 C58 14 64 10 72 10 C86 10 98 16 104 28" fill="none" stroke="#0d2747" stroke-width="6" stroke-linecap="round"/>
+    <rect x="50" y="18" width="20" height="30" rx="5" fill="#0d2747"/>
+    <rect x="47" y="15" width="26" height="8" rx="4" fill="#0d2747"/>
+    <circle cx="60" cy="84" r="40" fill="#0d2747"/>
+    <clipPath id="fl"><circle cx="60" cy="84" r="33"/></clipPath>
+    <circle cx="60" cy="84" r="33" fill="#dff0ff"/>
+    <g clip-path="url(#fl)">
+      <path d="M22 80 Q41 70 60 80 T98 80 V130 H22 Z" fill="#2f8cff"/>
+      <path d="M22 86 Q41 78 60 86 T98 86 V130 H22 Z" fill="#1c6fe0"/>
+      <circle cx="40" cy="100" r="4" fill="#bfe3ff"/><circle cx="76" cy="104" r="3" fill="#bfe3ff"/><circle cx="66" cy="92" r="2" fill="#bfe3ff"/>
+      <path d="M30 66 q4 -12 14 -16" stroke="#0d2747" stroke-width="4" fill="none" stroke-linecap="round" opacity=".9"/>
+    </g>
+    <!-- visage -->
+    <path d="M44 92 q5 -5 10 0" stroke="#0d2747" stroke-width="3.6" fill="none" stroke-linecap="round"/>
+    <circle cx="72" cy="91" r="4.6" fill="#0d2747"/><circle cx="73.6" cy="89.4" r="1.4" fill="#fff"/>
+    <path d="M48 102 Q60 116 74 102 Q61 108 48 102 Z" fill="#0d2747"/>
+    <path d="M54 107 Q61 112 68 107" stroke="#ff7a7a" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="86" cy="80" r="2.2" fill="#0d2747" opacity=".85"/>
+  </g>
+  <!-- bulles de potion qui s'échappent -->
+  <circle cx="111" cy="58" r="5" fill="#8fd0ff"/><circle cx="121" cy="72" r="3.4" fill="#8fd0ff"/><circle cx="104" cy="44" r="2.6" fill="#8fd0ff"/>
+</svg>
