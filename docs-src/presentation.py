@@ -74,7 +74,7 @@ S.append(slide(f"""<div class="cols"><div><div class="k">Démarrer</div><h2>Un c
 
 S.append(slide(f"""<div class="cols"><div><div class="k">L'écran Moi</div><h2>Son taux, son avatar, ses verres</h2>
 <ul><li>Taux estimé en grand, état coloré : sobre, pompette, interdit de conduire, au-dessus du plafond, alerte.</li>
-<li>Spirale d'alambic qui se remplit de potion à côté de l'avatar ; pic de la soirée et heure estimée du retour à 0.</li>
+<li>Alambic en verre et cuivre qui se remplit de potion à côté de l'avatar ; pic de la soirée et heure estimée du retour à 0.</li>
 <li>Huit boissons prêtes, un verre perso (volume et degré), « bu il y a 15 min à 1 h ».</li>
 <li>Repas du jour demandés avant le premier verre, ajout d'un repas à tout moment, question « avez-vous dîné ? » à l'heure des repas.</li>
 <li>Mes titres et l'historique de mes verres.</li></ul></div>

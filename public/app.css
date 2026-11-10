@@ -162,22 +162,24 @@ body.isdemo{padding-bottom:200px}
 .ltitle{font-size:12.5px;font-weight:600;min-height:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ltitle.trophy{color:var(--gold)}.ltitle.shame{color:var(--bad)}.ltitle.care{color:var(--care)}
 @media (max-width:340px){.live{grid-template-columns:1fr}}
-/* jauge en spirale d'alambic, à côté de l'avatar */
+/* jauge alambic, à côté de l'avatar */
 .merow{gap:12px;flex-wrap:nowrap;align-items:center}
 .merow .bac{margin-left:auto;font-size:clamp(40px,12.5vw,56px);white-space:nowrap}
 .merow .bac small{font-size:15px;margin-left:3px}
-.gauge.spiral{position:relative;width:74px;flex:none}
+.gauge.alam{position:relative;width:76px;flex:none}
 .gauge svg{display:block;width:100%;height:auto;overflow:visible}
-.gauge .gt{fill:none;stroke:var(--line);stroke-width:8;stroke-linecap:round;stroke-linejoin:round}
-.gauge .gi{fill:none;stroke:#0b1d33;stroke-width:5.2;stroke-linecap:round;stroke-linejoin:round}
-.gauge .pot{fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:100 100;transition:stroke-dashoffset 1.4s cubic-bezier(.3,.7,.2,1),stroke .6s}
-.gauge .gend{fill:#0b1d33;stroke:var(--line);stroke-width:2}
-.gbub{position:absolute;width:5px;height:5px;border-radius:50%;background:#dff0ff;left:46%;top:44%;opacity:0;animation:gbub2 2.2s ease-in-out infinite 1.2s}
-.gbub.b2{width:4px;height:4px;left:56%;animation-delay:1.9s}
-.gauge.down .gbub{animation-name:gdown2}
-@keyframes gbub2{0%{opacity:0;transform:translate(0,4px)}30%{opacity:.9}100%{opacity:0;transform:translate(3px,-22px)}}
-@keyframes gdown2{0%{opacity:0;transform:translate(0,-16px)}30%{opacity:.8}100%{opacity:0;transform:translate(-2px,6px)}}
-@media (max-width:370px){.gauge.spiral{width:58px}}
+.gauge .alq{transition:transform 1.4s cubic-bezier(.3,.7,.2,1)}
+.gauge .alb{fill:none;stroke:#d8f0ff;stroke-opacity:.75;stroke-width:.9;animation:alb 2.6s linear infinite}
+.gauge .aldown .alb{animation-direction:reverse}
+@keyframes alb{0%{transform:translateY(0);opacity:0}15%{opacity:1}100%{transform:translateY(-46px);opacity:0}}
+.gauge .alfl{transform-box:fill-box;transform-origin:50% 100%;animation:alfl .9s ease-in-out infinite alternate}
+@keyframes alfl{to{transform:scale(1.08,.88)}}
+.gauge .aldr{animation:aldr 1.8s ease-in infinite}
+@keyframes aldr{0%{transform:translateY(-3px);opacity:0}30%{opacity:1}100%{transform:translateY(8px);opacity:0}}
+.gauge .alst{animation:alst 2.6s ease-in-out infinite}
+@keyframes alst{0%{opacity:0;transform:translateY(4px)}40%{opacity:1}100%{opacity:0;transform:translateY(-6px)}}
+@media (max-width:370px){.gauge.alam{width:60px}}
+@media (prefers-reduced-motion:reduce){.gauge .alq{transition:none}.gauge .alb,.gauge .alfl,.gauge .aldr,.gauge .alst{animation:none}}
 /* goutte qui vole jusqu'au tuyau */
 .dropfx{position:fixed;left:0;top:0;width:14px;height:14px;margin:-7px 0 0 -7px;z-index:30;pointer-events:none;background:radial-gradient(circle at 35% 35%,#bfe3ff,#2f8cff 60%);border-radius:50% 50% 50% 0;rotate:-45deg;box-shadow:0 0 10px rgba(47,140,255,.6)}
 .splashfx{position:fixed;z-index:30;width:10px;height:10px;margin:-5px 0 0 -5px;border:2px solid #8fd0ff;border-radius:50%;pointer-events:none;animation:splash .55s ease-out forwards}
@@ -199,7 +201,7 @@ body.isdemo{padding-bottom:200px}
 .loader .lf{fill:none;stroke:var(--fg);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .loader .ll{fill:var(--accent);animation:fill 1.4s ease-in-out infinite alternate}
 @keyframes fill{from{transform:translateY(22px)}to{transform:translateY(0)}}
-@media (prefers-reduced-motion:reduce){.gauge .pot{transition:none}.gbub,.toast .hic,.toast .sp,.toast.trophy .ti,.ltr.chg,.loader .ll{animation:none}.toast .hic{opacity:1}}
+@media (prefers-reduced-motion:reduce){.gbub,.toast .hic,.toast .sp,.toast.trophy .ti,.ltr.chg,.loader .ll{animation:none}.toast .hic{opacity:1}}
 .fcode{display:flex;flex-direction:column;gap:10px}
 .fcode .code{font-family:var(--display);font-size:30px;letter-spacing:.18em}
 .lcard.off{opacity:.8}.lcard.off .link{align-self:flex-start;padding:0}

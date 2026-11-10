@@ -94,23 +94,15 @@ function viewChart(list,now){
 }
 /* ---------- animations ---------- */
 const REDUCE=(()=>{try{return matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){return false}})();
-/* Jauge en spirale d'alambic : le serpentin se remplit de potion, sans graduation (indicatif). */
-const SPIRAL=(()=>{const cx=34,cy=34,turns=2.6,r0=29,r1=7,n=140;let d="";
-  for(let k=0;k<=n;k++){const t=k/n, a=-Math.PI/2+t*turns*2*Math.PI, r=r0-(r0-r1)*t; d+=(k?"L":"M")+(cx+r*Math.cos(a)).toFixed(2)+" "+(cy+r*Math.sin(a)).toFixed(2)}
-  return d})();
+/* Jauge : alambic qui se remplit de potion (dessin dans avatar.js), sans graduation (indicatif). */
 let gaugePrev=null;
 function gauge(cur,maxB,cap,col,down){
   const r=Math.max(0,Math.min(1,cur/maxB)), from=gaugePrev===null?r:gaugePrev; gaugePrev=r;
-  return `<div class="gauge spiral${down?" down":""}"><svg viewBox="0 0 68 68" role="img" aria-label="Jauge indicative du taux">
-    <path d="M34 -6 V5" class="gt"/><path d="M34 -6 V5" class="gi"/>
-    <path d="${SPIRAL}" class="gt"/><path d="${SPIRAL}" class="gi"/>
-    <path d="${SPIRAL}" class="pot" pathLength="100" stroke="${col}" style="stroke-dashoffset:${(100-from*100).toFixed(2)}" data-to="${(100-r*100).toFixed(2)}"/>
-    <circle cx="34" cy="34" r="4.2" class="gend"/>
-  </svg>${r>0.02?'<i class="gbub b1"></i><i class="gbub b2"></i>':""}</div>`;
+  return `<div class="gauge alam">${alambic(r,from,down)}</div>`;
 }
 function animateGauge(){
-  document.querySelectorAll(".gauge .pot").forEach(p=>{ if(REDUCE){p.style.strokeDashoffset=p.dataset.to;return}
-    requestAnimationFrame(()=>requestAnimationFrame(()=>{p.style.strokeDashoffset=p.dataset.to})) });
+  document.querySelectorAll(".gauge .alq").forEach(q=>{ const go=()=>{q.style.transform=`translateY(${q.dataset.to}px)`};
+    if(REDUCE) return go(); requestAnimationFrame(()=>requestAnimationFrame(go)) });
 }
 /* Une goutte de potion vole du bouton touché jusqu'à l'entrée du tuyau. */
 function flyDrop(rect){

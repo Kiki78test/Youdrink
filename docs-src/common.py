@@ -9,6 +9,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 # Historique des versions : une ligne par lot important (la plus récente en haut)
 HISTORIQUE = [
+    ("10/11/2026", "0.10", "Jauge alambic en verre et cuivre (potion qui monte, bulles, flamme, goutte, vapeur) à la place de la spirale. Verres favoris et catalogue de boissons, IA de design notés pour la suite."),
     ("10/11/2026", "0.9", "Nouvel avatar en portrait dans un cercle, en 10 stades du sourire au KO (cercle du vert au rose, fou rire, spirale, couronne d'étoiles, tête affaissée à 1,5 g/L) ; seuils identiques pour tous, sans lien avec le plafond perso ; sursaut et bulle à chaque changement de stade ; chemise à la couleur du joueur et cravate qui se défait. Gages supprimés : les titres de honte coûtent seulement des points."),
     ("10/11/2026", "0.8", "Avatar vivant : il se balance d'autant plus que le taux monte et sursaute en annonçant son nouvel état (« Pompette », « Au-dessus du plafond »…). Jauge remplacée par une spirale d'alambic indicative à côté de l'avatar. Banc de test sur ordinateur (/demo.html). Nouveau document « Business plan »."),
     ("10/11/2026", "0.7", "Animations : jauge en serpentin d'alambic qui se remplit de potion, goutte qui vole du bouton au tuyau, titre qui fait « hic ! », tendance qui clignote, fiole de chargement. Amis : code ami et lien d'invitation, demandes à accepter, amis en direct (taux, tendance, mini-courbe, dernier titre), partage désactivable. En-tête : Amis et Profil ; Documentation et Démo dans le profil."),

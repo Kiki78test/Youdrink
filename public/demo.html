@@ -27,7 +27,7 @@ body{padding:0;overflow-x:hidden}
 .avbox.jolt .avwrap{animation:jolt .9s cubic-bezier(.3,1.5,.5,1)}
 .avbox .avbub{display:none}
 .avbox.jolt .avbub{display:block}
-.pc .gauge.spiral{width:76px}
+.pc .gauge.alam{width:84px}
 .pc .num{font:800 48px var(--display);font-variant-numeric:tabular-nums;line-height:1}
 .pc .num small{font-size:15px;color:var(--muted);margin-left:3px;font-family:var(--body)}
 .pc .row2{display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -99,15 +99,13 @@ const P=self.DEMO_DATA.map((x,i)=>({id:x.id,pseudo:x.pseudo,sex:x.sex,age:x.age,
   meals:(x.meals||[]).map(([m,k])=>({t:T0+m*MIN,kind:k})),
   drinks:x.d.map(([m,k])=>{const p=PRESETS[k];return{t:T0+m*MIN,l:p.l,ml:p.ml,abv:p.abv,...(p.water?{water:1}:{})}})}));
 function stateOf(b,cap){ if(b>=1.5)return["Alerte","var(--care)"]; if(b>=cap)return["Au-dessus du plafond","var(--bad)"]; if(b>=0.5)return["Interdit de conduire","var(--warn)"]; if(b>=0.2)return["Pompette","var(--accent)"]; return["Sobre","var(--ok)"] }
-/* spirale d'alambic (même dessin que l'appli) */
-const SPIRAL=(()=>{const cx=34,cy=34,turns=2.6,r0=29,r1=7,n=140;let d="";for(let k=0;k<=n;k++){const t=k/n,a=-Math.PI/2+t*turns*2*Math.PI,r=r0-(r0-r1)*t;d+=(k?"L":"M")+(cx+r*Math.cos(a)).toFixed(2)+" "+(cy+r*Math.sin(a)).toFixed(2)}return d})();
 const END=T0+660*MIN;
 /* toute la soirée calculée d'avance : courbes et titres */
 const FULL=P.map(p=>{const sim=YD.simulate({...p},END);return{sim,ev:YD.events({...p},sim,END)}});
 /* cartes joueurs (créées une fois, puis mises à jour) */
 $("#grid").innerHTML=P.map((p,i)=>`<div class="pc" id="pc${i}"><div class="top"><span class="nm" style="color:${p.color}">${esc(p.pseudo)}</span><span class="st"></span></div>
  <div class="mid"><div class="avbox"><div class="avwrap"></div><em class="avbub"></em></div>
- <div class="gauge spiral"><svg viewBox="0 0 68 68"><path d="M34 -6 V5" class="gt"/><path d="M34 -6 V5" class="gi"/><path d="${SPIRAL}" class="gt"/><path d="${SPIRAL}" class="gi"/><path d="${SPIRAL}" class="pot" pathLength="100" style="stroke-dashoffset:100"/><circle cx="34" cy="34" r="4.2" class="gend"/></svg></div></div>
+ <div class="gauge alam"></div></div>
  <div class="row2"><span class="num">0,00<small>g/L</small></span><span class="ltr flat">■ stable</span></div>
  <div class="info"></div><div class="tit"></div></div>`).join("");
 /* repères des titres sur la frise */
@@ -121,7 +119,10 @@ function update(silent,since){
     const sim=YD.simulate(p,now), ev=YD.events(p,sim,now), [lab,col]=stateOf(sim.cur,p.cap), el=$("#pc"+i);
     el.querySelector(".st").textContent=p.sam?"Sam · "+lab:lab; el.querySelector(".st").style.color=col;
     const n=el.querySelector(".num"); n.firstChild.nodeValue=fmt(sim.cur); n.style.color=col;
-    const pot=el.querySelector(".pot"); pot.style.stroke=col; pot.style.strokeDashoffset=(100-Math.min(1,sim.cur/Math.max(1.6,p.cap+0.4))*100).toFixed(2);
+    /* alambic : redessiné quand le niveau change d'au moins 2 %, le liquide glisse ensuite jusqu'au nouveau niveau */
+    const lv=Math.min(1,sim.cur/Math.max(1.6,p.cap+0.4)), gk=Math.round(lv*50)+(sim.cur<sim.prev-0.004?"d":""), ga=el.querySelector(".gauge");
+    if(ga.dataset.k!==gk){ const prev=ga.dataset.v===undefined?lv:+ga.dataset.v; ga.dataset.k=gk; ga.dataset.v=lv; ga.innerHTML=alambic(lv,prev,sim.cur<sim.prev-0.004);
+      const q=ga.querySelector(".alq"); requestAnimationFrame(()=>requestAnimationFrame(()=>{q.style.transform=`translateY(${q.dataset.to}px)`})) }
     /* avatar : redessiné seulement si son aspect change (taux au centième, verre en main) */
     const last=p.drinks.filter(d=>d.t<=now).pop(), hold=last&&now-last.t<25*MIN?last.l:"", sig=sim.cur.toFixed(2)+hold+(sim.cur<sim.prev-0.004?"d":"");
     if(lastAv[i]!==sig){ lastAv[i]=sig; el.querySelector(".avwrap").innerHTML=avatar({...p,sim},124) }

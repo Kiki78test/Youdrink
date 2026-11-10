@@ -55,7 +55,7 @@ ch("Le taux estimé", """<p>Alamb’hic estime votre taux minute par minute avec
 <tr><td>Interdit de conduire</td><td>à partir de 0,5 g/L</td></tr><tr><td>Au-dessus du plafond</td><td>à partir de votre plafond</td></tr>
 <tr><td>Alerte</td><td>à partir de 1,5 g/L</td></tr></table>
 <p>L'écran Moi montre aussi le pic de la soirée, le nombre de verres standard et l'heure estimée du retour à 0.</p>
-<p><b>La jauge en spirale</b> : à côté de l'avatar, un serpentin d'alambic en spirale se remplit de potion à mesure que le taux monte. Elle est volontairement indicative, sans graduation : le chiffre exact reste affiché à côté. La potion prend la couleur de l'état, des bulles remontent quand le taux monte et redescendent quand il baisse. À chaque verre d'alcool, une goutte vole du bouton touché jusqu'à l'entrée de la spirale.</p>
+<p><b>La jauge alambic</b> : à côté de l'avatar, un alambic en verre et cuivre se remplit de potion bleue à mesure que le taux monte. Elle est volontairement indicative, sans graduation : le chiffre exact reste affiché à côté. Des bulles remontent quand le taux monte et redescendent quand il baisse ; la flamme grandit, une goutte perle au bout du tuyau, et de la vapeur s'échappe au-delà de la moitié. À chaque verre d'alcool, une goutte vole du bouton touché jusqu'à l'alambic.</p>
 <div class="note warn"><b>Une estimation, jamais une autorisation de conduire.</b> L'écart avec un éthylotest peut dépasser 0,2 g/L. Après avoir bu, on ne prend pas le volant.</div>""")
 
 ch("Courbes, potes et fil", f"""<div class="shots">{shot("demo-courbes", "Courbes de la soirée")}{shot("demo-classement", "Classement")}{shot("demo-fil", "Fil de la soirée")}</div>
@@ -111,7 +111,7 @@ ch("Le mode démo", """<p>Le bouton « Démo » en haut de l'écran lance une so
 <li><b>Lecture</b> : la soirée défile en accéléré, 5 minutes toutes les demi-secondes.</li>
 <li>On peut ajouter ou supprimer des verres pour Léa : rien n'est enregistré.</li>
 <li><b>Quitter</b> revient à votre vraie soirée.</li></ul>
-<h3>Banc de test sur ordinateur</h3><p>La page <code>/demo.html</code> (lien « Banc de test (ordinateur) » dans le Profil des admins) affiche la même soirée fictive en grand : les quatre joueurs côte à côte (avatar, spirale, taux, tendance, titres obtenus), les courbes de la soirée et le fil des titres. Une frise en bas fait défiler la soirée de 19 h à 6 h ; chaque point de la frise est un titre, cliquable pour y sauter. Lecture ×1, ×5 ou ×15, touche Espace pour lancer ou arrêter, flèches pour avancer de 5 minutes (30 avec Maj).</p>""")
+<h3>Banc de test sur ordinateur</h3><p>La page <code>/demo.html</code> (lien « Banc de test (ordinateur) » dans le Profil des admins) affiche la même soirée fictive en grand : les quatre joueurs côte à côte (avatar, alambic, taux, tendance, titres obtenus), les courbes de la soirée et le fil des titres. Une frise en bas fait défiler la soirée de 19 h à 6 h ; chaque point de la frise est un titre, cliquable pour y sauter. Lecture ×1, ×5 ou ×15, touche Espace pour lancer ou arrêter, flèches pour avancer de 5 minutes (30 avec Maj).</p>""")
 
 ch("Suivi des 7 derniers jours", f"""<div class="split"><div>
 <p>La page Profil compte vos verres standard des 7 derniers jours, toutes soirées confondues, et les compare aux repères de Santé publique France : 10 verres par semaine au plus, 2 par jour, et des jours sans alcool.</p>

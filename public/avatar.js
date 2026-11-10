@@ -142,3 +142,38 @@ function avatar(p,size){
   <circle cx="60" cy="60" r="56" fill="none" stroke="${ring}" stroke-width="3.6"/>
   ${keys}</svg>`;
 }
+
+/* ---------- jauge : alambic en verre et cuivre qui se remplit de potion (indicatif, sans graduation) ----------
+   v : 0 à 1 ; from : niveau de départ pour l'animation ; down : le taux redescend. */
+let ALN=0;
+function alambic(v,from,down){
+  const n=++ALN; v=cl(v); from=from==null?v:cl(from);
+  const off=x=>((1-x)*56).toFixed(1), hot=v>0.55, nb=v>0.02?Math.round(2+v*5):0;
+  const bub=[...Array(nb)].map((_,i)=>`<circle cx="${36+(i*13)%40}" cy="106" r="${(1+(i%3)*.7).toFixed(1)}" class="alb" style="animation-delay:-${(i*0.47).toFixed(2)}s;animation-duration:${(2.2+(i%3)*0.6).toFixed(1)}s"/>`).join("");
+  return `<svg viewBox="0 0 120 120" role="img" aria-label="Jauge indicative du taux"${down?' class="aldown"':""}>
+  <defs>
+   <radialGradient id="ag${n}" cx="38%" cy="35%" r="70%"><stop offset="0" stop-color="#bfe2ff" stop-opacity=".22"/><stop offset=".7" stop-color="#5a8fc4" stop-opacity=".12"/><stop offset="1" stop-color="#9fd0ff" stop-opacity=".35"/></radialGradient>
+   <linearGradient id="aq${n}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fd0ff"/><stop offset=".45" stop-color="#2f8cff"/><stop offset="1" stop-color="#1449a8"/></linearGradient>
+   <linearGradient id="ac${n}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7a3a17"/><stop offset=".35" stop-color="#e59a5c"/><stop offset=".55" stop-color="#ffd2a3"/><stop offset=".75" stop-color="#c86e34"/><stop offset="1" stop-color="#6b3112"/></linearGradient>
+   <radialGradient id="aw${n}" cx="50%" cy="70%" r="55%"><stop offset="0" stop-color="#2f8cff" stop-opacity="${(0.12+v*0.5).toFixed(2)}"/><stop offset="1" stop-color="#2f8cff" stop-opacity="0"/></radialGradient>
+   <radialGradient id="af${n}" cx="50%" cy="100%" r="80%"><stop offset="0" stop-color="#ffe17a"/><stop offset=".5" stop-color="#ff8a2a"/><stop offset="1" stop-color="#ff4d2a" stop-opacity="0"/></radialGradient>
+   <clipPath id="ak${n}"><circle cx="56" cy="80" r="28"/></clipPath>
+  </defs>
+  <ellipse cx="56" cy="82" rx="46" ry="38" fill="url(#aw${n})"/>
+  ${v>0.03?`<path class="alfl" d="M44 116q4-${(6+v*8).toFixed(0)} 6-12q3 ${(5+v*6).toFixed(0)} 6 12q4-${(8+v*9).toFixed(0)} 6-14q3 ${(7+v*6).toFixed(0)} 6 14z" fill="url(#af${n})" opacity="${(0.45+v*0.55).toFixed(2)}"/>`:""}
+  <rect x="30" y="108" width="52" height="5" rx="2.5" fill="url(#ac${n})"/>
+  <g clip-path="url(#ak${n})"><g class="alq" style="transform:translateY(${off(from)}px)" data-to="${off(v)}">
+   <rect x="20" y="52" width="72" height="70" fill="url(#aq${n})"/><ellipse cx="56" cy="52" rx="30" ry="3" fill="#bfe6ff" opacity=".75"/></g>${bub}</g>
+  <circle cx="56" cy="80" r="28" fill="url(#ag${n})" stroke="#bfe2ff" stroke-opacity=".8" stroke-width="1.6"/>
+  <path d="M38 68q4-12 16-15" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M74 96q4-4 5-9" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M47 53V40h18v13" fill="url(#ac${n})" stroke="#4a210b" stroke-width="1"/>
+  <path d="M43 40q13-16 26 0z" fill="url(#ac${n})" stroke="#4a210b" stroke-width="1"/>
+  <rect x="44" y="49" width="24" height="4" rx="2" fill="url(#ac${n})" stroke="#4a210b" stroke-width=".8"/>
+  <path d="M56 27q0-6 8-8q22-4 32 10q4 7 4 20" fill="none" stroke="#4a210b" stroke-width="6.4" stroke-linecap="round"/>
+  <path d="M56 27q0-6 8-8q22-4 32 10q4 7 4 20" fill="none" stroke="url(#ac${n})" stroke-width="4.6" stroke-linecap="round"/>
+  <path d="M60 21q18-5 30 6" fill="none" stroke="#ffe3c4" stroke-opacity=".7" stroke-width="1.2" stroke-linecap="round"/>
+  ${v>0.15?`<circle cx="100" cy="56" r="${(1.6+v*1.4).toFixed(1)}" fill="#8fd0ff" class="aldr"/>`:""}
+  ${hot?`<g fill="none" stroke="#dfe9f7" stroke-linecap="round" stroke-opacity=".55" stroke-width="1.6" class="alst"><path d="M50 22q-4-5 0-9q4-4 0-9"/><path d="M62 18q4-4 0-8"/></g>`:""}
+  </svg>`;
+}
