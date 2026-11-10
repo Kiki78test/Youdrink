@@ -27,7 +27,7 @@ th{text-align:left;color:var(--muted);font-weight:600;font-size:7.6pt;letter-spa
 td{padding:1.7mm 2mm;border-bottom:1px solid var(--line);color:#e6ddd2;vertical-align:top}
 .pill{display:inline-block;font-size:8pt;font-weight:600;padding:.6mm 2.4mm;border-radius:9mm;border:1px solid currentColor}
 .t{color:var(--accent)}.h{color:var(--bad)}.c{color:var(--care)}.o{color:var(--ok)}.w{color:var(--warn)}
-.cover{justify-content:center;background:radial-gradient(120mm 90mm at 85% 20%,rgba(247,148,29,.18),transparent 70%),var(--bg)}
+.cover{justify-content:center;background:radial-gradient(120mm 90mm at 85% 20%,rgba(47,140,255,.22),transparent 70%),var(--bg)}
 .cover img.logo{height:30mm;align-self:flex-start;margin-bottom:9mm}
 .cover h1{font-size:34pt}
 .cover p{font-size:13pt;max-width:150mm;color:var(--muted);margin-top:4mm}
@@ -38,7 +38,7 @@ td{padding:1.7mm 2mm;border-bottom:1px solid var(--line);color:#e6ddd2;vertical-
 .av svg{width:100%;height:auto;max-height:34mm}
 .road{display:grid;grid-template-columns:repeat(5,1fr);gap:3mm;margin-top:6mm}
 .road div{border:1px solid var(--line);border-radius:3.5mm;padding:4mm;background:var(--surface);position:relative}
-.road div.now{border-color:var(--accent);background:rgba(247,148,29,.1)}
+.road div.now{border-color:var(--accent);background:rgba(47,140,255,.12)}
 .road b{font-family:'Bricolage',sans-serif;font-size:12pt;display:block;margin:1mm 0 2mm}
 .road span{font-size:9pt;color:var(--muted);line-height:1.35;display:block}
 .road i{font-style:normal;font-size:7.6pt;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:600}

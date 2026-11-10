@@ -2,14 +2,14 @@
 @font-face{font-family:'Bricolage';font-weight:600;src:url(fonts/bricolage-grotesque-latin-600-normal.woff2) format('woff2')}
 @font-face{font-family:'Bricolage';font-weight:800;src:url(fonts/bricolage-grotesque-latin-800-normal.woff2) format('woff2')}
 
-:root{--bg:#0c0a08;--surface:#18140f;--surface2:#221c15;--line:#2f271e;--fg:#f7f1ea;--muted:#a8998a;
---accent:#f7941d;--ink:#1a1006;--ok:#5bc88a;--warn:#f2c94c;--bad:#ff5a4e;--care:#5ab0ff;
---paper:#fbf7f2;--paper2:#f1e9de;--text:#1d1711;--soft:#6d6052;--rule:#e2d6c6;--deep:#b8650a}
+:root{--bg:#0a1626;--surface:#10233b;--surface2:#16304f;--line:#24446e;--fg:#f4f8ff;--muted:#9fb3cc;
+--accent:#2f8cff;--ink:#ffffff;--ok:#5bc88a;--warn:#ffd34d;--bad:#ff6b6b;--care:#ff9f43;
+--paper:#f7faff;--paper2:#e8f1fc;--text:#0d2747;--soft:#4f6685;--rule:#d3e1f2;--deep:#1c6fe0}
 *{box-sizing:border-box}
 body{margin:0;font-family:Inter,'DejaVu Sans',sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 h1,h2,h3{font-family:'Bricolage','Inter Display',Inter,sans-serif;font-weight:800;letter-spacing:-.01em;margin:0;text-wrap:balance}
 b{font-weight:600}
-code{font-family:'DejaVu Sans Mono',monospace;font-size:.88em;background:rgba(247,148,29,.12);padding:1px 5px;border-radius:4px}
+code{font-family:'DejaVu Sans Mono',monospace;font-size:.88em;background:rgba(47,140,255,.12);padding:1px 5px;border-radius:4px}
 
 @page{size:254mm 142.875mm;margin:0}
 body{background:var(--bg);color:var(--fg)}
@@ -35,7 +35,7 @@ th{text-align:left;color:var(--muted);font-weight:600;font-size:7.6pt;letter-spa
 td{padding:1.7mm 2mm;border-bottom:1px solid var(--line);color:#e6ddd2;vertical-align:top}
 .pill{display:inline-block;font-size:8pt;font-weight:600;padding:.6mm 2.4mm;border-radius:9mm;border:1px solid currentColor}
 .t{color:var(--accent)}.h{color:var(--bad)}.c{color:var(--care)}.o{color:var(--ok)}.w{color:var(--warn)}
-.cover{justify-content:center;background:radial-gradient(120mm 90mm at 85% 20%,rgba(247,148,29,.18),transparent 70%),var(--bg)}
+.cover{justify-content:center;background:radial-gradient(120mm 90mm at 85% 20%,rgba(47,140,255,.22),transparent 70%),var(--bg)}
 .cover img.logo{height:30mm;align-self:flex-start;margin-bottom:9mm}
 .cover h1{font-size:34pt}
 .cover p{font-size:13pt;max-width:150mm;color:var(--muted);margin-top:4mm}
@@ -46,7 +46,7 @@ td{padding:1.7mm 2mm;border-bottom:1px solid var(--line);color:#e6ddd2;vertical-
 .av svg{width:100%;height:auto;max-height:34mm}
 .road{display:grid;grid-template-columns:repeat(5,1fr);gap:3mm;margin-top:6mm}
 .road div{border:1px solid var(--line);border-radius:3.5mm;padding:4mm;background:var(--surface);position:relative}
-.road div.now{border-color:var(--accent);background:rgba(247,148,29,.1)}
+.road div.now{border-color:var(--accent);background:rgba(47,140,255,.12)}
 .road b{font-family:'Bricolage',sans-serif;font-size:12pt;display:block;margin:1mm 0 2mm}
 .road span{font-size:9pt;color:var(--muted);line-height:1.35;display:block}
 .road i{font-style:normal;font-size:7.6pt;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:600}
@@ -116,7 +116,7 @@ td{padding:1.7mm 2mm;border-bottom:1px solid var(--line);color:#e6ddd2;vertical-
 <div class="cards" style="grid-template-columns:repeat(3,1fr)">
 <div class="card"><b>Publicité</b><span>VTC et taxis, livraison de repas, boissons sans alcool, éthylotests. Jamais de marque d'alcool, jamais pendant une alerte.</span></div>
 <div class="card"><b>Premium</b><span>Sans publicité, historique long terme complet, thèmes d'avatar.</span></div>
-<div class="card"><b>À valider</b><span>Loi Évin, règles d'Apple et Google sur l'alcool, RGPD : les consommations sont des données de santé.</span></div></div><span class="num">Alamb’hic · 15</span></section><section class="s "><div class="k">Annexe</div><h2>Historique des versions</h2><table><tr><th>Date</th><th>Version</th><th>Contenu</th></tr><tr><td>10/11/2026</td><td>0.5</td><td>L'appli devient Alamb’hic (YouDrink déjà pris par une appli américaine) : nom, logo provisoire, icônes, pages légales et documentation. Les noms techniques (dépôt, Render, adresse onrender) restent « youdrink ».</td></tr><tr><td>10/11/2026</td><td>0.4</td><td>Pages publiques « Politique de confidentialité » et « Conditions d'utilisation » ; consentement explicite à la création du compte ; connexion Google active.</td></tr><tr><td>10/11/2026</td><td>0.3</td><td>Repas : saisie des repas du jour avant le premier verre, ajout d'un repas à tout moment, question « avez-vous mangé ? » aux heures des repas ; le type de repas module l'absorption et le pic.</td></tr><tr><td>10/11/2026</td><td>0.2</td><td>Onglet Documentation réservé aux admins (présentation, guide, check-list, services externes) ; en-tête compacté.</td></tr><tr><td>10/11/2026</td><td>0.1</td><td>Socle web en ligne sur Render : comptes, soirées par code en temps réel, calcul serveur des taux et des titres, avatar, mode démo, suivi 7 jours, appli installable, premières règles anti-triche.</td></tr><tr><td>09/11/2026</td><td>proto</td><td>Prototype jouable : calcul Widmark, titres et gages, courbes communes, notifications, avatar évolutif, mode démo avec curseur temporel ; cahier des charges.</td></tr></table><span class="num">Alamb’hic · 16</span></section><script>const MIN=60000;const NOW=()=>1e12;</script><script src="../public/avatar.js"></script>
+<div class="card"><b>À valider</b><span>Loi Évin, règles d'Apple et Google sur l'alcool, RGPD : les consommations sont des données de santé.</span></div></div><span class="num">Alamb’hic · 15</span></section><section class="s "><div class="k">Annexe</div><h2>Historique des versions</h2><table><tr><th>Date</th><th>Version</th><th>Contenu</th></tr><tr><td>10/11/2026</td><td>0.5</td><td>L'appli devient Alamb’hic (YouDrink déjà pris par une appli américaine)  : nom, logo « potion » bleu et blanc, icônes, thème bleu de l'appli, pages légales et documentation. Les noms techniques (dépôt, Render, adresse onrender) restent « youdrink ».</td></tr><tr><td>10/11/2026</td><td>0.4</td><td>Pages publiques « Politique de confidentialité » et « Conditions d'utilisation » ; consentement explicite à la création du compte ; connexion Google active.</td></tr><tr><td>10/11/2026</td><td>0.3</td><td>Repas : saisie des repas du jour avant le premier verre, ajout d'un repas à tout moment, question « avez-vous mangé ? » aux heures des repas ; le type de repas module l'absorption et le pic.</td></tr><tr><td>10/11/2026</td><td>0.2</td><td>Onglet Documentation réservé aux admins (présentation, guide, check-list, services externes) ; en-tête compacté.</td></tr><tr><td>10/11/2026</td><td>0.1</td><td>Socle web en ligne sur Render : comptes, soirées par code en temps réel, calcul serveur des taux et des titres, avatar, mode démo, suivi 7 jours, appli installable, premières règles anti-triche.</td></tr><tr><td>09/11/2026</td><td>proto</td><td>Prototype jouable : calcul Widmark, titres et gages, courbes communes, notifications, avatar évolutif, mode démo avec curseur temporel ; cahier des charges.</td></tr></table><span class="num">Alamb’hic · 16</span></section><script>const MIN=60000;const NOW=()=>1e12;</script><script src="../public/avatar.js"></script>
 <script>document.querySelectorAll('.av').forEach((el,i)=>{const b=+el.dataset.b;
 el.innerHTML=avatar({cap:0.8,color:['#f7941d','#5ab0ff','#5bc88a','#e879f9','#f2c94c','#ff7a6e'][i],sim:{cur:b,prev:b+(b>=0.8&&b<1.5?0.05:-0.05),peak:1.8},
 drinks:b>0&&b<1.5?[{t:1e12-5*MIN,l:['Bière','Vin','Cocktail','Shot'][i%4],abv:5}]:[]},150)});</script></body></html>

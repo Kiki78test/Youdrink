@@ -25,7 +25,7 @@ FAIT = [
     ("ok", "<b>Repas</b> (10/11) : repas du jour demandés avant le premier verre (heure et type, ou « rien mangé »), ajout d'un repas à tout moment, question « avez-vous mangé ? » à l'heure des repas ; quatre types de repas qui ralentissent l'absorption et baissent le pic. Remplace l'option « J'ai mangé »."),
     ("ok", "<b>Connexion Google</b> (10/11) : projet Google Cloud « YouDrink », client OAuth Web, <code>GOOGLE_CLIENT_ID</code> sur Render ; bouton « Continuer avec Google » vérifié en ligne ; application <b>publiée en production</b> (ouverte à tout compte Google)."),
     ("ok", "<b>Pages légales</b> (10/11) : politique de confidentialité et conditions d'utilisation publiques, case de consentement à la création du compte (données de santé)."),
-    ("ok", "<b>Nouveau nom : Alamb’hic</b> (10/11) : « YouDrink » est déjà une appli américaine (youdrink.com) ; Godet écarté (marque GODET de Godet Frères Cognac en classe 33), Alambix écarté (personnage d'Astérix). Logo provisoire et icônes en place."),
+    ("ok", "<b>Nouveau nom : Alamb’hic</b> (10/11) : « YouDrink » est déjà une appli américaine (youdrink.com) ; Godet écarté (marque GODET de Godet Frères Cognac en classe 33), Alambix écarté (personnage d'Astérix). Logo « potion » bleu et blanc et thème bleu en place (à affiner)."),
     ("ok", "<b>Onglet Documentation</b> (10/11) réservé aux admins : présentation complète, guide complet, check-list, services externes."),
 ]
 A_TESTER = [

@@ -9,7 +9,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 # Historique des versions : une ligne par lot important (la plus récente en haut)
 HISTORIQUE = [
-    ("10/11/2026", "0.5", "L'appli devient Alamb’hic (YouDrink déjà pris par une appli américaine) : nom, logo provisoire, icônes, pages légales et documentation. Les noms techniques (dépôt, Render, adresse onrender) restent « youdrink »."),
+    ("10/11/2026", "0.5", "L'appli devient Alamb’hic (YouDrink déjà pris par une appli américaine)  : nom, logo « potion » bleu et blanc, icônes, thème bleu de l'appli, pages légales et documentation. Les noms techniques (dépôt, Render, adresse onrender) restent « youdrink »."),
     ("10/11/2026", "0.4", "Pages publiques « Politique de confidentialité » et « Conditions d'utilisation » ; consentement explicite à la création du compte ; connexion Google active."),
     ("10/11/2026", "0.3", "Repas : saisie des repas du jour avant le premier verre, ajout d'un repas à tout moment, question « avez-vous mangé ? » aux heures des repas ; le type de repas module l'absorption et le pic."),
     ("10/11/2026", "0.2", "Onglet Documentation réservé aux admins (présentation, guide, check-list, services externes) ; en-tête compacté."),
@@ -23,14 +23,14 @@ FONTS = """
 """
 
 TOKENS = """
-:root{--bg:#0c0a08;--surface:#18140f;--surface2:#221c15;--line:#2f271e;--fg:#f7f1ea;--muted:#a8998a;
---accent:#f7941d;--ink:#1a1006;--ok:#5bc88a;--warn:#f2c94c;--bad:#ff5a4e;--care:#5ab0ff;
---paper:#fbf7f2;--paper2:#f1e9de;--text:#1d1711;--soft:#6d6052;--rule:#e2d6c6;--deep:#b8650a}
+:root{--bg:#0a1626;--surface:#10233b;--surface2:#16304f;--line:#24446e;--fg:#f4f8ff;--muted:#9fb3cc;
+--accent:#2f8cff;--ink:#ffffff;--ok:#5bc88a;--warn:#ffd34d;--bad:#ff6b6b;--care:#ff9f43;
+--paper:#f7faff;--paper2:#e8f1fc;--text:#0d2747;--soft:#4f6685;--rule:#d3e1f2;--deep:#1c6fe0}
 *{box-sizing:border-box}
 body{margin:0;font-family:Inter,'DejaVu Sans',sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 h1,h2,h3{font-family:'Bricolage','Inter Display',Inter,sans-serif;font-weight:800;letter-spacing:-.01em;margin:0;text-wrap:balance}
 b{font-weight:600}
-code{font-family:'DejaVu Sans Mono',monospace;font-size:.88em;background:rgba(247,148,29,.12);padding:1px 5px;border-radius:4px}
+code{font-family:'DejaVu Sans Mono',monospace;font-size:.88em;background:rgba(47,140,255,.12);padding:1px 5px;border-radius:4px}
 """
 
 # Feuille de style A4 claire (guide, check-list, services) : fond papier chaud, bandeau noir de marque

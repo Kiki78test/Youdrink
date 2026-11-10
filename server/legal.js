@@ -8,9 +8,9 @@ function page(title, body) {
   const c = CONTACT();
   const contact = c ? `<a href="mailto:${c}">${c}</a>` : "l'adresse de contact qui sera publiée ici prochainement";
   return `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>${title} · Alamb'hic</title><meta name="theme-color" content="#0c0a08"><link rel="icon" href="/icons/icon-192.png">
+<title>${title} · Alamb'hic</title><meta name="theme-color" content="#0a1626"><link rel="icon" href="/icons/icon-192.png">
 <style>
-:root{--bg:#0c0a08;--surface:#18140f;--line:#2f271e;--fg:#f7f1ea;--muted:#a8998a;--accent:#f7941d;color-scheme:dark}
+:root{--bg:#0a1626;--surface:#10233b;--line:#24446e;--fg:#f4f8ff;--muted:#9fb3cc;--accent:#5aa8ff;color-scheme:dark}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
 .w{max-width:720px;margin:0 auto;padding:24px max(18px,env(safe-area-inset-left,0px)) 64px}
 header{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding-bottom:14px}
