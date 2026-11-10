@@ -28,6 +28,7 @@ FAIT = [
     ("ok", "<b>Nouveau nom : Alamb’hic</b> (10/11) : « YouDrink » est déjà une appli américaine (youdrink.com) ; Godet écarté (marque GODET de Godet Frères Cognac en classe 33), Alambix écarté (personnage d'Astérix). Logo « potion » bleu et blanc et thème bleu en place (à affiner)."),
     ("ok", "<b>Nouvelle adresse</b> (10/11) : service Render « alambhic » sur <code>alambhic.onrender.com</code>, base renommée <code>alambhic-db</code>, variables et origine Google en place, Node 22 fixé ; Google et contact vérifiés en ligne."),
     ("todo", "<b>Supprimer l'ancien service Render « youdrink »</b> (service web uniquement, pas la base)."),
+    ("ok", "<b>Test à deux comptes</b> (10/11) : soirée créée et rejointe par code sur alambhic.onrender.com, verres des deux joueurs, courbes communes en temps réel."),
     ("ok", "<b>Onglet Documentation</b> (10/11) réservé aux admins : présentation complète, guide complet, check-list, services externes."),
 ]
 A_TESTER = [
@@ -36,7 +37,6 @@ A_TESTER = [
     ("test", "<b>Connexion Google</b> : se connecter avec « Continuer avec Google » depuis le téléphone."),
     ("test", "<b>Création de compte et profil</b> sur alambhic.onrender.com, depuis le téléphone puis l'ordinateur."),
     ("test", "<b>Repas</b> : en entrant dans la soirée, renseigner les repas du jour (heure et type) avant le premier verre ; ajouter un repas en cours de soirée ; vérifier la question « avez-vous dîné ? » entre 19 h et 22 h 30."),
-    ("test", "<b>Soirée à deux téléphones</b> : créer une soirée, la rejoindre avec le code, noter des verres des deux côtés et vérifier que courbes, classement et notifications arrivent chez l'autre."),
     ("test", "<b>Installation</b> : menu du navigateur → « Ajouter à l'écran d'accueil »."),
     ("test", "<b>Mode démo</b> : curseur et lecture, déblocage des titres, évolution des avatars."),
     ("test", "<b>Réveil du serveur gratuit</b> : après 15 min sans visite, la première ouverture prend environ 30 à 50 s."),
