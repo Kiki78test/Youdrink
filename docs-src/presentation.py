@@ -31,8 +31,8 @@ td{padding:1.7mm 2mm;border-bottom:1px solid var(--line);color:#e6ddd2;vertical-
 .cover img.logo{height:30mm;align-self:flex-start;margin-bottom:9mm}
 .cover h1{font-size:34pt}
 .cover p{font-size:13pt;max-width:150mm;color:var(--muted);margin-top:4mm}
-.avs{display:grid;grid-template-columns:repeat(6,1fr);gap:3mm;margin-top:5mm;text-align:center}
-.avs div{background:var(--surface);border:1px solid var(--line);border-radius:3.5mm;padding:3mm 1mm 3mm}
+.avs{display:grid;grid-template-columns:repeat(5,1fr);gap:2.5mm;margin-top:3mm;text-align:center}
+.avs div{background:var(--surface);border:1px solid var(--line);border-radius:3.5mm;padding:1.5mm 1mm}
 .avs b{display:block;font-family:'Bricolage',sans-serif;font-size:13pt;font-variant-numeric:tabular-nums}
 .avs span{font-size:8.4pt;color:var(--muted)}
 .av svg{width:100%;height:auto;max-height:34mm}
@@ -61,7 +61,7 @@ S.append(slide("""<div class="k">Le concept</div><h2>La modération rapporte, l'
 <div class="cards" style="grid-template-columns:repeat(3,1fr)">
 <div class="card"><b>Chacun note ses verres</b><span>Bière, vin, shot, cocktail ou eau, en un geste. Alamb’hic estime le taux de chacun minute par minute.</span></div>
 <div class="card"><b>On se chambre</b><span>Titres à débloquer, avatars qui changent de tête, classement et notifications moqueuses chez tous les amis.</span></div>
-<div class="card"><b>Le groupe veille</b><span>Au-delà du plafond, le titre devient une honte avec gage sans alcool. À 1,5 g/L, les amis sont alertés.</span></div>
+<div class="card"><b>Le groupe veille</b><span>Au-delà du plafond, le titre devient une honte. À 1,5 g/L, les amis sont alertés.</span></div>
 </div>
 <p class="muted" style="margin-top:6mm">Réservé aux 18 ans et plus. Pensé pour les soirées à domicile, sans prendre la route. Le taux est une estimation, jamais une autorisation de conduire.</p>"""))
 
@@ -89,24 +89,23 @@ S.append(slide(f"""<div class="cols"><div><div class="k">Courbes communes</div><
 S.append(slide("""<div class="k">Titres et points</div><h2>Un titre gagné +10, un titre de honte −15</h2>
 <table><tr><th>Famille</th><th>Titres</th><th>Effet</th></tr>
 <tr><td><span class="pill t">Montée</span></td><td>Premières bulles (0,2) · Joues roses (0,4) · Philosophe de comptoir (0,8), dernier titre à gagner en montant</td><td>+10</td></tr>
-<tr><td><span class="pill h">Honte</span></td><td>Hors plafond · Le Naufragé (1,2) · La Fusée (+0,5 g/L en une heure)</td><td>−15 et gage sans alcool</td></tr>
+<tr><td><span class="pill h">Honte</span></td><td>Hors plafond · Le Naufragé (1,2) · La Fusée (+0,5 g/L en une heure)</td><td>−15</td></tr>
 <tr><td><span class="pill o">Modération</span></td><td>Atterrissage en douceur (sous 0,2 après 0,4) · Retour sur Terre (retour à 0)</td><td>+10</td></tr>
 <tr><td><span class="pill c">Hydratation</span></td><td>Le Chameau (3 verres d'eau) · L'Oasis (6 verres d'eau)</td><td>+10</td></tr>
 <tr><td><span class="pill o">Solidarité</span></td><td>Sam de la soirée (zéro alcool)</td><td>+10</td></tr>
-<tr><td><span class="pill w">Info</span></td><td>Clés confisquées (0,5 g/L)</td><td>aucun point</td></tr></table>
-<p class="muted" style="margin-top:4mm">Gages tirés au sort parmi huit, toujours sans alcool : verres d'eau, compliments, imitation, chanson, mime…</p>"""))
+<tr><td><span class="pill w">Info</span></td><td>Clés confisquées (0,5 g/L)</td><td>aucun point</td></tr></table>"""))
 
 S.append(slide(f"""<div class="cols"><div><div class="k">Classement, fil et notifications</div><h2>Tout le monde est prévenu, tout de suite</h2>
 <ul><li>Chaque titre et chaque seuil s'affiche en notification sur tous les téléphones de la soirée, avec vibration.</li>
-<li>Le ton change avec le niveau : moqueur, puis gage, puis <span class="c">« apportez-lui de l'eau »</span> à 1,5 g/L et rappel du 15 à 2 g/L.</li>
+<li>Le ton change avec le niveau : moqueur, puis honte, puis <span class="c">« apportez-lui de l'eau »</span> à 1,5 g/L et rappel du 15 à 2 g/L.</li>
 <li>Le fil garde tout l'historique, suppressions de verres comprises.</li>
 <li>Écran « Potes » en direct : taux, tendance ▲▼ façon bourse, mini-courbe et dernier titre de chacun ; classement par points en un clic.</li></ul></div>
 <div class="phones">{img("demo-notifs")}{img("demo-classement")}</div></div>"""))
 
-AV = [(0, "En forme"), (0.3, "Pompette"), (0.6, "Éméché"), (0.9, "Lunettes de travers"), (1.2, "Au-dessus du plafond"), (1.7, "Allongé")]
-S.append(slide("""<div class="k">L'avatar</div><h2>Il évolue en continu avec le taux</h2>
+AV = [(0, "En forme"), (0.1, "Premier verre"), (0.25, "Détendu"), (0.4, "Pompette"), (0.55, "Éméché"), (0.7, "Fou rire"), (0.9, "Hilare"), (1.1, "Ça tourne"), (1.3, "Les étoiles"), (1.6, "KO")]
+S.append(slide("""<div class="k">L'avatar</div><h2>Dix stades, du sourire au KO</h2>
 <div class="avs">""" + "".join(f'<div><div class="av" data-b="{b}"></div><b>{str(b).replace(".", ",")}</b><span>{t}</span></div>' for b, t in AV) + """</div>
-<p class="muted" style="margin-top:5mm">Rougeurs, nez, paupières, sourire puis grimace, tête qui penche, clés barrées à 0,5, hoquet, lunettes, teint vert et cheveux en bataille au-delà du plafond, allongé à 1,5 g/L. Pendant 25 minutes après chaque verre, il tient le bon modèle de verre ; en redescente, un verre d'eau.</p>"""))
+<p class="muted" style="margin-top:5mm">Portrait dans un cercle qui passe du vert au rose : sourire, paupières qui tombent, fou rire, langue tirée, spirale, couronne d'étoiles, puis KO à 1,5 g/L. Chemise à la couleur du joueur, cravate qui se défait, clés barrées à 0,5. Pendant 25 minutes après chaque verre, il tient le bon modèle de verre ; en redescente, un verre d'eau.</p>"""))
 
 S.append(slide(f"""<div class="cols"><div><div class="k">Mode démo</div><h2>Une soirée fictive, en accéléré</h2>
 <ul><li>Bouton « Démo » toujours visible en haut, même sans compte.</li>
@@ -167,7 +166,7 @@ S.append(slide("""<div class="k">Annexe</div><h2>Historique des versions</h2><ta
 
 SCRIPT = """<script>const MIN=60000;const NOW=()=>1e12;</script><script src="../public/avatar.js"></script>
 <script>document.querySelectorAll('.av').forEach((el,i)=>{const b=+el.dataset.b;
-el.innerHTML=avatar({cap:0.8,color:['#f7941d','#5ab0ff','#5bc88a','#e879f9','#f2c94c','#ff7a6e'][i],sim:{cur:b,prev:b+(b>=0.8&&b<1.5?0.05:-0.05),peak:1.8},
+el.innerHTML=avatar({cap:0.8,color:['#f7941d','#5ab0ff','#5bc88a','#e879f9','#f2c94c','#ff7a6e'][i],sim:{cur:b,prev:b-0.01,peak:b},
 drinks:b>0&&b<1.5?[{t:1e12-5*MIN,l:['Bière','Vin','Cocktail','Shot'][i%4],abv:5}]:[]},150)});</script>"""
 
 write("presentation.html", f"<style>{CSS}</style></head><body>{''.join(S)}{SCRIPT}</body></html>", "Présentation Alamb’hic")

@@ -10,7 +10,7 @@ ch("Démarrer", f"""<div class="split"><div>
 <h3>Créer un compte</h3><p>Ouvrez <b>alambhic.onrender.com</b>, choisissez « Créer un compte », saisissez votre e-mail et un mot de passe d'au moins 8 caractères. La connexion reste active 60 jours sur l'appareil. La connexion Google arrivera quand l'identifiant sera configuré.</p>
 <h3>Compléter son profil</h3><p>Pseudo, sexe biologique, âge, taille et poids : ces mesures servent uniquement à estimer votre taux. Les autres joueurs voient votre pseudo, vos verres et vos taux, jamais vos mesures.</p>
 <p>Alamb’hic est <b>réservé aux 18 ans et plus</b> : un âge inférieur est refusé.</p>
-<h3>Choisir son plafond</h3><p>0,5 ; 0,6 ; 0,8 (conseillé) ou 1,0 g/L. Au-delà, les titres positifs s'arrêtent et chaque excès devient un titre de honte avec gage.</p>
+<h3>Choisir son plafond</h3><p>0,5 ; 0,6 ; 0,8 (conseillé) ou 1,0 g/L. Au-delà, les titres positifs s'arrêtent et chaque excès devient un titre de honte.</p>
 <h3>Installer l'appli</h3><p>Dans le navigateur du téléphone : menu → « Ajouter à l'écran d'accueil ». Alamb’hic s'ouvre alors en plein écran avec son icône.</p>
 <div class="note">Sur l'offre gratuite de Render, le serveur s'endort après 15 minutes sans visite : la première ouverture prend alors 30 à 50 secondes.</div>
 </div>{shot("auth", "Écran d'accueil")}</div>""")
@@ -63,40 +63,47 @@ ch("Courbes, potes et fil", f"""<div class="shots">{shot("demo-courbes", "Courbe
 <p><b>Potes (en direct)</b> : une carte par joueur avec son avatar, son taux, sa <b>tendance façon bourse</b> sur les 15 dernières minutes (▲ ça monte, ▼ ça redescend, en g/L par heure), une mini-courbe des 2 dernières heures avec la redescente prévue, et son dernier titre. Le bouton « Points » affiche le classement des titres : trié par points, avec le pic et les titres de chacun.</p>
 <p><b>Fil</b> : tous les titres, alertes et suppressions de verres, du plus récent au plus ancien. La pastille rouge sur l'onglet compte les nouveautés non lues.</p>""")
 
-ch("Titres, points et gages", """<table><tr><th>Titre</th><th>Condition</th><th>Points</th></tr>
+ch("Titres et points", """<table><tr><th>Titre</th><th>Condition</th><th>Points</th></tr>
 <tr><td>Premières bulles</td><td>0,2 g/L</td><td>+10</td></tr>
 <tr><td>Joues roses</td><td>0,4 g/L</td><td>+10</td></tr>
 <tr><td>Clés confisquées</td><td>0,5 g/L (information)</td><td>0</td></tr>
 <tr><td>Philosophe de comptoir</td><td>0,8 g/L, dernier titre à gagner en montant</td><td>+10</td></tr>
-<tr><td>Hors plafond</td><td>dépasser son plafond perso (s'il est sous 1,2)</td><td>−15 + gage</td></tr>
-<tr><td>Le Naufragé</td><td>1,2 g/L</td><td>−15 + gage</td></tr>
-<tr><td>La Fusée</td><td>+0,5 g/L en une heure</td><td>−15 + gage</td></tr>
+<tr><td>Hors plafond</td><td>dépasser son plafond perso (s'il est sous 1,2)</td><td>−15</td></tr>
+<tr><td>Le Naufragé</td><td>1,2 g/L</td><td>−15</td></tr>
+<tr><td>La Fusée</td><td>+0,5 g/L en une heure</td><td>−15</td></tr>
 <tr><td>Alerte copains</td><td>1,5 g/L : les amis sont appelés à aider</td><td>0</td></tr>
 <tr><td>Alerte rouge</td><td>2 g/L : rester avec la personne, 15 en cas de signes graves</td><td>0</td></tr>
 <tr><td>Atterrissage en douceur</td><td>redescendre sous 0,2 après avoir dépassé 0,4</td><td>+10</td></tr>
 <tr><td>Retour sur Terre</td><td>revenir à 0 après avoir dépassé 0,2</td><td>+10</td></tr>
 <tr><td>Le Chameau / L'Oasis</td><td>3 / 6 verres d'eau</td><td>+10 chacun</td></tr>
 <tr><td>Sam de la soirée</td><td>jouer Sam</td><td>+10</td></tr></table>
-<p><b>Gages</b> : tirés parmi huit, toujours sans alcool (deux grands verres d'eau, un compliment à chaque joueur, imiter un animal, parler avec un accent, servir de l'eau à la tablée, raconter sa pire honte, chanter un refrain, mimer un film).</p>""")
+""")
 
 ch("Notifications", f"""<div class="split"><div>
 <p>Chaque titre et chaque seuil apparaît en haut de l'écran sur tous les téléphones de la soirée, <b>une notification à la fois</b> : les suivantes attendent leur tour (le compteur « +2 » l'indique). Chaque notification a une icône et une couleur par type (doré pour un titre, rouge pour une honte, orange pour une alerte), et une barre qui montre le temps restant ; un toucher la ferme. Les alertes vibrent deux fois et restent 12 secondes.</p>
 <p>Quand un titre est débloqué, l'icône de la notification fait « hic ! » avec quelques étincelles dorées. Sur l'écran Potes, la flèche de tendance clignote quand elle change de sens. Les animations sont coupées si « réduire les animations » est activé sur le téléphone.</p>
 <p>Les confirmations de vos propres actions (verre, repas, invitation copiée, erreur) s'affichent à part, dans un bandeau en bas de l'écran, pour ne jamais se mélanger aux notifications des amis.</p>
-<ul><li><b>Titres</b> : message moqueur.</li><li><b>Honte</b> : gage et passage à l'eau.</li>
+<ul><li><b>Titres</b> : message moqueur.</li><li><b>Honte</b> : passage à l'eau.</li>
 <li><b>1,5 g/L</b> : « apportez-lui de l'eau et gardez un œil sur lui ».</li><li><b>2 g/L</b> : rester avec la personne ; si elle vomit, ne répond plus ou respire mal, appeler le 15.</li></ul>
 <p>Aujourd'hui, les notifications arrivent quand l'appli est ouverte. Les notifications appli fermée viendront avec l'APK (étape 2).</p>
 </div>{shot("demo-notifs", "Notifications pendant la démo")}</div>""")
 
 AVS = '<div class="avs">' + "".join(f'<div><div class="av" data-b="{b}"></div><span>{t}</span></div>' for b, t in
-       [(0, "0 g/L"), (0.3, "0,3"), (0.6, "0,6"), (0.9, "0,9"), (1.2, "1,2"), (1.7, "1,7")]) + '</div>'
-ch("L'avatar", AVS + """<p>Chaque joueur a un avatar à sa couleur, sur l'écran Moi et dans le classement. Il évolue en continu :</p>
-<ul><li>rougeurs et nez rouge qui augmentent, paupières qui tombent, blanc des yeux qui rougit, tête qui penche ;</li>
-<li>sourire qui s'élargit jusqu'au plafond, puis grimace ;</li>
-<li>0,5 g/L : col ouvert et clés de voiture barrées ; 0,6 g/L : bulles de hoquet ; 0,8 g/L : lunettes de travers ;</li>
-<li>au-dessus du plafond : teint verdâtre, yeux qui louchent, cheveux en bataille, chemise froissée ; 1 g/L : goutte de sueur ;</li>
-<li>1,5 g/L : allongé sur un oreiller avec un verre d'eau.</li></ul>
-<p><b>Avatar vivant</b> : il respire doucement quand on est sobre, puis se balance de plus en plus à mesure que le taux monte. À chaque changement d'état (sobre, pompette, interdit de conduire, au-dessus du plafond, alerte), il sursaute et une bulle annonce son nouvel état, sur l'écran Moi, l'écran Potes et la liste d'amis.</p>
+       [(0, "0 · En forme"), (0.1, "1 · Premier verre"), (0.25, "2 · Détendu"), (0.4, "3 · Pompette"), (0.55, "4 · Éméché"), (0.7, "5 · Fou rire"), (0.9, "6 · Hilare"), (1.1, "7 · Ça tourne"), (1.3, "8 · Les étoiles"), (1.6, "9 · KO")]) + '</div>'
+ch("L'avatar", AVS + """<p>Chaque joueur a un avatar en portrait dans un cercle, avec une chemise à sa couleur, sur l'écran Moi, l'écran Potes et la liste d'amis. Il passe par <b>10 stades</b> ; le cercle passe du vert au rose :</p>
+<table><tr><th>Stade</th><th>À partir de</th><th>Ce qu'on voit</th></tr>
+<tr><td>0 · En forme</td><td>0</td><td>grand sourire, yeux grands ouverts, cravate bien nouée</td></tr>
+<tr><td>1 · Premier verre</td><td>0,05 g/L</td><td>sourire, joues qui rosissent</td></tr>
+<tr><td>2 · Détendu</td><td>0,2</td><td>paupières mi-closes, sourire tranquille</td></tr>
+<tr><td>3 · Pompette</td><td>0,35</td><td>sourire en coin, barbe naissante, col ouvert, petit « hic » jaune</td></tr>
+<tr><td>4 · Éméché</td><td>0,5</td><td>yeux tombants, bouche de travers, cheveux en bataille, bulles, clés barrées</td></tr>
+<tr><td>5 · Fou rire</td><td>0,65</td><td>yeux plissés de rire, langue tirée, chemise froissée</td></tr>
+<tr><td>6 · Hilare</td><td>0,8</td><td>éclat de rire, tache sur la chemise, cravate de travers</td></tr>
+<tr><td>7 · Ça tourne</td><td>1,0</td><td>regard vague, grimace, sueur, spirale au-dessus de la tête</td></tr>
+<tr><td>8 · Les étoiles</td><td>1,2</td><td>bouche grande ouverte, langue pendante, couronne d'étoiles qui tourne</td></tr>
+<tr><td>9 · KO</td><td>1,5</td><td>tête affaissée, yeux fermés, bave, « z z », verre d'eau à côté</td></tr></table>
+<p>Rougeurs, nez rouge et teint rouge augmentent en continu à l'intérieur de chaque stade.</p>
+<p><b>Avatar vivant</b> : il se balance de plus en plus à mesure que le taux monte. À chaque changement d'état (sobre, pompette, interdit de conduire, au-dessus du plafond, alerte), il sursaute et une bulle annonce son nouvel état, sur l'écran Moi, l'écran Potes et la liste d'amis.</p>
 <p>Pendant 25 minutes après chaque verre, l'avatar tient le bon modèle (bière avec mousse, vin rouge, flûte, shot, cocktail ou eau). Quand le taux redescend, il tient un verre d'eau.</p>""")
 
 ch("Le mode démo", """<p>Le bouton « Démo » en haut de l'écran lance une soirée fictive, même sans compte : Léa (raisonnable, c'est vous), Max (qui dérape), Tom (modéré) et Inès (Sam).</p>
@@ -144,10 +151,10 @@ body = f"""<div>{band("Guide complet", "Présentation et guides")}
     f'<div style="{"page-break-before:always" if i == 0 else "margin-top:9mm"}"><h2><span class="n">{i+1}</span>{t}</h2>{b}</div>' for i, (t, b) in enumerate(CH)) + \
     f'<div style="page-break-before:always"><h2><span class="n">A</span>Historique des versions</h2>{hist_table()}</div>'
 
-CSS = A4 + """.avs{display:grid;grid-template-columns:repeat(6,1fr);gap:2.5mm;margin:2mm 0 4mm;text-align:center}
+CSS = A4 + """.avs{display:grid;grid-template-columns:repeat(5,1fr);gap:2.5mm;margin:2mm 0 4mm;text-align:center}
 .avs>div{background:var(--bg);border-radius:3mm;padding:2mm 1mm}.avs span{color:var(--muted);font-size:8.4pt}.av svg{width:100%;height:auto}"""
 SCRIPT = """<script>const MIN=60000;const NOW=()=>1e12;</script><script src="../public/avatar.js"></script>
 <script>document.querySelectorAll('.av').forEach((el,i)=>{const b=+el.dataset.b;
-el.innerHTML=avatar({cap:0.8,color:['#f7941d','#5ab0ff','#5bc88a','#e879f9','#f2c94c','#ff7a6e'][i],sim:{cur:b,prev:b+(b>=0.8&&b<1.5?0.05:-0.05),peak:1.8},
-drinks:b>0&&b<1.5?[{t:1e12-5*MIN,l:['Bière','Vin','Cocktail','Shot'][i%4],abv:5}]:[]},120)});</script>"""
+el.innerHTML=avatar({cap:0.8,color:['#f7941d','#5ab0ff','#5bc88a','#e879f9','#f2c94c','#ff7a6e'][i],sim:{cur:b,prev:b-0.01,peak:b},
+drinks:i%3===1?[{t:1e12-5*MIN,l:['Bière','Vin','Cocktail','Shot'][i%4],abv:5}]:[]},120)});</script>"""
 write("guide.html", f"<style>{CSS}</style></head><body>{body}{SCRIPT}</body></html>", "Guide complet Alamb’hic")

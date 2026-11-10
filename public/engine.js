@@ -8,7 +8,6 @@ const PRESETS=[
  {l:"Vin",d:"12 cl · 12 %",ml:120,abv:12},{l:"Champagne",d:"12 cl · 12 %",ml:120,abv:12},
  {l:"Shot",d:"4 cl · 40 %",ml:40,abv:40},{l:"Cocktail",d:"20 cl · 10 %",ml:200,abv:10},
  {l:"Cidre",d:"25 cl · 5 %",ml:250,abv:5},{l:"Eau",d:"25 cl",ml:250,abv:0,water:1}];
-const GAGES=["boire deux grands verres d'eau d'affilée","faire un compliment sincère à chaque joueur","imiter un animal choisi par le groupe pendant une minute","parler avec un accent pendant 5 minutes","servir de l'eau à toute la tablée","raconter sa pire honte de soirée","chanter un refrain choisi par le groupe","mimer un film que les autres doivent deviner"];
 const ABS_FED=75, ABS_FAST=30, ELIM=0.15, MIN=60000;
 /* Repas : un repas ralentit l'absorption (abs, en min) et réduit la part d'alcool qui passe dans le sang (f),
    pour les verres bus de 30 min avant le repas jusqu'à `dur` min après. */
@@ -53,7 +52,6 @@ function simulate(p,now){
   return out;
 }
 function hash(s){let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))|0;return Math.abs(h)}
-const gage=(p,id)=>GAGES[hash(p.id+id+(p.joined||0))%GAGES.length];
 function events(p,sim,now){
   const ev=[], n=p.pseudo||"Quelqu'un", cap=+p.cap||0.8;
   const add=(id,kind,t,title,text)=>ev.push({key:p.id+":"+id,pid:p.id,kind,t,title,text});
@@ -63,15 +61,15 @@ function events(p,sim,now){
    [0.4,"joues","trophy","Joues roses",`${n} commence à rosir.`],
    [0.5,"volant","info","Clés confisquées",`${n} passe 0,5 g/L : plus de volant ce soir.`],
    [0.8,"philo","trophy","Philosophe de comptoir",`${n} refait le monde à 0,8 g/L. Dernier titre à gagner en montant.`],
-   [1.2,"naufrage","shame","Le Naufragé",`${n} dépasse 1,2 g/L. Gage : ${gage(p,"n")}. Passage à l'eau.`],
+   [1.2,"naufrage","shame","Le Naufragé",`${n} dépasse 1,2 g/L. Passage à l'eau.`],
    [1.5,"alerte","care","Alerte copains",`${n} est estimé à 1,5 g/L. Apportez-lui de l'eau et gardez un œil sur lui.`],
    [2.0,"rouge","care","Alerte rouge",`${n} dépasse 2 g/L estimé. Restez avec lui. S'il vomit, ne répond plus ou respire mal : appelez le 15.`]];
   const done={}; let pk=0; const pts=sim.pts;
   for(let i=0;i<pts.length&&pts[i][0]<=now;i++){
     const [t,b]=pts[i];
     for(const th of TH) if(!done[th[1]]&&b>=th[0]){done[th[1]]=1;add(th[1],th[2],t,th[3],th[4])}
-    if(!done.cap&&cap<1.2&&b>=cap){done.cap=1;add("cap","shame",t,"Hors plafond",`${n} dépasse son plafond de ${fmt(cap)} g/L. Gage : ${gage(p,"c")}. Eau jusqu'à nouvel ordre.`)}
-    if(!done.fusee&&i>=60&&b-pts[i-60][1]>=0.5){done.fusee=1;add("fusee","shame",t,"La Fusée",`${n} a pris +0,5 g/L en une heure. Gage : ${gage(p,"f")}.`)}
+    if(!done.cap&&cap<1.2&&b>=cap){done.cap=1;add("cap","shame",t,"Hors plafond",`${n} dépasse son plafond de ${fmt(cap)} g/L. Eau jusqu'à nouvel ordre.`)}
+    if(!done.fusee&&i>=60&&b-pts[i-60][1]>=0.5){done.fusee=1;add("fusee","shame",t,"La Fusée",`${n} a pris +0,5 g/L en une heure.`)}
     pk=Math.max(pk,b);
     if(!done.land&&pk>=0.4&&b<0.2){done.land=1;add("land","trophy",t,"Atterrissage en douceur",`${n} redescend sous 0,2 g/L.`)}
     if(!done.earth&&pk>=0.2&&b<=0){done.earth=1;add("earth","trophy",t,"Retour sur Terre",`${n} est revenu à zéro.`)}
@@ -84,6 +82,6 @@ function events(p,sim,now){
 const scoreOf=ev=>ev.reduce((s,e)=>s+(e.kind==="trophy"?10:e.kind==="shame"?-15:0),0);
 const fmt=b=>(Math.max(0,b)).toFixed(2).replace(".",",");
 function scoreSummary(p,now){ const sim=simulate(p,now); const ev=events(p,sim,now); return {sim,ev,score:scoreOf(ev)}; }
-const api={PRESETS,GAGES,ABS_FED,ABS_FAST,ELIM,MIN,MEALS,MEAL_ORDER,mealFor,tbw,simulate,events,scoreOf,hash,fmt,scoreSummary};
+const api={PRESETS,ABS_FED,ABS_FAST,ELIM,MIN,MEALS,MEAL_ORDER,mealFor,tbw,simulate,events,scoreOf,hash,fmt,scoreSummary};
 if(typeof module!=="undefined"&&module.exports) module.exports=api; else root.YD=api;
 })(typeof self!=="undefined"?self:this);

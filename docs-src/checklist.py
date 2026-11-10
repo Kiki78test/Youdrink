@@ -37,6 +37,8 @@ FAIT = [
     ("ok", "<b>Business plan</b> (10/11) : document dans l'onglet Documentation, à enrichir au fil des idées."),
     ("ok", "<b>Liste d'amis</b> (10/11) : code ami, lien d'invitation, demandes, amis en direct (taux, tendance, mini-courbe, dernier titre), partage désactivable."),
     ("todo", "<b>Widget « mes potes »</b> sur l'APK et la montre, et notifications des titres des amis hors soirée (avec l'APK)."),
+    ("ok", "<b>Nouvel avatar</b> (10/11) : portrait dans un cercle en 10 stades (du sourire au KO), d'après la planche fournie. Version femme à venir."),
+    ("ok", "<b>Gages supprimés</b> (10/11) : les titres de honte coûtent seulement des points."),
     ("ok", "<b>Onglet Documentation</b> (10/11) réservé aux admins : présentation complète, guide complet, check-list, services externes."),
 ]
 A_TESTER = [
@@ -61,6 +63,7 @@ A_FAIRE = [
     ("todo", "<b>Étape 3 — Fiabilité</b> : saisie d'un éthylotest et recalibrage personnel, éthylotest Bluetooth, validation des verres par les amis, indice de fiabilité."),
     ("todo", "<b>Étape 4 — Montre et long terme</b> : Wear OS (ajout d'un verre, vibration aux seuils, gorgées détectées par l'inclinaison), tableau de bord mensuel, objectifs, trophées long terme."),
     ("todo", "<b>Étape 5 — Ouverture publique</b> : localisation approximative et défis entre soirées, publicités cohérentes (VTC, repas, sans alcool), version premium."),
+    ("todo", "<b>Avatar femme</b> : à dessiner d'après les prochaines images (le sexe du profil choisira la version)."),
     ("todo", "<b>Juridique</b> avant toute ouverture publique : loi Évin, règles des stores, RGPD (analyse d'impact, politique de confidentialité, mentions légales)."),
     ("todo", "<b>Passage aux offres payantes Render</b> (environ 7 $ + 6 $ par mois) avant d'ouvrir au-delà du cercle d'amis : la base gratuite expire au bout de 30 jours."),
 ]

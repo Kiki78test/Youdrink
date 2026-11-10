@@ -47,7 +47,7 @@ const TERMS = `
 <p>En créant un compte Alamb'hic, vous acceptez les conditions suivantes.</p>
 <h2>Un jeu, pas une mesure</h2><p>Les taux affichés sont des <b>estimations</b> calculées à partir de vos déclarations et d'une formule générale. L'écart avec un éthylotest peut dépasser 0,2 g/L. Alamb'hic ne remplace ni un éthylotest ni un avis médical, et <b>n'est jamais une autorisation de conduire</b> : après avoir bu, on ne prend pas le volant.</p>
 <h2>Réservé aux adultes</h2><p>Il faut avoir 18 ans ou plus pour utiliser Alamb'hic.</p>
-<h2>Modération</h2><p>Le jeu récompense la modération et l'entraide. Les gages proposés sont toujours sans alcool. N'utilisez pas Alamb'hic pour pousser quelqu'un à boire. En cas de malaise, de perte de connaissance ou de difficulté à respirer, appelez le 15 ou le 112.</p>
+<h2>Modération</h2><p>Le jeu récompense la modération et l'entraide. N'utilisez pas Alamb'hic pour pousser quelqu'un à boire. En cas de malaise, de perte de connaissance ou de difficulté à respirer, appelez le 15 ou le 112.</p>
 <h2>Votre compte</h2><p>Vous êtes responsable de l'exactitude de ce que vous déclarez et de la confidentialité de votre mot de passe. Nous pouvons suspendre un compte utilisé pour tricher de façon répétée, harceler d'autres joueurs ou détourner le service.</p>
 <h2>Service en test</h2><p>Alamb'hic est en phase de test : il peut être interrompu, modifié ou remis à zéro sans préavis. Il est fourni tel quel, sans garantie de disponibilité.</p>
 <h2>Responsabilité</h2><p>Chaque joueur reste seul responsable de sa consommation et de ses décisions. L'éditeur ne peut être tenu responsable des conséquences d'une consommation d'alcool ni d'une décision prise à partir d'une estimation affichée.</p>

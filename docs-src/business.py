@@ -20,7 +20,7 @@ sec("Sources de revenus", """<h3>1. Version Premium (abonnement)</h3>
 <li>Contenu : bilans mensuels et historique complet, objectifs et trophées long terme, avatars, accessoires et thèmes, défis entre amis, sans publicité.</li>
 <li>La version gratuite reste complète pour jouer en soirée : le Premium vend le confort et la personnalisation, jamais la sécurité (les alertes restent gratuites).</li></ul>
 <h3>2. Achats ponctuels</h3>
-<ul><li>Packs d'avatars et d'accessoires, packs de gages, titres secrets.</li>
+<ul><li>Packs d'avatars et d'accessoires, titres secrets.</li>
 <li><b>Pass soirée</b> (anniversaire, EVJF, mariage) : thème de la soirée, titres personnalisés, récapitulatif souvenir à partager. Prix à tester : 4,99 € la soirée.</li></ul>
 <h3>3. Publicité cohérente avec le concept</h3>
 <ul><li>Annonceurs : VTC et taxis (« rentrer sans conduire »), livraison de repas (lien direct avec la question « avez-vous mangé ? »), boissons sans alcool, éthylotests.</li>
