@@ -7,7 +7,7 @@ def ch(title, body): CH.append((title, body))
 def shot(n, cap=""): return f'<figure><img src="img/{n}.png"><figcaption>{cap}</figcaption></figure>'
 
 ch("Démarrer", f"""<div class="split"><div>
-<h3>Créer un compte</h3><p>Ouvrez <b>youdrink.onrender.com</b>, choisissez « Créer un compte », saisissez votre e-mail et un mot de passe d'au moins 8 caractères. La connexion reste active 60 jours sur l'appareil. La connexion Google arrivera quand l'identifiant sera configuré.</p>
+<h3>Créer un compte</h3><p>Ouvrez <b>alambhic.onrender.com</b>, choisissez « Créer un compte », saisissez votre e-mail et un mot de passe d'au moins 8 caractères. La connexion reste active 60 jours sur l'appareil. La connexion Google arrivera quand l'identifiant sera configuré.</p>
 <h3>Compléter son profil</h3><p>Pseudo, sexe biologique, âge, taille et poids : ces mesures servent uniquement à estimer votre taux. Les autres joueurs voient votre pseudo, vos verres et vos taux, jamais vos mesures.</p>
 <p>Alamb’hic est <b>réservé aux 18 ans et plus</b> : un âge inférieur est refusé.</p>
 <h3>Choisir son plafond</h3><p>0,5 ; 0,6 ; 0,8 (conseillé) ou 1,0 g/L. Au-delà, les titres positifs s'arrêtent et chaque excès devient un titre de honte avec gage.</p>

@@ -11,7 +11,7 @@ FAIT = [
     ("ok", "<b>Prototype</b> (09/11) : calcul du taux, titres et gages, courbes communes, notifications, avatar évolutif, mode démo avec curseur temporel."),
     ("ok", "<b>Cahier des charges</b> (09/11) : concept, calcul, trophées, alertes, fiabilité et anti-triche, localisation, suivi long terme, supports, monétisation, juridique, architecture, feuille de route."),
     ("ok", "<b>Dépôt GitHub</b> <code>Kiki78test/Youdrink</code> (10/11), accès de Claude autorisé."),
-    ("ok", "<b>Render</b> (10/11) : Blueprint « youdrink », service web gratuit et base PostgreSQL gratuite, tous deux à Francfort. Adresse : <code>youdrink.onrender.com</code>."),
+    ("ok", "<b>Render</b> (10/11) : Blueprint « youdrink », service web gratuit et base PostgreSQL gratuite, tous deux à Francfort. Adresse : <code>alambhic.onrender.com</code>."),
     ("ok", "<b>Comptes</b> : e-mail + mot de passe (8 caractères minimum, mots de passe chiffrés), connexion gardée 60 jours, limitation des essais de connexion."),
     ("ok", "<b>Profil</b> : pseudo, sexe, âge (18 ans minimum), taille, poids, plafond perso. Les mesures ne sont jamais montrées aux autres joueurs."),
     ("ok", "<b>Soirées par code</b> de 4 lettres : créer, rejoindre, partager l'invitation, quitter. Une seule soirée active à la fois."),
@@ -32,7 +32,7 @@ A_TESTER = [
     ("test", "<b>Variable Render <code>ADMIN_EMAILS</code></b> : y mettre votre adresse e-mail pour voir le bouton « Docs »."),
     ("test", "<b>Variable <code>CONTACT_EMAIL</code></b> sur Render : adresse de contact affichée dans les pages légales."),
     ("test", "<b>Connexion Google</b> : se connecter avec « Continuer avec Google » depuis le téléphone."),
-    ("test", "<b>Création de compte et profil</b> sur youdrink.onrender.com, depuis le téléphone puis l'ordinateur."),
+    ("test", "<b>Création de compte et profil</b> sur alambhic.onrender.com, depuis le téléphone puis l'ordinateur."),
     ("test", "<b>Repas</b> : en entrant dans la soirée, renseigner les repas du jour (heure et type) avant le premier verre ; ajouter un repas en cours de soirée ; vérifier la question « avez-vous dîné ? » entre 19 h et 22 h 30."),
     ("test", "<b>Soirée à deux téléphones</b> : créer une soirée, la rejoindre avec le code, noter des verres des deux côtés et vérifier que courbes, classement et notifications arrivent chez l'autre."),
     ("test", "<b>Installation</b> : menu du navigateur → « Ajouter à l'écran d'accueil »."),
@@ -41,6 +41,7 @@ A_TESTER = [
     ("test", "<b>Vraie soirée entre amis</b> : validation de l'étape 1 avant de passer à l'APK."),
 ]
 A_FAIRE = [
+    ("todo", "<b>Nouvelle adresse <code>alambhic.onrender.com</code></b> : Manual sync du Blueprint (crée le service « alambhic »), renseigner <code>GOOGLE_CLIENT_ID</code>, <code>ADMIN_EMAILS</code>, <code>CONTACT_EMAIL</code>, ajouter l'adresse aux origines du client Google, puis supprimer l'ancien service « youdrink »."),
     ("todo", "<b>Marque Alamb’hic</b> : export INPI sur « alambic » et « alambhic » (classes 9, 41, 42), puis dépôt INPI ; choisir l'écriture définitive (Alamb’hic / AlambHic)."),
     ("todo", "<b>Logo définitif</b> : choisir parmi les pistes A à D (brand/propositions-logo.png) ou fournir le vôtre."),
     ("todo", "<b>Google</b> : Branding → nom de l'application « Alamb’hic » (le projet peut garder son nom)."),

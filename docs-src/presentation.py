@@ -136,7 +136,7 @@ S.append(slide(f"""<div class="cols"><div><div class="k">Suivi long terme</div><
 
 S.append(slide("""<div class="k">Architecture et supports</div><h2>Un seul serveur pour le site, l'APK et la montre</h2>
 <div class="arch">
-<div class="card"><b>Aujourd'hui</b><span>Site web installable sur youdrink.onrender.com · serveur Node et temps réel · base PostgreSQL · Render à Francfort · code sur GitHub.</span></div>
+<div class="card"><b>Aujourd'hui</b><span>Site web installable sur alambhic.onrender.com · serveur Node et temps réel · base PostgreSQL · Render à Francfort · code sur GitHub.</span></div>
 <div class="card"><b>APK Android</b><span>Même appli emballée, notifications push Firebase appli fermée, widget écran d'accueil (jauge, retour à 0, + bière / + vin / + eau).</span></div>
 <div class="card"><b>Montre Wear OS</b><span>Ajouter un verre au poignet, taux en complication, vibration aux seuils et quand un ami est en alerte, gorgées détectées.</span></div></div>"""))
 
