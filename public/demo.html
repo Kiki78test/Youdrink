@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Alamb'hic – banc de test</title>
+<meta name="theme-color" content="#0a1626">
+<link rel="icon" href="/icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/app.css">
+<style>
+/* Banc de test sur ordinateur : la soirée fictive défile sur une frise, on suit les avatars et l'arrivée des titres. */
+body{padding:0;overflow-x:hidden}
+.tb{max-width:1400px;margin:0 auto;padding:18px 28px 200px}
+.tb header{position:static;border:0;padding:0 0 14px}
+.tb h1{font-size:26px}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.pc{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0;position:relative}
+.pc .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.pc .nm{font:800 22px var(--display)}
+.pc .st{font:600 13px var(--body)}
+.pc .mid{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.avbox{position:relative;width:124px;height:124px;flex:none}
+.avwrap{width:100%;height:100%;transform-origin:50% 92%;animation:sway 3.4s ease-in-out infinite}
+.avwrap svg{width:100%;height:100%}
+.avbox.jolt .avwrap{animation:jolt .9s cubic-bezier(.3,1.5,.5,1),sway 3.4s ease-in-out .9s infinite}
+.avbox .avbub{display:none}
+.avbox.jolt .avbub{display:block}
+.pc .gauge.spiral{width:76px}
+.pc .num{font:800 48px var(--display);font-variant-numeric:tabular-nums;line-height:1}
+.pc .num small{font-size:15px;color:var(--muted);margin-left:3px;font-family:var(--body)}
+.pc .row2{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pc .tit{display:flex;flex-wrap:wrap;gap:6px;min-height:28px}
+.pc .tit span{font-size:12px;padding:4px 8px;border-radius:9px;border:1px solid var(--line);background:var(--surface2)}
+.pc .tit .trophy{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 50%,transparent)}
+.pc .tit .shame{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 50%,transparent)}
+.pc .tit .care{color:var(--care);border-color:color-mix(in srgb,var(--care) 50%,transparent)}
+.pc .info{font-size:12.5px;color:var(--muted)}
+.lower{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px;margin-top:16px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:16px;min-width:0}
+.panel h2{font-size:18px;margin-bottom:8px}
+#chart svg{width:100%;height:auto;display:block}
+#feed{max-height:330px;overflow:auto}
+#feed .ev{animation:in .35s ease-out}
+.tl{position:fixed;left:0;right:0;bottom:0;z-index:10;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+.tl .in{max-width:1400px;margin:0 auto;padding:12px 28px 16px;display:flex;flex-direction:column;gap:8px}
+.tl .ctl{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tl .clock{font:800 34px var(--display);font-variant-numeric:tabular-nums;min-width:110px}
+.tl .seg{flex:0 0 auto}
+.tl .seg button{padding:7px 12px}
+.track{position:relative;height:44px}
+.track input{position:absolute;left:0;right:0;top:20px;width:100%;margin:0;accent-color:var(--accent)}
+.marks{position:absolute;left:8px;right:8px;top:0;height:18px}
+.marks i{position:absolute;top:2px;width:10px;height:10px;border-radius:50%;transform:translateX(-50%);cursor:pointer;border:2px solid var(--bg)}
+.marks i:hover{transform:translateX(-50%) scale(1.5)}
+.hours{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);padding:0 4px}
+.help{font-size:12px;color:var(--muted)}
+kbd{font:600 11px var(--body);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 5px;color:var(--fg)}
+@media (max-width:1000px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lower{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="tb">
+<header><img src="/logo.png" alt="Alamb'hic"><span class="chip">Banc de test · soirée fictive</span></header>
+<h1>La soirée de Léa, Max, Tom et Inès</h1>
+<p class="muted" style="margin:4px 0 16px">Faites défiler la frise du bas pour voir les taux, les avatars et l'arrivée des titres heure par heure.</p>
+<div class="grid" id="grid"></div>
+<div class="lower">
+ <div class="panel"><h2>Courbes de la soirée</h2><div id="chart"></div></div>
+ <div class="panel"><h2>Fil des titres</h2><div id="feed"></div></div>
+</div>
+</div>
+<div class="tl"><div class="in">
+ <div class="ctl">
+  <span class="clock" id="clock">19:00</span>
+  <button class="btn" id="play">▶ Lecture</button>
+  <div class="seg" id="speed"><button data-s="1">×1</button><button data-s="5" aria-pressed="true">×5</button><button data-s="15">×15</button></div>
+  <button class="btn ghost small" id="reset">Revenir à 19 h</button>
+  <span class="help"><kbd>Espace</kbd> lecture · <kbd>←</kbd> <kbd>→</kbd> ±5 min · <kbd>Maj</kbd>+flèches ±30 min · un point de la frise saute au titre</span>
+ </div>
+ <div class="track"><div class="marks" id="marks"></div><input type="range" id="range" min="0" max="660" step="1" value="0" aria-label="Heure de la soirée"></div>
+ <div class="hours"><span>19h</span><span>20h</span><span>21h</span><span>22h</span><span>23h</span><span>0h</span><span>1h</span><span>2h</span><span>3h</span><span>4h</span><span>5h</span><span>6h</span></div>
+</div></div>
+<div id="toasts" aria-live="polite"></div>
+<script src="/engine.js"></script>
+<script>const MIN=60000; let T0=0, T=0; const NOW=()=>T;</script>
+<script src="/avatar.js"></script>
+<script src="/demo-data.js"></script>
+<script>
+"use strict";
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const {PRESETS,fmt}=YD;
+const hm=t=>new Date(t).toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+const COLORS=["#f7941d","#5ab0ff","#5bc88a","#e879f9"];
+const d0=new Date(); d0.setHours(19,0,0,0); T0=d0.getTime(); T=T0;
+const P=self.DEMO_DATA.map((x,i)=>({id:x.id,pseudo:x.pseudo,sex:x.sex,age:x.age,height:x.height,weight:x.weight,cap:x.cap,sam:!!x.sam,joined:T0,color:COLORS[i],
+  meals:(x.meals||[]).map(([m,k])=>({t:T0+m*MIN,kind:k})),
+  drinks:x.d.map(([m,k])=>{const p=PRESETS[k];return{t:T0+m*MIN,l:p.l,ml:p.ml,abv:p.abv,...(p.water?{water:1}:{})}})}));
+function stateOf(b,cap){ if(b>=1.5)return["Alerte","var(--care)"]; if(b>=cap)return["Au-dessus du plafond","var(--bad)"]; if(b>=0.5)return["Interdit de conduire","var(--warn)"]; if(b>=0.2)return["Pompette","var(--accent)"]; return["Sobre","var(--ok)"] }
+/* spirale d'alambic (même dessin que l'appli) */
+const SPIRAL=(()=>{const cx=34,cy=34,turns=2.6,r0=29,r1=7,n=140;let d="";for(let k=0;k<=n;k++){const t=k/n,a=-Math.PI/2+t*turns*2*Math.PI,r=r0-(r0-r1)*t;d+=(k?"L":"M")+(cx+r*Math.cos(a)).toFixed(2)+" "+(cy+r*Math.sin(a)).toFixed(2)}return d})();
+const END=T0+660*MIN;
+/* toute la soirée calculée d'avance : courbes et titres */
+const FULL=P.map(p=>{const sim=YD.simulate({...p},END);return{sim,ev:YD.events({...p},sim,END)}});
+/* cartes joueurs (créées une fois, puis mises à jour) */
+$("#grid").innerHTML=P.map((p,i)=>`<div class="pc" id="pc${i}"><div class="top"><span class="nm" style="color:${p.color}">${esc(p.pseudo)}</span><span class="st"></span></div>
+ <div class="mid"><div class="avbox"><div class="avwrap"></div><em class="avbub"></em></div>
+ <div class="gauge spiral"><svg viewBox="0 0 68 68"><path d="M34 -6 V5" class="gt"/><path d="M34 -6 V5" class="gi"/><path d="${SPIRAL}" class="gt"/><path d="${SPIRAL}" class="gi"/><path d="${SPIRAL}" class="pot" pathLength="100" style="stroke-dashoffset:100"/><circle cx="34" cy="34" r="4.2" class="gend"/></svg></div></div>
+ <div class="row2"><span class="num">0,00<small>g/L</small></span><span class="ltr flat">■ stable</span></div>
+ <div class="info"></div><div class="tit"></div></div>`).join("");
+/* repères des titres sur la frise */
+const allEv=FULL.flatMap((f,i)=>f.ev.filter(e=>e.kind!=="info").map(e=>({...e,i}))).sort((a,b)=>a.t-b.t);
+$("#marks").innerHTML=allEv.map(e=>`<i title="${esc(P[e.i].pseudo)} · ${esc(e.title)} · ${hm(e.t)}" style="left:${((e.t-T0)/(660*MIN)*100).toFixed(2)}%;background:${e.kind==="trophy"?"var(--gold)":e.kind==="shame"?"var(--bad)":"var(--care)"}" data-t="${Math.ceil((e.t-T0)/MIN)}"></i>`).join("");
+const prevState=[], shown=new Set();
+let lastAv=[];
+function update(silent,since){
+  const now=T; $("#clock").textContent=hm(now); $("#range").value=Math.round((now-T0)/MIN);
+  P.forEach((p,i)=>{
+    const sim=YD.simulate(p,now), ev=YD.events(p,sim,now), [lab,col]=stateOf(sim.cur,p.cap), el=$("#pc"+i);
+    el.querySelector(".st").textContent=p.sam?"Sam · "+lab:lab; el.querySelector(".st").style.color=col;
+    const n=el.querySelector(".num"); n.firstChild.nodeValue=fmt(sim.cur); n.style.color=col;
+    const pot=el.querySelector(".pot"); pot.style.stroke=col; pot.style.strokeDashoffset=(100-Math.min(1,sim.cur/Math.max(1.6,p.cap+0.4))*100).toFixed(2);
+    /* avatar : redessiné seulement si son aspect change (taux au centième, verre en main) */
+    const last=p.drinks.filter(d=>d.t<=now).pop(), hold=last&&now-last.t<25*MIN?last.l:"", sig=sim.cur.toFixed(2)+hold+(sim.cur<sim.prev-0.004?"d":"");
+    if(lastAv[i]!==sig){ lastAv[i]=sig; el.querySelector(".avwrap").innerHTML=avatar({...p,sim},124) }
+    el.querySelector(".avwrap").style.setProperty("--sw",(Math.min(1.4,sim.cur)*4.5).toFixed(2)+"deg");
+    if(prevState[i]&&prevState[i]!==lab&&!silent){ const b=el.querySelector(".avbox"); b.querySelector(".avbub").textContent=lab; b.classList.remove("jolt"); void b.offsetWidth; b.classList.add("jolt"); setTimeout(()=>b.classList.remove("jolt"),2200) }
+    prevState[i]=lab;
+    const past=sim.pts.filter(x=>x[0]<=now-15*MIN).pop(), rate=past?(sim.cur-past[1])*4:0, tr=el.querySelector(".ltr");
+    if(sim.cur<0.01&&(!past||past[1]<0.01)||Math.abs(rate)<0.02){tr.className="ltr flat";tr.textContent="■ stable"} else if(rate>0){tr.className="ltr up";tr.textContent=`▲ +${fmt(rate)}/h`} else {tr.className="ltr down";tr.textContent=`▼ −${fmt(-rate)}/h`}
+    el.querySelector(".info").textContent=`Pic ${fmt(sim.peak)} · ${(sim.grams/10).toFixed(1).replace(".",",")} verres standard`+(sim.cur>0&&sim.zeroT?` · retour à 0 vers ${hm(sim.zeroT)}`:"");
+    el.querySelector(".tit").innerHTML=ev.filter(e=>e.kind!=="info").map(e=>`<span class="${e.kind}">${esc(e.title)}</span>`).join("");
+    ev.forEach(e=>{ if(!shown.has(e.key)){ shown.add(e.key); if(!silent&&e.kind!=="info"&&(!since||e.t>since)) toast(e) } });
+  });
+  /* fil */
+  const evs=allEv.filter(e=>e.t<=now).slice().reverse();
+  $("#feed").innerHTML=evs.length?evs.map(e=>`<div class="ev ${e.kind}"><span class="t">${hm(e.t)}</span><div><b>${esc(e.title)}</b><span class="muted" style="font-size:13px">${esc(e.text)}</span></div></div>`).join(""):`<p class="muted">Les titres apparaîtront ici.</p>`;
+  drawChart(now);
+}
+function drawChart(now){
+  const W=820,H=250,L=36,R=12,Tp=12,B=26,t1=END, ymax=2.2, X=t=>L+(t-T0)/(t1-T0)*(W-L-R), Y=b=>Tp+(1-b/ymax)*(H-Tp-B);
+  let g="";
+  for(const [v,c] of [[0.5,"var(--warn)"],[0.8,"var(--accent)"],[1.2,"var(--bad)"],[1.5,"var(--care)"]]) g+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${c}" stroke-opacity=".4" stroke-dasharray="3 4"/><text x="${L-6}" y="${Y(v)+4}" text-anchor="end" fill="var(--muted)" font-size="11">${fmt(v).replace(/0$/,"")}</text>`;
+  for(let h=0;h<=11;h++){const t=T0+h*60*MIN;g+=`<text x="${X(t)}" y="${H-8}" text-anchor="middle" fill="var(--muted)" font-size="11">${(19+h)%24}h</text>`}
+  g+=`<line x1="${X(now)}" x2="${X(now)}" y1="${Tp}" y2="${Y(0)}" stroke="var(--fg)" stroke-opacity=".5"/>`;
+  FULL.forEach((f,i)=>{ const pts=f.sim.pts.filter((x,k)=>k%3===0&&x[0]<=t1); const past=pts.filter(x=>x[0]<=now), fut=pts.filter(x=>x[0]>=now);
+    const d=a=>a.map((x,k)=>(k?"L":"M")+X(x[0]).toFixed(1)+" "+Y(Math.min(ymax,x[1])).toFixed(1)).join("");
+    if(past.length>1) g+=`<path d="${d(past)}" fill="none" stroke="${P[i].color}" stroke-width="2.6"/>`;
+    if(fut.length>1) g+=`<path d="${d(fut)}" fill="none" stroke="${P[i].color}" stroke-width="1.6" stroke-dasharray="4 5" opacity=".35"/>`;
+    const cur=YD.simulate(P[i],now).cur; g+=`<circle cx="${X(now)}" cy="${Y(Math.min(ymax,cur))}" r="5" fill="${P[i].color}" stroke="var(--bg)" stroke-width="2"/>` });
+  $("#chart").innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Courbes des taux de la soirée">${g}</svg>`;
+}
+/* notifications : une à la fois */
+const TQ=[]; let busy=false;
+function toast(e){ TQ.push(e); if(TQ.length>4) TQ.shift(); pump() }
+function pump(){ if(busy||!TQ.length) return; busy=true; const e=TQ.shift(), k=e.kind;
+  const d=document.createElement("div"); d.className="toast "+k; const pl=P.find(p=>e.key.startsWith(p.id));
+  d.innerHTML=`<span class="ti" style="color:${pl?pl.color:""}">●${k==="trophy"?'<em class="hic">hic!</em><i class="sp s1"></i><i class="sp s2"></i><i class="sp s3"></i>':""}</span><div class="tx"><b>${esc(e.title)}</b><span>${esc(e.text)}</span></div><span></span><span></span><i class="tp" style="animation-duration:2600ms"></i>`;
+  const box=$("#toasts"); box.innerHTML=""; box.appendChild(d); requestAnimationFrame(()=>d.classList.add("in"));
+  setTimeout(()=>{ d.classList.remove("in"); d.classList.add("out"); setTimeout(()=>{ d.remove(); busy=false; pump() },200) },2600) }
+/* commandes */
+let timer=null, speed=5;
+function setMin(m,silent){ m=Math.max(0,Math.min(660,m)); const back=T0+m*MIN<T; const prevT=T; T=T0+m*MIN; if(back){ shown.clear(); P.forEach((p,i)=>{ YD.events(p,YD.simulate(p,T),T).forEach(e=>shown.add(e.key)) }); TQ.length=0 } update(silent||back, T-prevT>20*MIN?T-20*MIN:0) }
+function play(on){ if(on===undefined) on=!timer; clearInterval(timer); timer=null; $("#play").textContent=on?"⏸ Pause":"▶ Lecture";
+  if(on){ if(+$("#range").value>=660) setMin(0,true); timer=setInterval(()=>{ const m=Math.round((T-T0)/MIN)+speed; setMin(m); if(m>=660) play(false) },250) } }
+$("#range").oninput=e=>{ play(false); setMin(+e.target.value) };
+$("#play").onclick=()=>play();
+$("#reset").onclick=()=>{ play(false); setMin(0,true) };
+document.querySelectorAll("#speed button").forEach(b=>b.onclick=()=>{ speed=+b.dataset.s; document.querySelectorAll("#speed button").forEach(x=>x.setAttribute("aria-pressed",x===b)) });
+$("#marks").onclick=e=>{ const t=e.target.dataset.t; if(t!==undefined){ play(false); setMin(+t-1,true); setMin(+t) } };
+addEventListener("keydown",e=>{ if(e.key===" "){e.preventDefault();play()} else if(e.key==="ArrowRight"||e.key==="ArrowLeft"){ e.preventDefault(); play(false); const st=(e.shiftKey?30:5)*(e.key==="ArrowRight"?1:-1); setMin(Math.round((T-T0)/MIN)+st) } });
+setMin(0,true);
+</script>
+</body>
+</html>

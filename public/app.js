@@ -310,7 +310,7 @@ function viewProfile(){
   <div class="row"><button class="btn" id="saveProf">Enregistrer</button>${edit?`<button class="btn ghost" id="back">Retour</button>`:""}</div>
   </section>
   ${wk}
-  ${edit?`<section><div class="row">${S.user?.admin?`<button class="btn ghost small" id="openDocs">Documentation</button>`:""}<button class="btn ghost small" id="demoBtn2">Voir la démo</button></div></section><section><div class="row">${S.code?`<button class="btn ghost small" id="leave">Quitter la soirée ${esc(S.code)}</button>`:""}<button class="btn ghost small" id="logout">Me déconnecter</button></div>
+  ${edit?`<section><div class="row">${S.user?.admin?`<button class="btn ghost small" id="openDocs">Documentation</button>`:""}<button class="btn ghost small" id="demoBtn2">Voir la démo</button>${S.user?.admin?`<a class="btn ghost small" href="/demo.html" target="_blank" rel="noopener" style="text-decoration:none">Banc de test (ordinateur)</a>`:""}</div></section><section><div class="row">${S.code?`<button class="btn ghost small" id="leave">Quitter la soirée ${esc(S.code)}</button>`:""}<button class="btn ghost small" id="logout">Me déconnecter</button></div>
   <button class="link danger" id="delAcc">Supprimer mon compte et toutes mes données</button><div id="delConfirm" hidden class="banner">Tout sera effacé : profil, verres, titres. <div class="row" style="margin-top:8px"><button class="btn small" id="delYes">Oui, tout supprimer</button><button class="btn ghost small" id="delNo">Annuler</button></div></div></section>`:""}`;
 }
 function weekView(){
@@ -530,11 +530,7 @@ async function afterLogin(){
 
 /* ---------- démo ---------- */
 
-const DEMO=[
- {id:"demo-lea",pseudo:"Léa",sex:"F",age:28,height:165,weight:58,cap:0.8,meals:[[-390,"full"],[60,"full"]],d:[[15,3],[50,7],[75,2],[110,7],[140,2],[170,7],[200,5],[240,7],[300,7]]},
- {id:"demo-max",pseudo:"Max",sex:"H",age:31,height:182,weight:85,cap:0.8,meals:[[-400,"light"],[140,"snack"]],d:[[5,1],[40,1],[60,4],[65,4],[90,1],[130,5],[150,4],[155,4],[180,1],[260,7],[320,7]]},
- {id:"demo-tom",pseudo:"Tom",sex:"H",age:25,height:178,weight:72,cap:0.8,meals:[[-380,"full"],[75,"big"]],d:[[20,1],[70,0],[100,2],[150,7],[180,2],[220,7],[260,7]]},
- {id:"demo-sam",pseudo:"Inès",sex:"F",age:30,height:170,weight:62,cap:0.5,sam:true,meals:[[60,"full"]],d:[[30,7],[120,7],[200,7],[280,7]]}];
+const DEMO=self.DEMO_DATA;
 let demoSaved=null;
 function startDemo(){
   demoSaved={me:S.me,tab:S.tab}; demo=true;

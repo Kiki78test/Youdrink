@@ -33,6 +33,7 @@ FAIT = [
     ("ok", "<b>Écran « Potes » en direct</b> (10/11) : taux, avatar, tendance façon bourse (▲/▼ en g/L par heure), mini-courbe, dernier titre."),
     ("ok", "<b>Animations</b> (10/11) : jauge en serpentin d'alambic, goutte qui vole jusqu'au tuyau, titre qui fait « hic ! », tendance qui clignote, fiole de chargement ; coupées si le téléphone réduit les animations."),
     ("ok", "<b>Avatar vivant</b> (10/11) : balancement selon le taux, sursaut et bulle à chaque changement d'état."),
+    ("ok", "<b>Banc de test sur ordinateur</b> (10/11) : <code>/demo.html</code>, la soirée fictive en grand avec frise temporelle, avatars, titres et courbes."),
     ("ok", "<b>Business plan</b> (10/11) : document dans l'onglet Documentation, à enrichir au fil des idées."),
     ("ok", "<b>Liste d'amis</b> (10/11) : code ami, lien d'invitation, demandes, amis en direct (taux, tendance, mini-courbe, dernier titre), partage désactivable."),
     ("todo", "<b>Widget « mes potes »</b> sur l'APK et la montre, et notifications des titres des amis hors soirée (avec l'APK)."),

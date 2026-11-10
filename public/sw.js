@@ -1,6 +1,6 @@
 /* Cache de l'interface pour l'installation ; l'API passe toujours par le réseau. */
-const V = "yd-v3";
-const SHELL = ["/", "/app.css", "/engine.js", "/avatar.js", "/app.js", "/logo.png", "/manifest.webmanifest", "/icons/icon-192.png"];
+const V = "yd-v4";
+const SHELL = ["/", "/app.css", "/engine.js", "/avatar.js", "/demo-data.js", "/app.js", "/logo.png", "/manifest.webmanifest", "/icons/icon-192.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(V).then(c => c.addAll(SHELL))); self.skipWaiting(); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(k => Promise.all(k.filter(x => x !== V).map(x => caches.delete(x))))); self.clients.claim(); });
 self.addEventListener("fetch", e => {

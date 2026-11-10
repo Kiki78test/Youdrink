@@ -103,7 +103,8 @@ ch("Le mode démo", """<p>Le bouton « Démo » en haut de l'écran lance une so
 <ul><li><b>Curseur</b> : avancez ou reculez de 19 h à 6 h ; les titres déjà passés ne sont pas renotifiés.</li>
 <li><b>Lecture</b> : la soirée défile en accéléré, 5 minutes toutes les demi-secondes.</li>
 <li>On peut ajouter ou supprimer des verres pour Léa : rien n'est enregistré.</li>
-<li><b>Quitter</b> revient à votre vraie soirée.</li></ul>""")
+<li><b>Quitter</b> revient à votre vraie soirée.</li></ul>
+<h3>Banc de test sur ordinateur</h3><p>La page <code>/demo.html</code> (lien « Banc de test (ordinateur) » dans le Profil des admins) affiche la même soirée fictive en grand : les quatre joueurs côte à côte (avatar, spirale, taux, tendance, titres obtenus), les courbes de la soirée et le fil des titres. Une frise en bas fait défiler la soirée de 19 h à 6 h ; chaque point de la frise est un titre, cliquable pour y sauter. Lecture ×1, ×5 ou ×15, touche Espace pour lancer ou arrêter, flèches pour avancer de 5 minutes (30 avec Maj).</p>""")
 
 ch("Suivi des 7 derniers jours", f"""<div class="split"><div>
 <p>La page Profil compte vos verres standard des 7 derniers jours, toutes soirées confondues, et les compare aux repères de Santé publique France : 10 verres par semaine au plus, 2 par jour, et des jours sans alcool.</p>
