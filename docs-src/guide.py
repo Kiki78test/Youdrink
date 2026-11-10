@@ -96,6 +96,7 @@ ch("L'avatar", AVS + """<p>Chaque joueur a un avatar à sa couleur, sur l'écran
 <li>0,5 g/L : col ouvert et clés de voiture barrées ; 0,6 g/L : bulles de hoquet ; 0,8 g/L : lunettes de travers ;</li>
 <li>au-dessus du plafond : teint verdâtre, yeux qui louchent, cheveux en bataille, chemise froissée ; 1 g/L : goutte de sueur ;</li>
 <li>1,5 g/L : allongé sur un oreiller avec un verre d'eau.</li></ul>
+<p><b>Avatar vivant</b> : il respire doucement quand on est sobre, puis se balance de plus en plus à mesure que le taux monte. À chaque changement d'état (sobre, pompette, interdit de conduire, au-dessus du plafond, alerte), il sursaute et une bulle annonce son nouvel état, sur l'écran Moi, l'écran Potes et la liste d'amis.</p>
 <p>Pendant 25 minutes après chaque verre, l'avatar tient le bon modèle (bière avec mousse, vin rouge, flûte, shot, cocktail ou eau). Quand le taux redescend, il tient un verre d'eau.</p>""")
 
 ch("Le mode démo", """<p>Le bouton « Démo » en haut de l'écran lance une soirée fictive, même sans compte : Léa (raisonnable, c'est vous), Max (qui dérape), Tom (modéré) et Inès (Sam).</p>

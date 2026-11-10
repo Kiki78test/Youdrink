@@ -204,3 +204,13 @@ body.isdemo{padding-bottom:200px}
 .btn.pulse{animation:pulse 1.2s ease-in-out infinite}
 @keyframes pulse{50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 30%,transparent)}}
 @media (prefers-reduced-motion:reduce){.btn.pulse{animation:none}}
+.avw{position:relative;display:inline-flex;flex:none}
+.avw>svg{transform-origin:50% 92%;animation:sway 3.4s ease-in-out infinite}
+.avw.still>svg{animation:breathe 4s ease-in-out infinite}
+@keyframes sway{0%,100%{rotate:calc(var(--sw) * -1)}50%{rotate:var(--sw)}}
+@keyframes breathe{50%{scale:1.025}}
+.avw.avchg>svg{animation:jolt .9s cubic-bezier(.3,1.5,.5,1) var(--el) both,sway 3.4s ease-in-out .9s infinite}
+@keyframes jolt{0%{transform:translateY(0) scale(1)}25%{transform:translateY(-14%) scale(1.08,.94)}50%{transform:translateY(0) scale(.94,1.06) rotate(-6deg)}75%{transform:rotate(5deg)}100%{transform:none}}
+.avbub{position:absolute;left:50%;top:-6px;translate:-50% -100%;white-space:nowrap;font:800 11px/1 var(--display);font-style:normal;color:#0d2747;background:#f4f8ff;padding:5px 8px;border-radius:10px 10px 10px 3px;box-shadow:0 6px 16px rgba(0,0,0,.35);opacity:0;animation:avbub 2.2s ease-out var(--el) forwards;pointer-events:none;z-index:2}
+@keyframes avbub{0%{opacity:0;transform:translateY(8px) scale(.6)}15%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0;transform:translateY(-6px)}}
+@media (prefers-reduced-motion:reduce){.avw>svg,.avw.avchg>svg{animation:none}.avbub{display:none}}

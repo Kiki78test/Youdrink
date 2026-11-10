@@ -26,5 +26,12 @@
   "desc": "Mode d'emploi détaillé de toutes les fonctions, par sujet, avec l'historique des versions",
   "date": "2026-11-10",
   "cat": "🎤 Présentation et guides"
+ },
+ {
+  "file": "03-business/business-plan.pdf",
+  "title": "Business plan",
+  "desc": "Cibles, sources de revenus (Premium, achats, publicité cohérente, bars, événements, sponsors), hypothèses chiffrées, mise sur le marché, risques, idées à creuser",
+  "date": "2026-11-10",
+  "cat": "💼 Business"
  }
 ]

@@ -53,7 +53,7 @@ function viewMe(p,now){
   return `${needMeals?viewMealsFirst():mealQuestion()}<section>
   <div class="card" style="display:flex;flex-direction:column;gap:12px">
     <div class="row" style="justify-content:space-between"><span class="label">${esc(my.pseudo)} · taux estimé</span><span class="state" style="color:${col}">${lab}</span></div>
-    <div class="row" style="gap:16px;flex-wrap:nowrap">${avatar(p,96)}<div class="bac">${fmt(s.cur)}<small>g/L</small></div></div>
+    <div class="row" style="gap:16px;flex-wrap:nowrap">${avx(p,96,lab,"me")}<div class="bac">${fmt(s.cur)}<small>g/L</small></div></div>
     ${gauge(s.cur,maxB,cap,col,s.cur<s.prev-0.004)}
     <div class="muted" style="font-size:13px">${sub}. Plafond perso : ${fmt(cap)} g/L.</div>
   </div></section>
@@ -130,7 +130,14 @@ function flyDrop(rect){
 }
 /* Fiole qui se remplit, à la place de « Chargement… ». */
 const loader=t=>`<div class="loader"><svg viewBox="0 0 40 48" aria-hidden="true"><path d="M15 4h10M17 4v12L7 34a8 8 0 0 0 7 12h12a8 8 0 0 0 7-12L23 16V4" class="lf"/><clipPath id="lc"><path d="M17 16L7 34a8 8 0 0 0 7 12h12a8 8 0 0 0 7-12L23 16z"/></clipPath><g clip-path="url(#lc)"><rect x="0" y="20" width="40" height="30" class="ll"/></g></svg><span>${t}</span></div>`;
-let trendPrev={};
+let trendPrev={}, statePrev={};
+/* Avatar vivant : il se balance d'autant plus que le taux est haut ; à chaque changement d'état, il sursaute et annonce son nouvel état. */
+function avx(p,size,lab,key){
+  key=key||p.id; const old=statePrev[key], now=Date.now();
+  const at=old?(old.lab!==lab?now:old.at):0, el=now-at, changed=!!at&&el<2200&&!REDUCE;   // l'animation continue au fil des rafraîchissements
+  const sw=Math.min(1.4,Math.max(0,p.sim?.cur||0))*4.5;
+  return `<span class="avw${changed?" avchg":""}${sw<0.4?" still":""}" style="--sw:${sw.toFixed(2)}deg;--el:-${el}ms" data-st="${esc(key)}|${at}|${esc(lab)}">${avatar(p,size)}${changed?`<em class="avbub">${esc(lab)}</em>`:""}</span>`;
+}
 
 /* Potes en direct : taux, tendance façon bourse, mini-courbe, dernier titre */
 const valAt=(pts,t)=>{let v=0;for(const [x,b] of pts||[]){if(x<=t)v=b;else break}return v};
@@ -159,14 +166,14 @@ function viewRank(list,now){
     return `<section><h2>Mes potes en direct</h2>${seg}
     <p class="muted" style="font-size:13px;margin:0">Taux estimé et tendance sur les 15 dernières minutes : ▲ ça monte, ▼ ça redescend.</p>
     <div class="live">${r.map(p=>{const [lab,col]=stateOf(p.sim.cur,+p.cap||0.8), tr=trendOf(p,now), last=p.ev.filter(e=>e.kind!=="info").sort((a,b)=>b.t-a.t)[0];
-      return `<div class="lcard"><div class="lhead">${avatar(p,58)}<div class="lname"><b>${esc(p.pseudo)}</b>${p.id===S.me?'<span class="muted"> (vous)</span>':""}<span class="lstate" style="color:${col}">${lab}</span></div></div>
+      return `<div class="lcard"><div class="lhead">${avx(p,58,lab)}<div class="lname"><b>${esc(p.pseudo)}</b>${p.id===S.me?'<span class="muted"> (vous)</span>':""}<span class="lstate" style="color:${col}">${lab}</span></div></div>
       <div class="lrow"><span class="lnum" style="color:${col}">${fmt(p.sim.cur)}<small>g/L</small></span><span class="ltr ${tr.k}${trendPrev[p.id]&&trendPrev[p.id]!==tr.k?" chg":""}" data-tk="${p.id}|${tr.k}">${tr.k==="up"?"▲":tr.k==="down"?"▼":"■"} ${tr.txt}</span></div>
       ${spark(p,now,p.color)}
       <div class="ltitle ${last?last.kind:""}">${last?`${esc(last.title)} <span class="muted">· ${hm(last.t)}</span>`:`<span class="muted">Pas encore de titre</span>`}</div></div>`}).join("")}</div></section>`;
   }
   const r=list.slice().sort((a,b)=>b.score-a.score||a.sim.peak-b.sim.peak);
   return `<section><h2>Classement des titres</h2>${seg}<p class="muted" style="font-size:13px">Titre gagné : +10. Titre de honte (plafond, Naufragé, Fusée) : −15. Rester raisonnable rapporte plus que grimper.</p>
-  ${r.map((p,i)=>{const [lab,col]=stateOf(p.sim.cur,+p.cap||0.8);const t=p.ev.filter(e=>e.kind!=="info");return `<div class="card player">${avatar(p,48)}<div><b>${i+1}. ${esc(p.pseudo)}</b>${p.id===S.me?' <span class="muted">(vous)</span>':""}${p.sam?' <span class="badge trophy" style="padding:2px 6px;font-size:11px">Sam</span>':""}</div><div class="num" style="color:${col}">${fmt(p.sim.cur)}</div>
+  ${r.map((p,i)=>{const [lab,col]=stateOf(p.sim.cur,+p.cap||0.8);const t=p.ev.filter(e=>e.kind!=="info");return `<div class="card player">${avx(p,48,lab,"r"+p.id)}<div><b>${i+1}. ${esc(p.pseudo)}</b>${p.id===S.me?' <span class="muted">(vous)</span>':""}${p.sam?' <span class="badge trophy" style="padding:2px 6px;font-size:11px">Sam</span>':""}</div><div class="num" style="color:${col}">${fmt(p.sim.cur)}</div>
   <div class="meta">${lab} · pic ${fmt(p.sim.peak)} · <span class="score">${p.score>0?"+":""}${p.score} pts</span>${t.length?"<br>"+t.map(e=>esc(e.title)).join(", "):""}</div></div>`}).join("")}</section>`;
 }
 
@@ -343,7 +350,7 @@ function friendCard(f,i,now){
   if(!L) return `<div class="lcard off"><div class="lhead">${avatar({id:f.id,color,cap:f.cap,sim:{cur:0,prev:0,peak:0},drinks:[]},50)}<div class="lname"><b>${esc(f.pseudo)}</b><span class="lstate muted">${f.share?"Pas en soirée":"Ne partage pas son taux"}</span></div></div><button class="link danger" data-unf="${f.id}" data-name="${esc(f.pseudo)}">Retirer</button></div>`;
   const p={id:f.id,color,cap:f.cap,sim:{cur:L.cur,prev:L.prev,peak:L.peak,pts:L.pts},drinks:L.drinks};
   const [lab,col]=stateOf(L.cur,+f.cap||0.8), tr=trendOf(p,now);
-  return `<div class="lcard"><div class="lhead">${avatar(p,58)}<div class="lname"><b>${esc(f.pseudo)}</b><span class="lstate" style="color:${col}">${L.sam?"Sam ce soir":lab}</span></div></div>
+  return `<div class="lcard"><div class="lhead">${avx(p,58,L.sam?"Sam ce soir":lab,"f"+f.id)}<div class="lname"><b>${esc(f.pseudo)}</b><span class="lstate" style="color:${col}">${L.sam?"Sam ce soir":lab}</span></div></div>
     <div class="lrow"><span class="lnum" style="color:${col}">${fmt(L.cur)}<small>g/L</small></span><span class="ltr ${tr.k}${trendPrev["f"+f.id]&&trendPrev["f"+f.id]!==tr.k?" chg":""}" data-tk="f${f.id}|${tr.k}">${tr.k==="up"?"▲":tr.k==="down"?"▼":"■"} ${tr.txt}</span></div>
     ${spark(p,now,color)}
     <div class="ltitle ${L.last?L.last.kind:""}">${L.last?`${esc(L.last.title)} <span class="muted">· ${hm(L.last.t)}</span>`:`<span class="muted">Pas encore de titre</span>`}</div></div>`;
@@ -365,7 +372,9 @@ function viewFriends(){
   ${!F.friends.length&&!F.incoming.length&&!F.outgoing.length?`<section><p class="muted">Pas encore d'amis. Partagez votre lien ou demandez leur code à vos potes.</p></section>`:""}
   <section>${back}</section>`;
 }
+function rememberStates(){ document.querySelectorAll("[data-st]").forEach(e=>{const [k,at,...l]=e.dataset.st.split("|");statePrev[k]={lab:l.join("|"),at:+at}}) }
 function bindFriends(){
+  rememberStates();
   const on=(id,f)=>{const el=$("#"+id); if(el) el.onclick=f};
   on("shareLink",async()=>{ const txt=`Ajoute-moi sur Alamb'hic : ${inviteLink()}`;
     try{ if(navigator.share){await navigator.share({title:"Alamb'hic",text:txt});return} await navigator.clipboard.writeText(txt); snack("Lien copié","Envoie-le à tes potes") }catch(e){ snack("Mon lien ami",inviteLink()) } });
@@ -473,7 +482,7 @@ async function addDrink(d,key,rect){
 function bindMain(){
   document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>addDrink(PRESETS[+b.dataset.p],"p"+b.dataset.p,b.getBoundingClientRect()));
   document.querySelectorAll("#ago button").forEach(b=>b.onclick=()=>{ago=+b.dataset.v;render()});
-  bindMeals(); animateGauge();
+  bindMeals(); animateGauge(); rememberStates();
   document.querySelectorAll("[data-tk]").forEach(e=>{const [id,k]=e.dataset.tk.split("|");trendPrev[id]=k});
   document.querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{S.rankMode=b.dataset.rm;render()});
   const ca=$("#cadd"); if(ca) ca.onclick=()=>{const ml=parseFloat($("#cml").value.replace(",","."))*10, abv=parseFloat($("#cabv").value.replace(",","."));if(!(ml>0&&ml<=1000&&abv>=0&&abv<=80)){flash("Verre incomplet","Indiquez un volume en cl et un degré entre 0 et 80 %.");return}addDrink({l:abv?"Verre perso":"Sans alcool",ml,abv,water:abv?0:1},"perso")};
