@@ -30,6 +30,7 @@ ch("Noter ses verres", f"""<div class="split"><div>
 <p><b>Verre perso</b> : indiquez le volume en cl et le degré, puis « Ajouter ». Un degré de 0 compte comme une boisson sans alcool.</p>
 <p><b>Bu plus tôt</b> : « il y a 15 min », « 30 min » ou « 1 h » avant de toucher la boisson. Un verre peut être noté jusqu'à 3 h après coup.</p>
 <p><b>Sam</b> : « Je suis Sam ce soir » limite vos boissons à l'eau et aux boissons sans alcool, et vous donne le titre « Sam de la soirée ». Impossible si vous avez déjà bu de l'alcool dans la soirée.</p>
+<p><b>Confirmation</b> : le bouton touché affiche un indicateur d'envoi, puis passe au vert avec une coche ; un bandeau « Verre enregistré » rappelle la boisson et l'heure. « Annuler », dans les 6 secondes, retire le verre sans laisser de trace. Un second appui pendant l'envoi est ignoré : plus de verre compté deux fois.</p>
 <p><b>Supprimer un verre</b> : la croix à droite, pendant 3 h. Chaque suppression apparaît dans le fil de la soirée.</p>
 </div>{shot("soiree-moi", "Écran Moi")}</div>""")
 
@@ -56,9 +57,9 @@ ch("Le taux estimé", """<p>Alamb’hic estime votre taux minute par minute avec
 <p>L'écran Moi montre aussi le pic de la soirée, le nombre de verres standard et l'heure estimée du retour à 0.</p>
 <div class="note warn"><b>Une estimation, jamais une autorisation de conduire.</b> L'écart avec un éthylotest peut dépasser 0,2 g/L. Après avoir bu, on ne prend pas le volant.</div>""")
 
-ch("Courbes, classement et fil", f"""<div class="shots">{shot("demo-courbes", "Courbes de la soirée")}{shot("demo-classement", "Classement")}{shot("demo-fil", "Fil de la soirée")}</div>
+ch("Courbes, potes et fil", f"""<div class="shots">{shot("demo-courbes", "Courbes de la soirée")}{shot("demo-classement", "Classement")}{shot("demo-fil", "Fil de la soirée")}</div>
 <p><b>Courbes</b> : une couleur par joueur, seuils 0,5 / 0,8 / 1,2 en pointillés, trait plein jusqu'à maintenant et pointillés pour la redescente prévue.</p>
-<p><b>Classement</b> : trié par points, avec l'avatar, le taux actuel, le pic et les titres de chacun.</p>
+<p><b>Potes (en direct)</b> : une carte par joueur avec son avatar, son taux, sa <b>tendance façon bourse</b> sur les 15 dernières minutes (▲ ça monte, ▼ ça redescend, en g/L par heure), une mini-courbe des 2 dernières heures avec la redescente prévue, et son dernier titre. Le bouton « Points » affiche le classement des titres : trié par points, avec le pic et les titres de chacun.</p>
 <p><b>Fil</b> : tous les titres, alertes et suppressions de verres, du plus récent au plus ancien. La pastille rouge sur l'onglet compte les nouveautés non lues.</p>""")
 
 ch("Titres, points et gages", """<table><tr><th>Titre</th><th>Condition</th><th>Points</th></tr>
@@ -78,7 +79,8 @@ ch("Titres, points et gages", """<table><tr><th>Titre</th><th>Condition</th><th>
 <p><b>Gages</b> : tirés parmi huit, toujours sans alcool (deux grands verres d'eau, un compliment à chaque joueur, imiter un animal, parler avec un accent, servir de l'eau à la tablée, raconter sa pire honte, chanter un refrain, mimer un film).</p>""")
 
 ch("Notifications", f"""<div class="split"><div>
-<p>Chaque titre et chaque seuil apparaît en bandeau sur tous les téléphones de la soirée (trois au plus à la fois, un toucher les ferme), avec une vibration ; les alertes vibrent deux fois et restent 15 secondes.</p>
+<p>Chaque titre et chaque seuil apparaît en haut de l'écran sur tous les téléphones de la soirée, <b>une notification à la fois</b> : les suivantes attendent leur tour (le compteur « +2 » l'indique). Chaque notification a une icône et une couleur par type (doré pour un titre, rouge pour une honte, orange pour une alerte), et une barre qui montre le temps restant ; un toucher la ferme. Les alertes vibrent deux fois et restent 12 secondes.</p>
+<p>Les confirmations de vos propres actions (verre, repas, invitation copiée, erreur) s'affichent à part, dans un bandeau en bas de l'écran, pour ne jamais se mélanger aux notifications des amis.</p>
 <ul><li><b>Titres</b> : message moqueur.</li><li><b>Honte</b> : gage et passage à l'eau.</li>
 <li><b>1,5 g/L</b> : « apportez-lui de l'eau et gardez un œil sur lui ».</li><li><b>2 g/L</b> : rester avec la personne ; si elle vomit, ne répond plus ou respire mal, appeler le 15.</li></ul>
 <p>Aujourd'hui, les notifications arrivent quand l'appli est ouverte. Les notifications appli fermée viendront avec l'APK (étape 2).</p>

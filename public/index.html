@@ -20,7 +20,7 @@
 <main id="app"></main>
 </div>
 <nav id="nav" hidden><div class="in">
-<button data-tab="moi">Moi</button><button data-tab="courbes">Courbes</button><button data-tab="classement">Classement</button><button data-tab="fil">Fil<span class="n" id="feedN" hidden></span></button>
+<button data-tab="moi">Moi</button><button data-tab="courbes">Courbes</button><button data-tab="classement">Potes</button><button data-tab="fil">Fil<span class="n" id="feedN" hidden></span></button>
 </div></nav>
 <div class="demo" id="demoBar" hidden><div class="in">
 <div class="top"><span class="label" style="color:var(--accent)">Démo · soirée fictive</span><span class="clock" id="demoClock">19:00</span><div class="row" style="gap:6px"><button class="btn small" id="demoPlay">Lecture</button><button class="btn ghost small" id="demoQuit">Quitter</button></div></div>
@@ -28,6 +28,7 @@
 <div class="scale"><span>19h</span><span>21h</span><span>23h</span><span>1h</span><span>3h</span><span>5h</span></div>
 </div></div>
 <div id="toasts" aria-live="polite"></div>
+<div id="snack" class="snack" role="status" aria-live="polite" hidden></div>
 <script src="/engine.js"></script>
 <script src="/avatar.js"></script>
 <script src="/app.js"></script>

@@ -29,6 +29,9 @@ FAIT = [
     ("ok", "<b>Nouvelle adresse</b> (10/11) : service Render « alambhic » sur <code>alambhic.onrender.com</code>, base renommée <code>alambhic-db</code>, variables et origine Google en place, Node 22 fixé ; Google et contact vérifiés en ligne."),
     ("todo", "<b>Supprimer l'ancien service Render « youdrink »</b> (service web uniquement, pas la base)."),
     ("ok", "<b>Test à deux comptes</b> (10/11) : soirée créée et rejointe par code sur alambhic.onrender.com, verres des deux joueurs, courbes communes en temps réel."),
+    ("ok", "<b>Design des notifications</b> (10/11) : une notification à la fois avec file d'attente, icônes et barre de temps ; confirmations en bas avec « Annuler » ; boutons de boisson avec état d'envoi et coche verte (fin des doubles saisies)."),
+    ("ok", "<b>Écran « Potes » en direct</b> (10/11) : taux, avatar, tendance façon bourse (▲/▼ en g/L par heure), mini-courbe, dernier titre."),
+    ("todo", "<b>Liste d'amis</b> hors soirée : ajouter des amis (code ou lien), les voir en direct quand ils partagent leur soirée, widget « mes potes » sur l'APK et la montre."),
     ("ok", "<b>Onglet Documentation</b> (10/11) réservé aux admins : présentation complète, guide complet, check-list, services externes."),
 ]
 A_TESTER = [

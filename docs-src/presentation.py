@@ -100,7 +100,7 @@ S.append(slide(f"""<div class="cols"><div><div class="k">Classement, fil et noti
 <ul><li>Chaque titre et chaque seuil s'affiche en notification sur tous les téléphones de la soirée, avec vibration.</li>
 <li>Le ton change avec le niveau : moqueur, puis gage, puis <span class="c">« apportez-lui de l'eau »</span> à 1,5 g/L et rappel du 15 à 2 g/L.</li>
 <li>Le fil garde tout l'historique, suppressions de verres comprises.</li>
-<li>Classement par points : rester raisonnable rapporte plus que grimper.</li></ul></div>
+<li>Écran « Potes » en direct : taux, tendance ▲▼ façon bourse, mini-courbe et dernier titre de chacun ; classement par points en un clic.</li></ul></div>
 <div class="phones">{img("demo-notifs")}{img("demo-classement")}</div></div>"""))
 
 AV = [(0, "En forme"), (0.3, "Pompette"), (0.6, "Éméché"), (0.9, "Lunettes de travers"), (1.2, "Au-dessus du plafond"), (1.7, "Allongé")]

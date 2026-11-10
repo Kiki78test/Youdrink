@@ -174,15 +174,21 @@ function routes(app) {
                                        AND created_at > now() - interval '10 minutes'`, [req.user.id]);
     if (!water && recent[0].n >= 6) return res.status(429).json({ error: "Six verres d'alcool en dix minutes : ce rythme n'est pas crédible. Patientez un peu." });
     const fed = b.fed === undefined ? m.fed : !!b.fed;
-    await q(`INSERT INTO drinks(user_id, party_code, t, label, ml, abv, fed, water) VALUES($1,$2, now() - make_interval(mins => $3), $4,$5,$6,$7,$8)`,
+    const { rows: ins } = await q(`INSERT INTO drinks(user_id, party_code, t, label, ml, abv, fed, water) VALUES($1,$2, now() - make_interval(mins => $3), $4,$5,$6,$7,$8) RETURNING id, t`,
       [req.user.id, m.code, ago, label, ml, abv, fed, water]);
     await q("UPDATE parties SET last_activity=now() WHERE code=$1", [m.code]);
-    res.json({ ok: true });
+    res.json({ ok: true, id: +ins[0].id, t: +ins[0].t });
     broadcast(m.code).catch(() => {});
   });
 
   app.delete("/api/parties/:code/drinks/:id", requireUser, async (req, res) => {
     const m = await member(req, res); if (!m) return;
+    // Annulation dans la minute (bouton « Annuler ») : effacement sans trace dans le fil.
+    if (req.query.undo === "1") {
+      const { rows: u } = await q(`DELETE FROM drinks WHERE id=$1 AND user_id=$2 AND party_code=$3 AND created_at > now() - interval '60 seconds' RETURNING id`,
+        [+req.params.id, req.user.id, m.code]);
+      if (u[0]) { res.json({ ok: true }); broadcast(m.code).catch(() => {}); return; }
+    }
     const { rows } = await q(`UPDATE drinks SET deleted_at=now() WHERE id=$1 AND user_id=$2 AND party_code=$3 AND deleted_at IS NULL
                               AND created_at > now() - interval '3 hours' RETURNING id`, [+req.params.id, req.user.id, m.code]);
     if (!rows[0]) return res.status(400).json({ error: "Ce verre ne peut plus être supprimé (plus de 3 h)." });

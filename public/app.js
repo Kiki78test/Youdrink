@@ -61,8 +61,8 @@ function viewMe(p,now){
   <div class="field"><span class="label">Bu</span><div class="seg" id="ago">${[[0,"Maintenant"],[15,"il y a 15 min"],[30,"30 min"],[60,"1 h"]].map(([v,l])=>`<button data-v="${v}" aria-pressed="${ago===v}">${l}</button>`).join("")}</div></div>
   ${demo?"":`<label class="toggle"><span>Je suis Sam ce soir (zéro alcool)</span><input type="checkbox" id="samT" ${my.sam?"checked":""}></label>`}
   ${needMeals?`<div class="banner">Indiquez d'abord vos repas du jour, juste au-dessus : ils changent beaucoup le calcul. L'eau reste disponible.</div>`:""}
-  <div class="drinks${needMeals?" locked":""}">${PRESETS.filter(d=>!my.sam||d.water).map((d,i)=>`<button class="drink${d.water?" water":""}" data-p="${PRESETS.indexOf(d)}"><b>${d.l}</b><span>${d.d}</span></button>`).join("")}</div>
-  ${my.sam?"":`<div class="row"><div class="field" style="flex:1;min-width:90px"><span class="label">Volume (cl)</span><input id="cml" type="number" inputmode="decimal" min="1" max="100" placeholder="15"></div><div class="field" style="flex:1;min-width:90px"><span class="label">Degré (%)</span><input id="cabv" type="number" inputmode="decimal" min="0" max="80" placeholder="13"></div><button class="btn" id="cadd" style="align-self:flex-end">Ajouter</button></div>`}
+  <div class="drinks${needMeals?" locked":""}">${PRESETS.filter(d=>!my.sam||d.water).map((d,i)=>`<button class="drink${d.water?" water":""}${pend["p"+PRESETS.indexOf(d)]?" "+pend["p"+PRESETS.indexOf(d)]:""}" data-p="${PRESETS.indexOf(d)}" ${pend["p"+PRESETS.indexOf(d)]==="sending"?'aria-busy="true"':""}><b>${d.l}</b><span>${d.d}</span></button>`).join("")}</div>
+  ${my.sam?"":`<div class="row"><div class="field" style="flex:1;min-width:90px"><span class="label">Volume (cl)</span><input id="cml" type="number" inputmode="decimal" min="1" max="100" placeholder="15"></div><div class="field" style="flex:1;min-width:90px"><span class="label">Degré (%)</span><input id="cabv" type="number" inputmode="decimal" min="0" max="80" placeholder="13"></div><button class="btn${pend.perso?" "+pend.perso:""}" id="cadd" style="align-self:flex-end">${pend.perso==="ok"?"✓ Noté":pend.perso==="sending"?"Envoi…":"Ajouter"}</button></div>`}
   </section>
   ${needMeals?"":viewMeals()}
   ${titles.length?`<section><h2>Mes titres</h2><div class="badges">${titles.map(e=>`<span class="badge ${e.kind}">${esc(e.title)}</span>`).join("")}</div></section>`:""}
@@ -93,9 +93,40 @@ function viewChart(list,now){
   <div class="legend">${withD.map(p=>`<span><i class="dot" style="background:${p.color}"></i>${esc(p.pseudo)} · ${fmt(p.sim.cur)}</span>`).join("")}</div>
   <p class="muted" style="font-size:13px">Trait plein : taux estimé jusqu'à maintenant. Pointillés : redescente prévue si plus personne ne boit.</p></section>`;
 }
+/* Potes en direct : taux, tendance façon bourse, mini-courbe, dernier titre */
+const valAt=(pts,t)=>{let v=0;for(const [x,b] of pts||[]){if(x<=t)v=b;else break}return v};
+function trendOf(p,now){
+  const cur=p.sim.cur, past=valAt(p.sim.pts,now-15*MIN), rate=(cur-past)*4;   // g/L par heure, sur les 15 dernières minutes
+  if(cur<0.01&&past<0.01) return {k:"flat",txt:"stable",rate:0};
+  if(Math.abs(rate)<0.02) return {k:"flat",txt:"stable",rate};
+  return rate>0?{k:"up",txt:`+${fmt(rate)}/h`,rate}:{k:"down",txt:`−${fmt(-rate)}/h`,rate};
+}
+function spark(p,now,color){
+  const t0=now-120*MIN, t1=now+60*MIN, W=120, H=36, pts=(p.sim.pts||[]).filter(x=>x[0]>=t0-5*MIN&&x[0]<=t1);
+  const mx=Math.max(0.6,...pts.map(x=>x[1]))*1.1, X=t=>((t-t0)/(t1-t0))*W, Y=b=>H-2-(b/mx)*(H-4);
+  const path=a=>a.map((x,i)=>(i?"L":"M")+X(Math.max(t0,x[0])).toFixed(1)+" "+Y(x[1]).toFixed(1)).join("");
+  const past=pts.filter(x=>x[0]<=now), fut=pts.filter(x=>x[0]>=now);
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
+    <line x1="${X(now)}" x2="${X(now)}" y1="0" y2="${H}" stroke="var(--line)"/>
+    ${past.length>1?`<path d="${path(past)}" fill="none" stroke="${color}" stroke-width="2.2" stroke-linejoin="round"/>`:""}
+    ${fut.length>1?`<path d="${path(fut)}" fill="none" stroke="${color}" stroke-width="1.6" stroke-dasharray="3 4" opacity=".6"/>`:""}
+    <circle cx="${X(now)}" cy="${Y(p.sim.cur)}" r="3" fill="${color}"/></svg>`;
+}
 function viewRank(list,now){
+  const live=S.rankMode!=="points";
+  const seg=`<div class="seg" id="rankSeg" style="margin-bottom:4px"><button data-rm="live" aria-pressed="${live}">En direct</button><button data-rm="points" aria-pressed="${!live}">Points</button></div>`;
+  if(live){
+    const r=list.slice().sort((a,b)=>(b.id===S.me)-(a.id===S.me)||b.sim.cur-a.sim.cur);
+    return `<section><h2>Mes potes en direct</h2>${seg}
+    <p class="muted" style="font-size:13px;margin:0">Taux estimé et tendance sur les 15 dernières minutes : ▲ ça monte, ▼ ça redescend.</p>
+    <div class="live">${r.map(p=>{const [lab,col]=stateOf(p.sim.cur,+p.cap||0.8), tr=trendOf(p,now), last=p.ev.filter(e=>e.kind!=="info").sort((a,b)=>b.t-a.t)[0];
+      return `<div class="lcard"><div class="lhead">${avatar(p,58)}<div class="lname"><b>${esc(p.pseudo)}</b>${p.id===S.me?'<span class="muted"> (vous)</span>':""}<span class="lstate" style="color:${col}">${lab}</span></div></div>
+      <div class="lrow"><span class="lnum" style="color:${col}">${fmt(p.sim.cur)}<small>g/L</small></span><span class="ltr ${tr.k}">${tr.k==="up"?"▲":tr.k==="down"?"▼":"■"} ${tr.txt}</span></div>
+      ${spark(p,now,p.color)}
+      <div class="ltitle ${last?last.kind:""}">${last?`${esc(last.title)} <span class="muted">· ${hm(last.t)}</span>`:`<span class="muted">Pas encore de titre</span>`}</div></div>`}).join("")}</div></section>`;
+  }
   const r=list.slice().sort((a,b)=>b.score-a.score||a.sim.peak-b.sim.peak);
-  return `<section><h2>Classement des titres</h2><p class="muted" style="font-size:13px">Titre gagné : +10. Titre de honte (plafond, Naufragé, Fusée) : −15. Rester raisonnable rapporte plus que grimper.</p>
+  return `<section><h2>Classement des titres</h2>${seg}<p class="muted" style="font-size:13px">Titre gagné : +10. Titre de honte (plafond, Naufragé, Fusée) : −15. Rester raisonnable rapporte plus que grimper.</p>
   ${r.map((p,i)=>{const [lab,col]=stateOf(p.sim.cur,+p.cap||0.8);const t=p.ev.filter(e=>e.kind!=="info");return `<div class="card player">${avatar(p,48)}<div><b>${i+1}. ${esc(p.pseudo)}</b>${p.id===S.me?' <span class="muted">(vous)</span>':""}${p.sam?' <span class="badge trophy" style="padding:2px 6px;font-size:11px">Sam</span>':""}</div><div class="num" style="color:${col}">${fmt(p.sim.cur)}</div>
   <div class="meta">${lab} · pic ${fmt(p.sim.peak)} · <span class="score">${p.score>0?"+":""}${p.score} pts</span>${t.length?"<br>"+t.map(e=>esc(e.title)).join(", "):""}</div></div>`}).join("")}</section>`;
 }
@@ -166,15 +197,43 @@ function notify(list,log){
     for(const e of all){ if(!seen.has(e.key)){ seen.add(e.key); if(Date.now()-bootT>4000 || e.t>bootT-60000) fresh.push(e) } }
     if(fresh.length) ls.set("yd_seen_"+S.code,[...seen].slice(-600));
   }
-  fresh.sort((a,b)=>a.t-b.t).slice(-3).forEach(e=>{toast(e); if(S.tab!=="fil") feedUnread++});
-  try{ if(fresh.some(e=>e.kind==="care")) navigator.vibrate&&navigator.vibrate([200,100,200]); else if(fresh.length) navigator.vibrate&&navigator.vibrate(80) }catch(_){}
+  fresh.sort((a,b)=>a.t-b.t).slice(demo?-2:-4).forEach(e=>{toast(e); if(S.tab!=="fil") feedUnread++});
+  if(fresh.some(e=>e.kind==="care")) buzz([200,100,200]); else if(fresh.length) buzz(60);
 }
-function toast(e){
-  const d=document.createElement("div"); d.className="toast "+(e.kind||"");
-  d.innerHTML=`<b>${esc(e.title)}</b><div class="muted" style="font-size:13px">${esc(e.text)}</div>`;
-  d.onclick=()=>d.remove(); const box=$("#toasts"); box.appendChild(d); while(box.children.length>3) box.firstElementChild.remove(); setTimeout(()=>d.remove(),e.kind==="care"?15000:6000);
+/* Notifications de la soirée : une seule à la fois, les suivantes attendent leur tour. */
+const ICONS={
+  trophy:'<path d="M7 4h10v3a5 5 0 0 1-10 0V4z"/><path d="M7 5H4v1a3 3 0 0 0 3 3M17 5h3v1a3 3 0 0 1-3 3M12 12v4M8 20h8M9 16h6"/>',
+  shame:'<circle cx="12" cy="12" r="9"/><path d="M8.5 16c1-1.3 2.2-2 3.5-2s2.5.7 3.5 2M9 9.5h.01M15 9.5h.01"/>',
+  care:'<path d="M12 3l9.5 17h-19z"/><path d="M12 10v4M12 17h.01"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+  ok:'<path d="M5 12.5l4.5 4.5L19 7.5"/>'};
+const icon=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[k]||ICONS.info}</svg>`;
+const TQ=[]; let tShown=null, tTimer=null;
+function toast(e){ TQ.push(e); if(TQ.length>6) TQ.splice(0,TQ.length-6); updQ(); pump() }
+function updQ(){ const q=document.querySelector("#toasts .tq"); if(q){ q.textContent=TQ.length?`+${TQ.length}`:""; q.hidden=!TQ.length } }
+function pump(){
+  if(tShown||!TQ.length) return;
+  const e=TQ.shift(), k=e.kind||"info", dur=k==="care"?12000:k==="shame"?6500:4500;
+  const d=document.createElement("div"); d.className="toast "+k; d.setAttribute("role","status");
+  d.innerHTML=`<span class="ti">${icon(k)}</span><div class="tx"><b>${esc(e.title)}</b><span>${esc(e.text)}</span></div><span class="tq" hidden></span><button class="tc" aria-label="Fermer">×</button><i class="tp" style="animation-duration:${dur}ms"></i>`;
+  const box=$("#toasts"); box.innerHTML=""; box.appendChild(d); tShown=d; updQ();
+  requestAnimationFrame(()=>d.classList.add("in"));
+  const close=()=>{ if(tShown!==d) return; clearTimeout(tTimer); d.classList.remove("in"); d.classList.add("out"); setTimeout(()=>{ d.remove(); tShown=null; pump() },200) };
+  d.onclick=close; tTimer=setTimeout(close,dur);
 }
-const flash=(title,text,kind="info")=>toast({title,text,kind});
+/* Confirmations d'action : un bandeau en bas, avec « Annuler » quand c'est possible. */
+let sTimer=null;
+function snack(title,text="",opt={}){
+  const s=$("#snack"); clearTimeout(sTimer);
+  s.className="snack "+(opt.err?"err":"ok");
+  s.innerHTML=`<span class="si">${icon(opt.err?"care":"ok")}</span><div class="sx"><b>${esc(title)}</b>${text?`<span>${esc(text)}</span>`:""}</div>${opt.undo?`<button class="su">Annuler</button>`:""}`;
+  if(opt.undo) s.querySelector(".su").onclick=()=>{ hideSnack(); opt.undo() };
+  s.hidden=false; requestAnimationFrame(()=>s.classList.add("show"));
+  sTimer=setTimeout(hideSnack,opt.undo?6000:opt.err?5000:2800);
+}
+function hideSnack(){ const s=$("#snack"); s.classList.remove("show"); clearTimeout(sTimer); sTimer=setTimeout(()=>{s.hidden=true},250) }
+const flash=(title,text,kind="info")=>snack(title,text,{err:kind==="err"||kind==="shame"});
+const buzz=p=>{ try{ navigator.vibrate&&navigator.vibrate(p) }catch(_){} };
 
 /* ---------- écrans hors soirée ---------- */
 function viewAuth(){
@@ -301,19 +360,33 @@ function bindOut(){
   on("create",()=>run(async()=>{ const r=await api("POST","/api/parties"); enterParty(r.code) }));
   on("join",()=>run(async()=>{ const c=$("#joinCode").value.trim().toUpperCase(); if(!/^[A-Z]{4}$/.test(c)) throw new Error("Le code de soirée fait 4 lettres."); const r=await api("POST",`/api/parties/${c}/join`); enterParty(r.code) }));
 }
-function addDrink(d){
-  if(demo){ const p=demoPlayers[S.me]; const t=NOW()-ago*MIN; p.drinks=[...p.drinks,{id:t,t,l:d.l,ml:d.ml,abv:d.abv,...(d.water?{water:1}:{})}]; ago=0; render(); return }
-  const a=ago; ago=0;
-  run(async()=>{ await api("POST",`/api/parties/${S.code}/drinks`,{label:d.l,ml:d.ml,abv:d.abv,agoMin:a}); await refresh() });
+/* Ajout d'un verre : état « envoi » immédiat, coche verte quand c'est enregistré, puis bandeau avec Annuler. */
+const pend={};
+function setPend(k,v,ms){ if(v) pend[k]=v; else delete pend[k]; render(); if(ms) setTimeout(()=>{ if(pend[k]===v){ delete pend[k]; render() } },ms) }
+async function addDrink(d,key){
+  key=key??d.l; if(pend[key]==="sending") return;
+  const a=ago, when=NOW()-a*MIN;
+  if(demo){ const p=demoPlayers[S.me]; p.drinks=[...p.drinks,{id:when,t:when,l:d.l,ml:d.ml,abv:d.abv,...(d.water?{water:1}:{})}]; ago=0;
+    buzz(25); setPend(key,"ok",1300); snack("Verre enregistré",`${d.l} · ${hm(when)}`,{undo:()=>{p.drinks=p.drinks.filter(x=>x.id!==when);render();snack("Verre retiré")}}); return }
+  setPend(key,"sending");
+  try{
+    const r=await api("POST",`/api/parties/${S.code}/drinks`,{label:d.l,ml:d.ml,abv:d.abv,agoMin:a});
+    ago=0; buzz(25); setPend(key,"ok",1300);
+    snack("Verre enregistré",`${d.l} · ${hm(r.t||when)}`,{undo:async()=>{ try{ await api("DELETE",`/api/parties/${S.code}/drinks/${r.id}?undo=1`); snack("Verre retiré"); refresh() }catch(e){ snack("Impossible d'annuler",e.message,{err:1}) } }});
+    refresh();
+  }catch(e){ setPend(key,null); snack("Verre non enregistré",e.message,{err:1}); buzz([40,60,40]) }
 }
 function bindMain(){
-  document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>addDrink(PRESETS[+b.dataset.p]));
+  document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>addDrink(PRESETS[+b.dataset.p],"p"+b.dataset.p));
   document.querySelectorAll("#ago button").forEach(b=>b.onclick=()=>{ago=+b.dataset.v;render()});
   bindMeals();
-  const ca=$("#cadd"); if(ca) ca.onclick=()=>{const ml=parseFloat($("#cml").value.replace(",","."))*10, abv=parseFloat($("#cabv").value.replace(",","."));if(!(ml>0&&ml<=1000&&abv>=0&&abv<=80)){flash("Verre incomplet","Indiquez un volume en cl et un degré entre 0 et 80 %.");return}addDrink({l:abv?"Verre perso":"Sans alcool",ml,abv,water:abv?0:1})};
+  document.querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{S.rankMode=b.dataset.rm;render()});
+  const ca=$("#cadd"); if(ca) ca.onclick=()=>{const ml=parseFloat($("#cml").value.replace(",","."))*10, abv=parseFloat($("#cabv").value.replace(",","."));if(!(ml>0&&ml<=1000&&abv>=0&&abv<=80)){flash("Verre incomplet","Indiquez un volume en cl et un degré entre 0 et 80 %.");return}addDrink({l:abv?"Verre perso":"Sans alcool",ml,abv,water:abv?0:1},"perso")};
   document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ const id=+b.dataset.del;
-    if(demo){const p=demoPlayers[S.me];p.drinks=p.drinks.filter(d=>d.id!==id);render();return}
-    run(async()=>{ await api("DELETE",`/api/parties/${S.code}/drinks/${id}`); await refresh() }) });
+    if(demo){const p=demoPlayers[S.me];p.drinks=p.drinks.filter(d=>d.id!==id);render();snack("Verre supprimé");return}
+    b.disabled=true; b.closest(".item")?.classList.add("leaving");
+    api("DELETE",`/api/parties/${S.code}/drinks/${id}`).then(()=>{ snack("Verre supprimé","visible dans le fil de la soirée"); refresh() })
+      .catch(e=>{ b.disabled=false; b.closest(".item")?.classList.remove("leaving"); snack("Suppression impossible",e.message,{err:1}) }) });
   const sm=$("#samT"); if(sm) sm.onchange=()=>run(async()=>{ await api("PUT",`/api/parties/${S.code}/me`,{sam:sm.checked}); await refresh() });
   const cc=$("#copyCode"); if(cc) cc.onclick=async()=>{ const txt=`Rejoins ma soirée Alamb'hic avec le code ${S.code} : ${location.origin}`;
     try{ if(navigator.share){await navigator.share({title:"Alamb'hic",text:txt});return} await navigator.clipboard.writeText(txt); flash("Invitation copiée","Collez-la dans votre groupe.") }catch(e){ flash("Code de la soirée",txt) } };
@@ -371,7 +444,8 @@ function startDemo(){
   S.me="demo-lea"; S.tab="moi"; feedUnread=0;
   $("#demoRange").value=0; $("#demoBar").hidden=false; document.body.classList.add("isdemo"); setDemo(0);
 }
-function setDemo(min){ demoT=demoStart+min*MIN; $("#demoClock").textContent=hm(demoT); render() }
+function clearToasts(){ TQ.length=0; clearTimeout(tTimer); tShown=null; $("#toasts").innerHTML="" }
+function setDemo(min){ if(!demoTimer) clearToasts(); demoT=demoStart+min*MIN; $("#demoClock").textContent=hm(demoT); render() }
 function stopPlay(){ if(demoTimer){clearInterval(demoTimer);demoTimer=null} $("#demoPlay").textContent="Lecture" }
 $("#demoHdr").onclick=()=>{ if(!demo) startDemo() };
 $("#demoRange").oninput=e=>{stopPlay();setDemo(+e.target.value)};
@@ -380,7 +454,7 @@ $("#demoPlay").onclick=()=>{ if(demoTimer){stopPlay();return}
   $("#demoPlay").textContent="Pause";
   demoTimer=setInterval(()=>{ const v=Math.min(+r.max,+r.value+5); r.value=v; setDemo(v); if(v>=+r.max) stopPlay() },450) };
 $("#demoQuit").onclick=()=>{ stopPlay(); demo=false; $("#demoBar").hidden=true; document.body.classList.remove("isdemo");
-  S.me=demoSaved.me; S.tab=demoSaved.tab; feedUnread=0; document.querySelectorAll("#toasts .toast").forEach(t=>t.remove()); render() };
+  S.me=demoSaved.me; S.tab=demoSaved.tab; feedUnread=0; clearToasts(); hideSnack(); render() };
 
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;render();window.scrollTo(0,0)});
 $("#docsBtn").onclick=()=>{S.err="";S.screen="docs";render();api("GET","/api/docs").then(d=>{S.docs=d;render()}).catch(e=>{S.err=e.message;S.screen=S.code?"party":"home";render()})};
