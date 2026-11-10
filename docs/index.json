@@ -1,0 +1,30 @@
+[
+ {
+  "file": "01-pilotage/check-list.pdf",
+  "title": "Check-list",
+  "desc": "Ce qui est fait, ce qui attend vos tests, ce qui reste à faire, étape par étape",
+  "date": "2026-11-10",
+  "cat": "📋 Pilotage du projet"
+ },
+ {
+  "file": "01-pilotage/services-externes.pdf",
+  "title": "Services externes",
+  "desc": "Render, GitHub, Google, futurs services : rôle, coût, réglages et données confiées",
+  "date": "2026-11-10",
+  "cat": "📋 Pilotage du projet"
+ },
+ {
+  "file": "02-presentation/presentation-complete.pdf",
+  "title": "Présentation complète",
+  "desc": "Le concept, l'appli en images, les titres, l'avatar, la fiabilité, la feuille de route",
+  "date": "2026-11-10",
+  "cat": "🎤 Présentation et guides"
+ },
+ {
+  "file": "02-presentation/guide-complet.pdf",
+  "title": "Guide complet",
+  "desc": "Mode d'emploi détaillé de toutes les fonctions, par sujet, avec l'historique des versions",
+  "date": "2026-11-10",
+  "cat": "🎤 Présentation et guides"
+ }
+]

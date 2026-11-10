@@ -11,6 +11,8 @@ const COOKIE = "yd_s";
 const MAX_AGE = 60 * 24 * 3600; // 60 jours
 const PROD = process.env.NODE_ENV === "production";
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "";
+// Comptes administrateurs : adresses e-mail séparées par des virgules (variable Render ADMIN_EMAILS).
+const ADMIN_EMAILS = new Set((process.env.ADMIN_EMAILS || "").split(",").map(s => s.trim().toLowerCase()).filter(Boolean));
 
 function sign(uid) {
   const exp = Math.floor(Date.now() / 1000) + MAX_AGE;
@@ -49,14 +51,19 @@ function limited(key, max = 10, windowMs = 10 * 60 * 1000) {
   return h.length > max;
 }
 
-const PUBLIC_USER = "id, email, pseudo, sex, age, height, weight, cap, (google_sub IS NOT NULL) AS google";
+const PUBLIC_USER = "id, email, pseudo, sex, age, height, weight, cap, (google_sub IS NOT NULL) AS google, is_admin";
+const withAdmin = u => { if (!u) return u; const { is_admin, ...rest } = u; return { ...rest, admin: !!is_admin || ADMIN_EMAILS.has(String(u.email || "").toLowerCase()) }; };
 
 async function requireUser(req, res, next) {
   const uid = userIdFromReq(req);
   if (!uid) return res.status(401).json({ error: "Connectez-vous pour continuer." });
   const { rows } = await q(`SELECT ${PUBLIC_USER} FROM users WHERE id=$1`, [uid]);
   if (!rows[0]) { clearSession(res); return res.status(401).json({ error: "Session expirée, reconnectez-vous." }); }
-  req.user = rows[0];
+  req.user = withAdmin(rows[0]);
+  next();
+}
+function requireAdmin(req, res, next) {
+  if (!req.user || !req.user.admin) return res.status(403).json({ error: "Réservé aux administrateurs." });
   next();
 }
 
@@ -128,7 +135,7 @@ function routes(app) {
     if (!(weight >= 35 && weight <= 200)) return res.status(400).json({ error: "Indiquez un poids entre 35 et 200 kg." });
     const { rows } = await q(`UPDATE users SET pseudo=$2, sex=$3, age=$4, height=$5, weight=$6, cap=$7 WHERE id=$1 RETURNING ${PUBLIC_USER}`,
       [req.user.id, pseudo, sex, age, height, weight, cap]);
-    res.json({ user: rows[0] });
+    res.json({ user: withAdmin(rows[0]) });
   });
 
   app.delete("/api/me", requireUser, async (req, res) => {
@@ -138,4 +145,4 @@ function routes(app) {
   });
 }
 
-module.exports = { routes, requireUser, userIdFromReq };
+module.exports = { routes, requireUser, requireAdmin, userIdFromReq };

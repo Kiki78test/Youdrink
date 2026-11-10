@@ -75,6 +75,7 @@ async function migrate() {
     }
   }
   await pool.query(SCHEMA); // gen_random_uuid() est natif depuis PostgreSQL 13
+  await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN NOT NULL DEFAULT false");
 }
 
 module.exports = { pool, migrate, q: (text, params) => pool.query(text, params) };

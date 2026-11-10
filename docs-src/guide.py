@@ -1,0 +1,128 @@
+# Guide complet Youdrink — source de docs/02-presentation/guide-complet.pdf
+# Organisé par sujet : chaque nouveauté est intégrée à son chapitre, les passages dépassés sont corrigés ; annexe « Historique des versions ».
+from common import A4, D, band, hist_table, write
+
+CH = []
+def ch(title, body): CH.append((title, body))
+def shot(n, cap=""): return f'<figure><img src="img/{n}.png"><figcaption>{cap}</figcaption></figure>'
+
+ch("Démarrer", f"""<div class="split"><div>
+<h3>Créer un compte</h3><p>Ouvrez <b>youdrink.onrender.com</b>, choisissez « Créer un compte », saisissez votre e-mail et un mot de passe d'au moins 8 caractères. La connexion reste active 60 jours sur l'appareil. La connexion Google arrivera quand l'identifiant sera configuré.</p>
+<h3>Compléter son profil</h3><p>Pseudo, sexe biologique, âge, taille et poids : ces mesures servent uniquement à estimer votre taux. Les autres joueurs voient votre pseudo, vos verres et vos taux, jamais vos mesures.</p>
+<p>Youdrink est <b>réservé aux 18 ans et plus</b> : un âge inférieur est refusé.</p>
+<h3>Choisir son plafond</h3><p>0,5 ; 0,6 ; 0,8 (conseillé) ou 1,0 g/L. Au-delà, les titres positifs s'arrêtent et chaque excès devient un titre de honte avec gage.</p>
+<h3>Installer l'appli</h3><p>Dans le navigateur du téléphone : menu → « Ajouter à l'écran d'accueil ». Youdrink s'ouvre alors en plein écran avec son icône.</p>
+<div class="note">Sur l'offre gratuite de Render, le serveur s'endort après 15 minutes sans visite : la première ouverture prend alors 30 à 50 secondes.</div>
+</div>{shot("auth", "Écran d'accueil")}</div>""")
+
+ch("Les soirées", """<h3>Créer une soirée</h3><p>Sur l'écran d'accueil, « Créer une soirée » génère un code de 4 lettres (sans I, L ni O pour éviter les confusions). Il s'affiche en haut de l'écran et dans la carte « Code de la soirée ».</p>
+<h3>Inviter</h3><p>« Copier l'invitation » ouvre le partage du téléphone, ou copie le message « Rejoins ma soirée Youdrink avec le code … » à coller dans le groupe.</p>
+<h3>Rejoindre</h3><p>Saisissez le code dans « Rejoindre avec un code ». Rejoindre une soirée vous fait quitter automatiquement la précédente : on ne joue qu'à une soirée à la fois.</p>
+<h3>Quitter</h3><p>Profil → « Quitter la soirée ». Vos verres restent comptés dans votre suivi personnel.</p>
+<h3>Temps réel</h3><p>Chaque verre ajouté, chaque titre et chaque seuil est diffusé immédiatement à tous les joueurs. Le serveur renvoie aussi l'état de la soirée chaque minute, pour que les taux et les titres de redescente avancent même quand personne ne boit.</p>""")
+
+ch("Noter ses verres", f"""<div class="split"><div>
+<table><tr><th>Boisson</th><th>Volume</th><th>Degré</th></tr>
+<tr><td>Bière</td><td>25 cl</td><td>5 %</td></tr><tr><td>Pinte</td><td>50 cl</td><td>5 %</td></tr>
+<tr><td>Vin</td><td>12 cl</td><td>12 %</td></tr><tr><td>Champagne</td><td>12 cl</td><td>12 %</td></tr>
+<tr><td>Shot</td><td>4 cl</td><td>40 %</td></tr><tr><td>Cocktail</td><td>20 cl</td><td>10 %</td></tr>
+<tr><td>Cidre</td><td>25 cl</td><td>5 %</td></tr><tr><td>Eau</td><td>25 cl</td><td>0 %</td></tr></table>
+<p><b>Verre perso</b> : indiquez le volume en cl et le degré, puis « Ajouter ». Un degré de 0 compte comme une boisson sans alcool.</p>
+<p><b>Bu plus tôt</b> : « il y a 15 min », « 30 min » ou « 1 h » avant de toucher la boisson. Un verre peut être noté jusqu'à 3 h après coup.</p>
+<p><b>J'ai mangé</b> : l'alcool est absorbé plus lentement (75 min au lieu de 30), le pic est plus bas.</p>
+<p><b>Sam</b> : « Je suis Sam ce soir » limite vos boissons à l'eau et aux boissons sans alcool, et vous donne le titre « Sam de la soirée ». Impossible si vous avez déjà bu de l'alcool dans la soirée.</p>
+<p><b>Supprimer un verre</b> : la croix à droite, pendant 3 h. Chaque suppression apparaît dans le fil de la soirée.</p>
+</div>{shot("soiree-moi", "Écran Moi")}</div>""")
+
+ch("Le taux estimé", """<p>Youdrink estime votre taux minute par minute avec la <b>formule de Widmark</b> et l'<b>eau corporelle de Watson</b> :</p>
+<ul><li><b>Alcool d'un verre</b> : volume × degré × 0,789 g/ml (10 g = un verre standard).</li>
+<li><b>Eau corporelle</b> : selon le sexe, l'âge, la taille et le poids.</li>
+<li><b>Absorption</b> progressive sur 30 min à jeun, 75 min après un repas.</li>
+<li><b>Élimination</b> : 0,15 g/L par heure.</li></ul>
+<table><tr><th>État affiché</th><th>Taux estimé</th></tr>
+<tr><td>Sobre</td><td>moins de 0,2 g/L</td></tr><tr><td>Pompette</td><td>0,2 à 0,5 g/L</td></tr>
+<tr><td>Interdit de conduire</td><td>à partir de 0,5 g/L</td></tr><tr><td>Au-dessus du plafond</td><td>à partir de votre plafond</td></tr>
+<tr><td>Alerte</td><td>à partir de 1,5 g/L</td></tr></table>
+<p>L'écran Moi montre aussi le pic de la soirée, le nombre de verres standard et l'heure estimée du retour à 0.</p>
+<div class="note warn"><b>Une estimation, jamais une autorisation de conduire.</b> L'écart avec un éthylotest peut dépasser 0,2 g/L. Après avoir bu, on ne prend pas le volant.</div>""")
+
+ch("Courbes, classement et fil", f"""<div class="shots">{shot("demo-courbes", "Courbes de la soirée")}{shot("demo-classement", "Classement")}{shot("demo-fil", "Fil de la soirée")}</div>
+<p><b>Courbes</b> : une couleur par joueur, seuils 0,5 / 0,8 / 1,2 en pointillés, trait plein jusqu'à maintenant et pointillés pour la redescente prévue.</p>
+<p><b>Classement</b> : trié par points, avec l'avatar, le taux actuel, le pic et les titres de chacun.</p>
+<p><b>Fil</b> : tous les titres, alertes et suppressions de verres, du plus récent au plus ancien. La pastille rouge sur l'onglet compte les nouveautés non lues.</p>""")
+
+ch("Titres, points et gages", """<table><tr><th>Titre</th><th>Condition</th><th>Points</th></tr>
+<tr><td>Premières bulles</td><td>0,2 g/L</td><td>+10</td></tr>
+<tr><td>Joues roses</td><td>0,4 g/L</td><td>+10</td></tr>
+<tr><td>Clés confisquées</td><td>0,5 g/L (information)</td><td>0</td></tr>
+<tr><td>Philosophe de comptoir</td><td>0,8 g/L, dernier titre à gagner en montant</td><td>+10</td></tr>
+<tr><td>Hors plafond</td><td>dépasser son plafond perso (s'il est sous 1,2)</td><td>−15 + gage</td></tr>
+<tr><td>Le Naufragé</td><td>1,2 g/L</td><td>−15 + gage</td></tr>
+<tr><td>La Fusée</td><td>+0,5 g/L en une heure</td><td>−15 + gage</td></tr>
+<tr><td>Alerte copains</td><td>1,5 g/L : les amis sont appelés à aider</td><td>0</td></tr>
+<tr><td>Alerte rouge</td><td>2 g/L : rester avec la personne, 15 en cas de signes graves</td><td>0</td></tr>
+<tr><td>Atterrissage en douceur</td><td>redescendre sous 0,2 après avoir dépassé 0,4</td><td>+10</td></tr>
+<tr><td>Retour sur Terre</td><td>revenir à 0 après avoir dépassé 0,2</td><td>+10</td></tr>
+<tr><td>Le Chameau / L'Oasis</td><td>3 / 6 verres d'eau</td><td>+10 chacun</td></tr>
+<tr><td>Sam de la soirée</td><td>jouer Sam</td><td>+10</td></tr></table>
+<p><b>Gages</b> : tirés parmi huit, toujours sans alcool (deux grands verres d'eau, un compliment à chaque joueur, imiter un animal, parler avec un accent, servir de l'eau à la tablée, raconter sa pire honte, chanter un refrain, mimer un film).</p>""")
+
+ch("Notifications", f"""<div class="split"><div>
+<p>Chaque titre et chaque seuil apparaît en bandeau sur tous les téléphones de la soirée (trois au plus à la fois, un toucher les ferme), avec une vibration ; les alertes vibrent deux fois et restent 15 secondes.</p>
+<ul><li><b>Titres</b> : message moqueur.</li><li><b>Honte</b> : gage et passage à l'eau.</li>
+<li><b>1,5 g/L</b> : « apportez-lui de l'eau et gardez un œil sur lui ».</li><li><b>2 g/L</b> : rester avec la personne ; si elle vomit, ne répond plus ou respire mal, appeler le 15.</li></ul>
+<p>Aujourd'hui, les notifications arrivent quand l'appli est ouverte. Les notifications appli fermée viendront avec l'APK (étape 2).</p>
+</div>{shot("demo-notifs", "Notifications pendant la démo")}</div>""")
+
+AVS = '<div class="avs">' + "".join(f'<div><div class="av" data-b="{b}"></div><span>{t}</span></div>' for b, t in
+       [(0, "0 g/L"), (0.3, "0,3"), (0.6, "0,6"), (0.9, "0,9"), (1.2, "1,2"), (1.7, "1,7")]) + '</div>'
+ch("L'avatar", AVS + """<p>Chaque joueur a un avatar à sa couleur, sur l'écran Moi et dans le classement. Il évolue en continu :</p>
+<ul><li>rougeurs et nez rouge qui augmentent, paupières qui tombent, blanc des yeux qui rougit, tête qui penche ;</li>
+<li>sourire qui s'élargit jusqu'au plafond, puis grimace ;</li>
+<li>0,5 g/L : col ouvert et clés de voiture barrées ; 0,6 g/L : bulles de hoquet ; 0,8 g/L : lunettes de travers ;</li>
+<li>au-dessus du plafond : teint verdâtre, yeux qui louchent, cheveux en bataille, chemise froissée ; 1 g/L : goutte de sueur ;</li>
+<li>1,5 g/L : allongé sur un oreiller avec un verre d'eau.</li></ul>
+<p>Pendant 25 minutes après chaque verre, l'avatar tient le bon modèle (bière avec mousse, vin rouge, flûte, shot, cocktail ou eau). Quand le taux redescend, il tient un verre d'eau.</p>""")
+
+ch("Le mode démo", """<p>Le bouton « Démo » en haut de l'écran lance une soirée fictive, même sans compte : Léa (raisonnable, c'est vous), Max (qui dérape), Tom (modéré) et Inès (Sam).</p>
+<ul><li><b>Curseur</b> : avancez ou reculez de 19 h à 6 h ; les titres déjà passés ne sont pas renotifiés.</li>
+<li><b>Lecture</b> : la soirée défile en accéléré, 5 minutes toutes les demi-secondes.</li>
+<li>On peut ajouter ou supprimer des verres pour Léa : rien n'est enregistré.</li>
+<li><b>Quitter</b> revient à votre vraie soirée.</li></ul>""")
+
+ch("Suivi des 7 derniers jours", f"""<div class="split"><div>
+<p>La page Profil compte vos verres standard des 7 derniers jours, toutes soirées confondues, et les compare aux repères de Santé publique France : 10 verres par semaine au plus, 2 par jour, et des jours sans alcool.</p>
+<p>Les barres passent en rouge au-delà de 2 verres standard dans la journée ; le nombre de jours sans alcool est indiqué.</p>
+<p>À venir (étape 4) : bilan mensuel, objectifs perso, trophées long terme, défis entre amis.</p>
+</div>{shot("profil", "Profil et suivi")}</div>""")
+
+ch("Fiabilité et anti-triche", """<p>Le classement récompense la modération : la triche consisterait surtout à sous-déclarer. Règles en place :</p>
+<ul><li>taux, titres et points calculés par le serveur, identiques pour tous ;</li>
+<li>un verre ne peut pas être antidaté de plus de 3 h ;</li>
+<li>un verre ne peut être supprimé que pendant 3 h, et la suppression apparaît dans le fil ;</li>
+<li>6 verres d'alcool au plus en 10 minutes ;</li>
+<li>Sam ne peut noter que des boissons sans alcool, et ne peut pas devenir Sam après avoir bu.</li></ul>
+<p>À venir (étape 3) : éthylotest Bluetooth et recalibrage personnel, validation des verres par les amis, photo du verre, indice de fiabilité ; puis gorgées détectées par la montre (étape 4).</p>""")
+
+ch("Compte et données", """<ul><li><b>Se déconnecter</b> : Profil → « Me déconnecter ».</li>
+<li><b>Supprimer son compte</b> : Profil → « Supprimer mon compte et toutes mes données », puis confirmer. Profil, verres et titres sont effacés définitivement.</li>
+<li><b>Données gardées</b> : e-mail, mot de passe chiffré, profil, verres, titres. Hébergement Render à Francfort (Union européenne).</li></ul>""")
+
+ch("Administration", """<ul><li><b>Comptes admin</b> : variable Render <code>ADMIN_EMAILS</code> (adresses séparées par des virgules). Un admin voit le bouton « Docs » en haut de l'écran.</li>
+<li><b>Documentation</b> : PDF du dossier <code>docs/</code> listés dans <code>docs/index.json</code> (titre, description, date, catégorie), accessibles aux seuls admins. Sources dans <code>docs-src/</code>, régénérées par <code>docs-src/build.sh</code>.</li>
+<li><b>Déploiement</b> : chaque envoi sur la branche <code>main</code> de <code>Kiki78test/Youdrink</code> redéploie le service Render.</li>
+<li><b>Variables</b> : <code>DATABASE_URL</code> et <code>SESSION_SECRET</code> (automatiques), <code>GOOGLE_CLIENT_ID</code> (facultatif), <code>ADMIN_EMAILS</code>.</li></ul>""")
+
+toc = "<ol class='toc'>" + "".join(f"<li><span class='n'>{i+1}</span>{t}</li>" for i, (t, _) in enumerate(CH)) + "<li><span class='n'>A</span>Historique des versions</li></ol>"
+body = f"""<div>{band("Guide complet", "Présentation et guides")}
+<p class="lead">Mode d'emploi de toutes les fonctions de Youdrink, rangé par sujet.</p>{toc}</div>""" + "".join(
+    f'<div style="{"page-break-before:always" if i == 0 else "margin-top:9mm"}"><h2><span class="n">{i+1}</span>{t}</h2>{b}</div>' for i, (t, b) in enumerate(CH)) + \
+    f'<div style="page-break-before:always"><h2><span class="n">A</span>Historique des versions</h2>{hist_table()}</div>'
+
+CSS = A4 + """.avs{display:grid;grid-template-columns:repeat(6,1fr);gap:2.5mm;margin:2mm 0 4mm;text-align:center}
+.avs>div{background:var(--bg);border-radius:3mm;padding:2mm 1mm}.avs span{color:var(--muted);font-size:8.4pt}.av svg{width:100%;height:auto}"""
+SCRIPT = """<script>const MIN=60000;const NOW=()=>1e12;</script><script src="../public/avatar.js"></script>
+<script>document.querySelectorAll('.av').forEach((el,i)=>{const b=+el.dataset.b;
+el.innerHTML=avatar({cap:0.8,color:['#f7941d','#5ab0ff','#5bc88a','#e879f9','#f2c94c','#ff7a6e'][i],sim:{cur:b,prev:b+(b>=0.8&&b<1.5?0.05:-0.05),peak:1.8},
+drinks:b>0&&b<1.5?[{t:1e12-5*MIN,l:['Bière','Vin','Cocktail','Shot'][i%4],abv:5}]:[]},120)});</script>"""
+write("guide.html", f"<style>{CSS}</style></head><body>{body}{SCRIPT}</body></html>", "Guide complet Youdrink")

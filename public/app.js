@@ -164,6 +164,15 @@ function weekView(){
    <div class="muted" style="font-size:13px">${free} jour${free>1?"s":""} sans alcool. Repères de Santé publique France : 10 verres par semaine au plus, 2 par jour, et des jours sans alcool.</div>
   </div></section>`;
 }
+function viewDocs(){
+  const back=`<button class="btn ghost small" id="back">Retour</button>`;
+  if(!S.docs) return `<div class="hero"><h1>Documentation</h1></div><section><p class="muted">Chargement…</p>${back}</section>`;
+  const cats=[...new Set(S.docs.map(d=>d.cat))];
+  const fd=d=>new Date(d+"T12:00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
+  return `<div class="hero"><h1>Documentation</h1><p class="muted">Réservée aux administrateurs. Chaque document est un PDF daté, mis à jour au fil du projet.</p></div>
+  ${cats.map(c=>`<section><h2>${esc(c)}</h2>${S.docs.filter(d=>d.cat===c).map(d=>`<a class="card doc" href="/docs/${encodeURI(d.file)}" target="_blank" rel="noopener"><div class="row" style="justify-content:space-between;align-items:baseline"><b>${esc(d.title)}</b><span class="muted" style="font-size:12px">${fd(d.date)}</span></div><span class="muted" style="font-size:13px">${esc(d.desc)}</span><span class="label" style="color:var(--accent)">Ouvrir le PDF</span></a>`).join("")}</section>`).join("")}
+  <section>${back}</section>`;
+}
 function viewHome(){
   return `<div class="hero"><h1>Salut ${esc(S.user.pseudo)} !</h1><p class="muted">Créez une soirée et partagez son code, ou rejoignez celle de vos amis.</p></div>
   <section><button class="btn" id="create">Créer une soirée</button>
@@ -176,14 +185,16 @@ function render(){
   const app=$("#app"), inParty=demo||(S.screen==="party"&&S.code);
   $("#nav").hidden=!inParty; $("#codeChip").hidden=!inParty; $("#demoHdr").hidden=demo;
   $("#profBtn").hidden=demo||!S.user||!profileReady(S.user)||S.screen==="profile";
-  if(!inParty||S.screen==="profile"&&!demo){
+  $("#docsBtn").hidden=demo||!S.user?.admin||S.screen==="docs";
+  if(!inParty||(S.screen==="profile"||S.screen==="docs")&&!demo){
     if(S.screen==="boot") app.innerHTML=`<section><p class="muted">Chargement…</p></section>`;
     else if(S.screen==="auth") app.innerHTML=viewAuth();
     else if(S.screen==="profile") app.innerHTML=viewProfile();
+    else if(S.screen==="docs") app.innerHTML=viewDocs();
     else app.innerHTML=viewHome();
     bindOut(); if(S.screen==="auth") mountGoogle(); return;
   }
-  $("#codeChip").textContent=demo?"Démo":"Soirée "+S.code;
+  $("#codeChip").textContent=demo?"Démo":S.code;
   const {now,list,log}=compute();
   notify(list,log);
   const meP=list.find(p=>p.id===S.me);
@@ -309,6 +320,7 @@ $("#demoQuit").onclick=()=>{ stopPlay(); demo=false; $("#demoBar").hidden=true; 
   S.me=demoSaved.me; S.tab=demoSaved.tab; feedUnread=0; document.querySelectorAll("#toasts .toast").forEach(t=>t.remove()); render() };
 
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;render();window.scrollTo(0,0)});
+$("#docsBtn").onclick=()=>{S.err="";S.screen="docs";render();api("GET","/api/docs").then(d=>{S.docs=d;render()}).catch(e=>{S.err=e.message;S.screen=S.code?"party":"home";render()})};
 $("#profBtn").onclick=()=>{S.err="";S.screen="profile";loadWeek().then(render);render()};
 setInterval(()=>{ if(document.activeElement&&/INPUT|SELECT/.test(document.activeElement.tagName)) return; if(S.screen==="party"||demo) render() },30000);
 if("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(()=>{});

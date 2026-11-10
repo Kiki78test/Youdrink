@@ -1,0 +1,65 @@
+<!doctype html><html lang='fr'><head><meta charset='utf-8'><title>Check-list Youdrink</title><style>
+@font-face{font-family:'Bricolage';font-weight:600;src:url(fonts/bricolage-grotesque-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Bricolage';font-weight:800;src:url(fonts/bricolage-grotesque-latin-800-normal.woff2) format('woff2')}
+
+:root{--bg:#0c0a08;--surface:#18140f;--surface2:#221c15;--line:#2f271e;--fg:#f7f1ea;--muted:#a8998a;
+--accent:#f7941d;--ink:#1a1006;--ok:#5bc88a;--warn:#f2c94c;--bad:#ff5a4e;--care:#5ab0ff;
+--paper:#fbf7f2;--paper2:#f1e9de;--text:#1d1711;--soft:#6d6052;--rule:#e2d6c6;--deep:#b8650a}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,'DejaVu Sans',sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+h1,h2,h3{font-family:'Bricolage','Inter Display',Inter,sans-serif;font-weight:800;letter-spacing:-.01em;margin:0;text-wrap:balance}
+b{font-weight:600}
+code{font-family:'DejaVu Sans Mono',monospace;font-size:.88em;background:rgba(247,148,29,.12);padding:1px 5px;border-radius:4px}
+
+@page{size:210mm 297mm;margin:14mm 16mm 17mm}
+body{background:var(--paper);color:var(--text);font-size:10.2pt;line-height:1.5}
+.page{page-break-after:always}
+.page:last-child{page-break-after:auto}
+.band{background:var(--bg);color:var(--fg);border-radius:4mm;margin:0 0 8mm;padding:8mm 9mm 7mm;display:flex;justify-content:space-between;align-items:flex-end;gap:10mm}
+.band img{height:12mm;display:block}
+.band .meta{text-align:right;color:var(--muted);font-size:9pt;line-height:1.4}
+.band h1{color:var(--fg);font-size:22pt;margin-top:4mm}
+.lead{font-size:12pt;color:var(--soft);max-width:160mm;margin:0 0 8mm}
+h2{font-size:16pt;margin:8mm 0 3mm;color:var(--text);display:flex;align-items:baseline;gap:3mm}
+h2 .n{font-family:'Bricolage',sans-serif;color:var(--deep);font-size:12pt}
+h3{font-size:11.5pt;margin:5mm 0 1.5mm}
+p{margin:0 0 2.5mm}
+ul{margin:0 0 3mm;padding-left:5mm}
+li{margin:0 0 1.2mm}
+table{width:100%;border-collapse:collapse;margin:2mm 0 4mm;font-size:9.4pt}
+th{text-align:left;font-weight:600;color:var(--soft);text-transform:uppercase;letter-spacing:.06em;font-size:7.8pt;border-bottom:1.4px solid var(--text);padding:1.6mm 2mm}
+td{border-bottom:1px solid var(--rule);padding:1.8mm 2mm;vertical-align:top}
+.note{border-left:3px solid var(--accent);background:var(--paper2);padding:3mm 4mm;margin:3mm 0 4mm;font-size:9.6pt}
+.warn{border-left-color:var(--bad)}
+.shots{display:flex;gap:5mm;margin:3mm 0 4mm;align-items:flex-start}
+.shots figure{margin:0;flex:1}
+.shots img{width:100%;border-radius:3.5mm;border:1px solid #000;display:block}
+.shots figcaption{font-size:8.4pt;color:var(--soft);margin-top:1.5mm}
+.split{display:grid;grid-template-columns:1fr 52mm;gap:7mm;align-items:start}
+.split img{width:100%;border-radius:3.5mm;border:1px solid #000}
+.foot{display:none}
+h2,h3{break-after:avoid}
+tr,li,.note,figure{break-inside:avoid}
+.toc{columns:2;column-gap:10mm;margin:0;padding-left:0;list-style:none}
+.toc li{display:flex;gap:3mm;break-inside:avoid;padding:1.4mm 0;border-bottom:1px solid var(--rule)}
+.toc .n{font-family:'Bricolage',sans-serif;color:var(--deep);width:7mm}
+.hist td:first-child{white-space:nowrap;font-variant-numeric:tabular-nums}
+
+.cl{list-style:none;padding:0}
+.cl li{display:grid;grid-template-columns:7mm 1fr;gap:2mm;padding:1.8mm 0;border-bottom:1px solid var(--rule);break-inside:avoid}
+.b{width:5mm;height:5mm;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:8pt;font-weight:700;margin-top:.4mm}
+.b.ok{background:var(--ok);color:#06210f}.b.test{background:var(--warn);color:#2a2000}.b.todo{background:transparent;border:1.4px solid var(--soft);color:var(--soft)}
+.legend{display:flex;gap:6mm;font-size:9pt;color:var(--soft);margin-bottom:4mm}
+.legend span{display:inline-flex;gap:2mm;align-items:center}
+.count{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm;margin:0 0 6mm}
+.count div{background:var(--paper2);border-radius:3mm;padding:3mm 4mm}
+.count b{font-family:'Bricolage',sans-serif;font-size:20pt;display:block;line-height:1.1}
+</style></head><body><div class="page"><div class="band"><div><img src="../public/logo.png" alt="Youdrink"><h1>Check-list</h1></div>
+<div class="meta">Pilotage du projet<br>Mis à jour le 10 novembre 2026</div></div>
+<p class="lead">Étape 1 de la feuille de route : le socle web est en ligne. Il reste à le tester en vraie soirée avant de passer à l'APK Android.</p>
+<div class="count"><div><b>15</b>fait</div><div><b>7</b>à tester par vous</div><div><b>9</b>à faire</div></div>
+<div class="legend"><span><span class="b ok">✔</span>fait</span><span><span class="b test">◷</span>à tester</span><span><span class="b todo">○</span>à faire</span></div>
+<h2>À tester par vous</h2><ul class='cl'><li><span class='b test'>◷</span><span><b>Variable Render <code>ADMIN_EMAILS</code></b> : y mettre votre adresse e-mail pour voir le bouton « Docs ».</span></li><li><span class='b test'>◷</span><span><b>Création de compte et profil</b> sur youdrink.onrender.com, depuis le téléphone puis l'ordinateur.</span></li><li><span class='b test'>◷</span><span><b>Soirée à deux téléphones</b> : créer une soirée, la rejoindre avec le code, noter des verres des deux côtés et vérifier que courbes, classement et notifications arrivent chez l'autre.</span></li><li><span class='b test'>◷</span><span><b>Installation</b> : menu du navigateur → « Ajouter à l'écran d'accueil ».</span></li><li><span class='b test'>◷</span><span><b>Mode démo</b> : curseur et lecture, déblocage des titres, évolution des avatars.</span></li><li><span class='b test'>◷</span><span><b>Réveil du serveur gratuit</b> : après 15 min sans visite, la première ouverture prend environ 30 à 50 s.</span></li><li><span class='b test'>◷</span><span><b>Vraie soirée entre amis</b> : validation de l'étape 1 avant de passer à l'APK.</span></li></ul>
+<h2>À faire</h2><ul class='cl'><li><span class='b todo'>○</span><span><b>Nom de domaine</b> (youdrink.fr ou .app) sur Cloudflare, puis branchement sur Render.</span></li><li><span class='b todo'>○</span><span><b>Connexion Google</b> : créer l'identifiant OAuth dans Google Cloud et le mettre dans <code>GOOGLE_CLIENT_ID</code>.</span></li><li><span class='b todo'>○</span><span><b>Mot de passe oublié</b> par e-mail (Resend, comme Airmony).</span></li><li><span class='b todo'>○</span><span><b>Étape 2 — APK Android</b> : notifications push Firebase appli fermée, widget écran d'accueil.</span></li><li><span class='b todo'>○</span><span><b>Étape 3 — Fiabilité</b> : saisie d'un éthylotest et recalibrage personnel, éthylotest Bluetooth, validation des verres par les amis, indice de fiabilité.</span></li><li><span class='b todo'>○</span><span><b>Étape 4 — Montre et long terme</b> : Wear OS (ajout d'un verre, vibration aux seuils, gorgées détectées par l'inclinaison), tableau de bord mensuel, objectifs, trophées long terme.</span></li><li><span class='b todo'>○</span><span><b>Étape 5 — Ouverture publique</b> : localisation approximative et défis entre soirées, publicités cohérentes (VTC, repas, sans alcool), version premium.</span></li><li><span class='b todo'>○</span><span><b>Juridique</b> avant toute ouverture publique : loi Évin, règles des stores, RGPD (analyse d'impact, politique de confidentialité, mentions légales).</span></li><li><span class='b todo'>○</span><span><b>Passage aux offres payantes Render</b> (environ 7 $ + 6 $ par mois) avant d'ouvrir au-delà du cercle d'amis : la base gratuite expire au bout de 30 jours.</span></li></ul>
+<h2>Fait</h2><ul class='cl'><li><span class='b ok'>✔</span><span><b>Prototype</b> (09/11) : calcul du taux, titres et gages, courbes communes, notifications, avatar évolutif, mode démo avec curseur temporel.</span></li><li><span class='b ok'>✔</span><span><b>Cahier des charges</b> (09/11) : concept, calcul, trophées, alertes, fiabilité et anti-triche, localisation, suivi long terme, supports, monétisation, juridique, architecture, feuille de route.</span></li><li><span class='b ok'>✔</span><span><b>Dépôt GitHub</b> <code>Kiki78test/Youdrink</code> (10/11), accès de Claude autorisé.</span></li><li><span class='b ok'>✔</span><span><b>Render</b> (10/11) : Blueprint « youdrink », service web gratuit et base PostgreSQL gratuite, tous deux à Francfort. Adresse : <code>youdrink.onrender.com</code>.</span></li><li><span class='b ok'>✔</span><span><b>Comptes</b> : e-mail + mot de passe (8 caractères minimum, mots de passe chiffrés), connexion gardée 60 jours, limitation des essais de connexion.</span></li><li><span class='b ok'>✔</span><span><b>Profil</b> : pseudo, sexe, âge (18 ans minimum), taille, poids, plafond perso. Les mesures ne sont jamais montrées aux autres joueurs.</span></li><li><span class='b ok'>✔</span><span><b>Soirées par code</b> de 4 lettres : créer, rejoindre, partager l'invitation, quitter. Une seule soirée active à la fois.</span></li><li><span class='b ok'>✔</span><span><b>Calcul serveur</b> des taux, titres et points, diffusé en temps réel à tous les joueurs (WebSocket, rafraîchi chaque minute).</span></li><li><span class='b ok'>✔</span><span><b>Avatar détaillé</b> qui évolue avec le taux, avec le verre en main pendant 25 min après chaque verre.</span></li><li><span class='b ok'>✔</span><span><b>Mode démo</b> accessible à tous (bouton « Démo » en haut) : soirée fictive de 19 h à 6 h, curseur et lecture accélérée.</span></li><li><span class='b ok'>✔</span><span><b>Suivi des 7 derniers jours</b> sur la page Profil, comparé aux repères de Santé publique France.</span></li><li><span class='b ok'>✔</span><span><b>Anti-triche, première série</b> : verre antidaté de 3 h au plus, suppression possible pendant 3 h et visible dans le fil, 6 verres d'alcool au plus en 10 min, Sam limité aux boissons sans alcool.</span></li><li><span class='b ok'>✔</span><span><b>Suppression du compte</b> avec effacement de toutes les données (RGPD).</span></li><li><span class='b ok'>✔</span><span><b>Appli installable</b> sur le téléphone (icône, plein écran, fonctionne hors ligne pour l'interface).</span></li><li><span class='b ok'>✔</span><span><b>Onglet Documentation</b> (10/11) réservé aux admins : présentation complète, guide complet, check-list, services externes.</span></li></ul>
+<div class="foot"><span>Youdrink · Check-list</span><span>10 novembre 2026</span></div></div></body></html>

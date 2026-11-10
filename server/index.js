@@ -23,6 +23,11 @@ app.get("/healthz", (req, res) => res.send("ok"));
 // Les erreurs des routes async remontent ici (Express 5).
 auth.routes(app);
 parties.routes(app);
+
+/* Documentation (réservée aux administrateurs) : docs/index.json + PDF */
+const DOCS = path.join(__dirname, "..", "docs");
+app.get("/api/docs", auth.requireUser, auth.requireAdmin, (req, res) => res.sendFile(path.join(DOCS, "index.json")));
+app.use("/docs", auth.requireUser, auth.requireAdmin, express.static(DOCS, { index: false, setHeaders: r => r.setHeader("Cache-Control", "private, no-cache") }));
 app.use("/api", (req, res) => res.status(404).json({ error: "Route inconnue." }));
 
 app.use(express.static(path.join(__dirname, "..", "public"), {
