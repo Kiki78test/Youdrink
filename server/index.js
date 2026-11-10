@@ -38,8 +38,9 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
-migrate().then(() => {
-  const server = http.createServer(app);
-  parties.attachWs(server);
-  server.listen(PORT, () => console.log(`Youdrink en écoute sur le port ${PORT}`));
-}).catch(e => { console.error("Migration impossible :", e); process.exit(1); });
+// Le port s'ouvre tout de suite ; la base est préparée en parallèle.
+const server = http.createServer(app);
+parties.attachWs(server);
+server.listen(PORT, () => console.log(`Youdrink en écoute sur le port ${PORT}`));
+migrate().then(() => console.log("Base prête."))
+  .catch(e => { console.error("Base impossible à préparer :", e.message); process.exit(1); });
