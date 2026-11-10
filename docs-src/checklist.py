@@ -31,12 +31,15 @@ FAIT = [
     ("ok", "<b>Test à deux comptes</b> (10/11) : soirée créée et rejointe par code sur alambhic.onrender.com, verres des deux joueurs, courbes communes en temps réel."),
     ("ok", "<b>Design des notifications</b> (10/11) : une notification à la fois avec file d'attente, icônes et barre de temps ; confirmations en bas avec « Annuler » ; boutons de boisson avec état d'envoi et coche verte (fin des doubles saisies)."),
     ("ok", "<b>Écran « Potes » en direct</b> (10/11) : taux, avatar, tendance façon bourse (▲/▼ en g/L par heure), mini-courbe, dernier titre."),
-    ("todo", "<b>Liste d'amis</b> hors soirée : ajouter des amis (code ou lien), les voir en direct quand ils partagent leur soirée, widget « mes potes » sur l'APK et la montre."),
+    ("ok", "<b>Animations</b> (10/11) : jauge en serpentin d'alambic, goutte qui vole jusqu'au tuyau, titre qui fait « hic ! », tendance qui clignote, fiole de chargement ; coupées si le téléphone réduit les animations."),
+    ("ok", "<b>Liste d'amis</b> (10/11) : code ami, lien d'invitation, demandes, amis en direct (taux, tendance, mini-courbe, dernier titre), partage désactivable."),
+    ("todo", "<b>Widget « mes potes »</b> sur l'APK et la montre, et notifications des titres des amis hors soirée (avec l'APK)."),
     ("ok", "<b>Onglet Documentation</b> (10/11) réservé aux admins : présentation complète, guide complet, check-list, services externes."),
 ]
 A_TESTER = [
     ("test", "<b>Variable Render <code>ADMIN_EMAILS</code></b> : y mettre votre adresse e-mail pour voir le bouton « Docs »."),
     ("test", "<b>Variable <code>CONTACT_EMAIL</code></b> sur Render : adresse de contact affichée dans les pages légales."),
+    ("test", "<b>Amis</b> : s'ajouter mutuellement avec le lien d'invitation, voir le taux de l'autre pendant une soirée, couper le partage."),
     ("test", "<b>Connexion Google</b> : se connecter avec « Continuer avec Google » depuis le téléphone."),
     ("test", "<b>Création de compte et profil</b> sur alambhic.onrender.com, depuis le téléphone puis l'ordinateur."),
     ("test", "<b>Repas</b> : en entrant dans la soirée, renseigner les repas du jour (heure et type) avant le premier verre ; ajouter un repas en cours de soirée ; vérifier la question « avez-vous dîné ? » entre 19 h et 22 h 30."),

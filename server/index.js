@@ -24,6 +24,8 @@ app.get("/healthz", (req, res) => res.send("ok"));
 auth.routes(app);
 parties.routes(app);
 require("./legal").routes(app);
+const friends = require("./friends");
+friends.routes(app);
 
 /* Documentation (réservée aux administrateurs) : docs/index.json + PDF */
 const DOCS = path.join(__dirname, "..", "docs");
@@ -48,5 +50,5 @@ const PORT = process.env.PORT || 3000;
 const server = http.createServer(app);
 parties.attachWs(server);
 server.listen(PORT, () => console.log(`Alamb'hic en écoute sur le port ${PORT}`));
-migrate().then(() => console.log("Base prête."))
+migrate().then(() => friends.migrate()).then(() => console.log("Base prête."))
   .catch(e => { console.error("Base impossible à préparer :", e.message); process.exit(1); });

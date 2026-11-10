@@ -74,7 +74,7 @@ S.append(slide(f"""<div class="cols"><div><div class="k">Démarrer</div><h2>Un c
 
 S.append(slide(f"""<div class="cols"><div><div class="k">L'écran Moi</div><h2>Son taux, son avatar, ses verres</h2>
 <ul><li>Taux estimé en grand, état coloré : sobre, pompette, interdit de conduire, au-dessus du plafond, alerte.</li>
-<li>Jauge avec les seuils 0,5, plafond et 1,2 g/L ; pic de la soirée et heure estimée du retour à 0.</li>
+<li>Jauge en serpentin d'alambic qui se remplit de potion, repères 0,5, plafond et 1,2 g/L ; pic de la soirée et heure estimée du retour à 0.</li>
 <li>Huit boissons prêtes, un verre perso (volume et degré), « bu il y a 15 min à 1 h ».</li>
 <li>Repas du jour demandés avant le premier verre, ajout d'un repas à tout moment, question « avez-vous dîné ? » à l'heure des repas.</li>
 <li>Mes titres et l'historique de mes verres.</li></ul></div>
@@ -139,6 +139,13 @@ S.append(slide("""<div class="k">Architecture et supports</div><h2>Un seul serve
 <div class="card"><b>Aujourd'hui</b><span>Site web installable sur alambhic.onrender.com · serveur Node et temps réel · base PostgreSQL · Render à Francfort · code sur GitHub.</span></div>
 <div class="card"><b>APK Android</b><span>Même appli emballée, notifications push Firebase appli fermée, widget écran d'accueil (jauge, retour à 0, + bière / + vin / + eau).</span></div>
 <div class="card"><b>Montre Wear OS</b><span>Ajouter un verre au poignet, taux en complication, vibration aux seuils et quand un ami est en alerte, gorgées détectées.</span></div></div>"""))
+
+S.append(slide(f"""<div class="cols"><div><div class="k">Les amis</div><h2>Ses potes en direct, même hors de la soirée</h2>
+<ul><li>Un code ami et un lien d'invitation ; l'autre accepte la demande.</li>
+<li>Pour chaque ami en soirée : avatar, taux, tendance ▲▼ façon bourse, mini-courbe et dernier titre.</li>
+<li>Partage du taux activé par défaut, désactivable ; seuls les amis acceptés le voient, jamais le reste de leur soirée.</li>
+<li>À venir : le même résumé en widget sur l'APK et sur la montre.</li></ul></div>
+<div class="phones">{img("amis")}</div></div>"""))
 
 ROAD = [("1", "Socle web", "Comptes, soirées, calcul serveur, titres, avatar, démo, suivi 7 jours", True),
         ("2", "APK Android", "Push Firebase, widget écran d'accueil", False),

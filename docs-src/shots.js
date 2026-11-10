@@ -40,7 +40,8 @@ const out = n => require('path').join(__dirname, 'img', n + '.png');
     await p.click('#mLogin'); await p.fill('#email', EMAIL); await p.fill('#pass', PASS); await p.click('#authForm button[type=submit]');
     await p.waitForTimeout(1500); await shot('soiree-moi', true);
     await p.click('#profBtn'); await p.waitForTimeout(800); await shot('profil', true);
-    await p.click('#docsBtn'); await p.waitForTimeout(800); await shot('documentation');
+    await p.click('#openDocs'); await p.waitForTimeout(800); await shot('documentation');
+    await p.click('#friendsBtn'); await p.waitForTimeout(1500); await shot('amis', true);
   }
   await b.close();
 })();

@@ -162,3 +162,45 @@ body.isdemo{padding-bottom:200px}
 .ltitle{font-size:12.5px;font-weight:600;min-height:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ltitle.trophy{color:var(--gold)}.ltitle.shame{color:var(--bad)}.ltitle.care{color:var(--care)}
 @media (max-width:340px){.live{grid-template-columns:1fr}}
+/* jauge en serpentin d'alambic */
+.gauge svg{display:block;width:100%;height:auto;overflow:visible}
+.gauge .gt{fill:none;stroke:var(--line);stroke-width:15;stroke-linecap:round;stroke-linejoin:round}
+.gauge .gi{fill:none;stroke:#0b1d33;stroke-width:10.5;stroke-linecap:round;stroke-linejoin:round}
+.gauge .pot{fill:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:100 100;transition:stroke-dashoffset 1.3s cubic-bezier(.3,.7,.2,1),stroke .6s;filter:drop-shadow(0 0 4px color-mix(in srgb,currentColor 30%,transparent))}
+.gauge .gs{fill:none;stroke:#fff;stroke-opacity:.16;stroke-width:1.6;stroke-linecap:round}
+.gauge .gend{fill:#0b1d33;stroke:var(--line);stroke-width:3}
+.gauge .gk{stroke:var(--muted);stroke-width:1.4}
+.gauge .gl{fill:var(--muted);font:600 10.5px var(--body);text-anchor:middle;font-variant-numeric:tabular-nums}
+.gauge .gb{fill:#dff0ff;opacity:0;animation:gbub 1.6s ease-in-out infinite 1.1s}
+.gauge.down .gb{animation-name:gdown}
+@keyframes gbub{0%{opacity:0;transform:translateX(-4px)}30%{opacity:.9}100%{opacity:0;transform:translateX(5px) translateY(-3px)}}
+@keyframes gdown{0%{opacity:0;transform:translateX(5px)}30%{opacity:.8}100%{opacity:0;transform:translateX(-6px) translateY(2px)}}
+/* goutte qui vole jusqu'au tuyau */
+.dropfx{position:fixed;left:0;top:0;width:14px;height:14px;margin:-7px 0 0 -7px;z-index:30;pointer-events:none;background:radial-gradient(circle at 35% 35%,#bfe3ff,#2f8cff 60%);border-radius:50% 50% 50% 0;rotate:-45deg;box-shadow:0 0 10px rgba(47,140,255,.6)}
+.splashfx{position:fixed;z-index:30;width:10px;height:10px;margin:-5px 0 0 -5px;border:2px solid #8fd0ff;border-radius:50%;pointer-events:none;animation:splash .55s ease-out forwards}
+@keyframes splash{to{transform:scale(3.4);opacity:0}}
+/* titre débloqué : la fiole fait « hic ! » */
+.toast.trophy .ti{position:relative;overflow:visible;animation:hicpop .6s cubic-bezier(.3,1.6,.5,1)}
+.toast .hic{position:absolute;top:-12px;right:-16px;font:800 10px/1 var(--display);font-style:normal;color:#1a1200;background:var(--gold);padding:3px 5px;border-radius:8px 8px 8px 2px;opacity:0;animation:hicbub 1.6s ease-out .25s forwards}
+.toast .sp{position:absolute;left:50%;top:50%;width:4px;height:4px;border-radius:50%;background:var(--gold);opacity:0;animation:spark .8s ease-out .15s forwards}
+.toast .s1{--dx:-18px;--dy:-16px}.toast .s2{--dx:18px;--dy:-14px}.toast .s3{--dx:-14px;--dy:16px}
+@keyframes hicpop{0%{transform:scale(.4) rotate(-20deg)}60%{transform:scale(1.18) rotate(8deg)}100%{transform:none}}
+@keyframes hicbub{0%{opacity:0;transform:translateY(6px) scale(.6)}20%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0;transform:translateY(-4px)}}
+@keyframes spark{0%{opacity:1;transform:translate(-50%,-50%)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.4)}}
+/* tendance qui change de sens */
+.ltr.chg{animation:tick .45s ease-in-out 3}
+@keyframes tick{50%{filter:brightness(1.8);transform:scale(1.12)}}
+/* chargement : fiole qui se remplit */
+.loader{display:flex;align-items:center;gap:12px;color:var(--muted)}
+.loader svg{width:30px;height:36px}
+.loader .lf{fill:none;stroke:var(--fg);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.loader .ll{fill:var(--accent);animation:fill 1.4s ease-in-out infinite alternate}
+@keyframes fill{from{transform:translateY(22px)}to{transform:translateY(0)}}
+@media (prefers-reduced-motion:reduce){.gauge .pot{transition:none}.gauge .gb,.toast .hic,.toast .sp,.toast.trophy .ti,.ltr.chg,.loader .ll{animation:none}.toast .hic{opacity:1}}
+.fcode{display:flex;flex-direction:column;gap:10px}
+.fcode .code{font-family:var(--display);font-size:30px;letter-spacing:.18em}
+.lcard.off{opacity:.8}.lcard.off .link{align-self:flex-start;padding:0}
+.item.req{gap:8px;flex-wrap:wrap}
+.btn.pulse{animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 30%,transparent)}}
+@media (prefers-reduced-motion:reduce){.btn.pulse{animation:none}}

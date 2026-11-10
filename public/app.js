@@ -44,7 +44,7 @@ function stateOf(b,cap){
 
 function viewMe(p,now){
   const s=p.sim, cap=+my.cap||0.8, [lab,col]=stateOf(s.cur,cap), maxB=Math.max(1.6,cap+0.4);
-  const ticks=[0.5,cap,1.2].filter((v,i,a)=>a.indexOf(v)===i&&v<maxB).map(v=>`<span style="left:${v/maxB*100}%">${fmt(v)}</span>`).join("");
+
   const std=(s.grams/10).toFixed(1).replace(".",",");
   const sub=s.peakT?`Pic ${fmt(s.peak)} à ${hm(s.peakT)} · ${std} verres standard`+(s.cur>0&&s.zeroT?` · retour à 0 vers ${hm(s.zeroT)}`:""):"Aucun verre d'alcool pour l'instant";
   const mine=(my.drinks||[]).slice().sort((a,b)=>b.t-a.t);
@@ -54,7 +54,7 @@ function viewMe(p,now){
   <div class="card" style="display:flex;flex-direction:column;gap:12px">
     <div class="row" style="justify-content:space-between"><span class="label">${esc(my.pseudo)} · taux estimé</span><span class="state" style="color:${col}">${lab}</span></div>
     <div class="row" style="gap:16px;flex-wrap:nowrap">${avatar(p,96)}<div class="bac">${fmt(s.cur)}<small>g/L</small></div></div>
-    <div><div class="bar"><i style="width:${Math.min(100,s.cur/maxB*100)}%;background:${col}"></i></div><div class="ticks">${ticks}</div></div>
+    ${gauge(s.cur,maxB,cap,col,s.cur<s.prev-0.004)}
     <div class="muted" style="font-size:13px">${sub}. Plafond perso : ${fmt(cap)} g/L.</div>
   </div></section>
   <section><h2>${my.sam?"Sam boit de l'eau":"Ajouter un verre"}</h2>
@@ -93,6 +93,45 @@ function viewChart(list,now){
   <div class="legend">${withD.map(p=>`<span><i class="dot" style="background:${p.color}"></i>${esc(p.pseudo)} · ${fmt(p.sim.cur)}</span>`).join("")}</div>
   <p class="muted" style="font-size:13px">Trait plein : taux estimé jusqu'à maintenant. Pointillés : redescente prévue si plus personne ne boit.</p></section>`;
 }
+/* ---------- animations ---------- */
+const REDUCE=(()=>{try{return matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){return false}})();
+/* Jauge en serpentin d'alambic : la potion avance dans le tuyau avec le taux. */
+const GX0=10, GX1=300, GY=26, GA=9, GP=46;
+const gy=x=>GY+GA*Math.sin(2*Math.PI*(x-GX0)/GP);
+const GPATH=(()=>{let d=`M${GX0} ${gy(GX0).toFixed(1)}`;for(let x=GX0+3;x<=GX1;x+=3)d+=`L${x} ${gy(x).toFixed(1)}`;return d})();
+let gaugePrev=null;
+function gauge(cur,maxB,cap,col,down){
+  const r=Math.max(0,Math.min(1,cur/maxB)), from=gaugePrev===null?r:gaugePrev; gaugePrev=r;
+  const fx=GX0+r*(GX1-GX0), ticks=[0.5,cap,1.2].filter((v,i,a)=>a.indexOf(v)===i&&v<maxB);
+  const bub=r>0.02?[0,1,2].map(i=>`<circle class="gb" cx="${(fx-6-i*9).toFixed(1)}" cy="${gy(Math.max(GX0,fx-6-i*9)).toFixed(1)}" r="${2.2-i*0.4}" style="animation-delay:${i*0.35}s"/>`).join(""):"";
+  return `<div class="gauge${down?" down":""}"><svg viewBox="0 0 320 58" role="img" aria-label="Jauge du taux : ${fmt(cur)} g/L">
+    <path d="${GPATH}" class="gt"/><path d="${GPATH}" class="gi"/>
+    <path d="${GPATH}" class="pot" pathLength="100" stroke="${col}" style="stroke-dashoffset:${(100-from*100).toFixed(2)}" data-to="${(100-r*100).toFixed(2)}"/>
+    <path d="${GPATH}" class="gs" transform="translate(0 -2.2)"/>
+    <g class="gbs">${bub}</g>
+    <circle cx="${GX1+8}" cy="${gy(GX1).toFixed(1)}" r="7" class="gend"/>
+    ${ticks.map(v=>{const x=GX0+(v/maxB)*(GX1-GX0);return `<line x1="${x}" x2="${x}" y1="${GY-GA-6}" y2="${GY-GA-1}" class="gk"/><text x="${x}" y="54" class="gl">${fmt(v)}</text>`}).join("")}
+  </svg></div>`;
+}
+function animateGauge(){
+  document.querySelectorAll(".gauge .pot").forEach(p=>{ if(REDUCE){p.style.strokeDashoffset=p.dataset.to;return}
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{p.style.strokeDashoffset=p.dataset.to})) });
+}
+/* Une goutte de potion vole du bouton touché jusqu'à l'entrée du tuyau. */
+function flyDrop(rect){
+  if(REDUCE||!rect) return;
+  const go=()=>{ const g=document.querySelector(".gauge svg"); if(!g) return; const t=g.getBoundingClientRect();
+    const x0=rect.left+rect.width/2, y0=rect.top+rect.height/2, x1=t.left+t.width*0.04, y1=t.top+t.height*0.42;
+    const d=document.createElement("div"); d.className="dropfx"; document.body.appendChild(d);
+    const mx=(x0+x1)/2, my=Math.min(y0,y1)-90;
+    const a=d.animate([{transform:`translate(${x0}px,${y0}px) scale(.6)`,opacity:0},{transform:`translate(${mx}px,${my}px) scale(1)`,opacity:1,offset:.45},{transform:`translate(${x1}px,${y1}px) scale(.8)`,opacity:1}],{duration:700,easing:"cubic-bezier(.4,0,.2,1)"});
+    a.onfinish=()=>{ d.remove(); const s=document.createElement("div"); s.className="splashfx"; s.style.left=x1+"px"; s.style.top=y1+"px"; document.body.appendChild(s); setTimeout(()=>s.remove(),600) } };
+  setTimeout(go,30);
+}
+/* Fiole qui se remplit, à la place de « Chargement… ». */
+const loader=t=>`<div class="loader"><svg viewBox="0 0 40 48" aria-hidden="true"><path d="M15 4h10M17 4v12L7 34a8 8 0 0 0 7 12h12a8 8 0 0 0 7-12L23 16V4" class="lf"/><clipPath id="lc"><path d="M17 16L7 34a8 8 0 0 0 7 12h12a8 8 0 0 0 7-12L23 16z"/></clipPath><g clip-path="url(#lc)"><rect x="0" y="20" width="40" height="30" class="ll"/></g></svg><span>${t}</span></div>`;
+let trendPrev={};
+
 /* Potes en direct : taux, tendance façon bourse, mini-courbe, dernier titre */
 const valAt=(pts,t)=>{let v=0;for(const [x,b] of pts||[]){if(x<=t)v=b;else break}return v};
 function trendOf(p,now){
@@ -121,7 +160,7 @@ function viewRank(list,now){
     <p class="muted" style="font-size:13px;margin:0">Taux estimé et tendance sur les 15 dernières minutes : ▲ ça monte, ▼ ça redescend.</p>
     <div class="live">${r.map(p=>{const [lab,col]=stateOf(p.sim.cur,+p.cap||0.8), tr=trendOf(p,now), last=p.ev.filter(e=>e.kind!=="info").sort((a,b)=>b.t-a.t)[0];
       return `<div class="lcard"><div class="lhead">${avatar(p,58)}<div class="lname"><b>${esc(p.pseudo)}</b>${p.id===S.me?'<span class="muted"> (vous)</span>':""}<span class="lstate" style="color:${col}">${lab}</span></div></div>
-      <div class="lrow"><span class="lnum" style="color:${col}">${fmt(p.sim.cur)}<small>g/L</small></span><span class="ltr ${tr.k}">${tr.k==="up"?"▲":tr.k==="down"?"▼":"■"} ${tr.txt}</span></div>
+      <div class="lrow"><span class="lnum" style="color:${col}">${fmt(p.sim.cur)}<small>g/L</small></span><span class="ltr ${tr.k}${trendPrev[p.id]&&trendPrev[p.id]!==tr.k?" chg":""}" data-tk="${p.id}|${tr.k}">${tr.k==="up"?"▲":tr.k==="down"?"▼":"■"} ${tr.txt}</span></div>
       ${spark(p,now,p.color)}
       <div class="ltitle ${last?last.kind:""}">${last?`${esc(last.title)} <span class="muted">· ${hm(last.t)}</span>`:`<span class="muted">Pas encore de titre</span>`}</div></div>`}).join("")}</div></section>`;
   }
@@ -215,7 +254,7 @@ function pump(){
   if(tShown||!TQ.length) return;
   const e=TQ.shift(), k=e.kind||"info", dur=k==="care"?12000:k==="shame"?6500:4500;
   const d=document.createElement("div"); d.className="toast "+k; d.setAttribute("role","status");
-  d.innerHTML=`<span class="ti">${icon(k)}</span><div class="tx"><b>${esc(e.title)}</b><span>${esc(e.text)}</span></div><span class="tq" hidden></span><button class="tc" aria-label="Fermer">×</button><i class="tp" style="animation-duration:${dur}ms"></i>`;
+  d.innerHTML=`<span class="ti">${icon(k)}${k==="trophy"?'<em class="hic">hic!</em><i class="sp s1"></i><i class="sp s2"></i><i class="sp s3"></i>':""}</span><div class="tx"><b>${esc(e.title)}</b><span>${esc(e.text)}</span></div><span class="tq" hidden></span><button class="tc" aria-label="Fermer">×</button><i class="tp" style="animation-duration:${dur}ms"></i>`;
   const box=$("#toasts"); box.innerHTML=""; box.appendChild(d); tShown=d; updQ();
   requestAnimationFrame(()=>d.classList.add("in"));
   const close=()=>{ if(tShown!==d) return; clearTimeout(tTimer); d.classList.remove("in"); d.classList.add("out"); setTimeout(()=>{ d.remove(); tShown=null; pump() },200) };
@@ -269,7 +308,7 @@ function viewProfile(){
   <div class="row"><button class="btn" id="saveProf">Enregistrer</button>${edit?`<button class="btn ghost" id="back">Retour</button>`:""}</div>
   </section>
   ${wk}
-  ${edit?`<section><div class="row">${S.code?`<button class="btn ghost small" id="leave">Quitter la soirée ${esc(S.code)}</button>`:""}<button class="btn ghost small" id="logout">Me déconnecter</button></div>
+  ${edit?`<section><div class="row">${S.user?.admin?`<button class="btn ghost small" id="openDocs">Documentation</button>`:""}<button class="btn ghost small" id="demoBtn2">Voir la démo</button></div></section><section><div class="row">${S.code?`<button class="btn ghost small" id="leave">Quitter la soirée ${esc(S.code)}</button>`:""}<button class="btn ghost small" id="logout">Me déconnecter</button></div>
   <button class="link danger" id="delAcc">Supprimer mon compte et toutes mes données</button><div id="delConfirm" hidden class="banner">Tout sera effacé : profil, verres, titres. <div class="row" style="margin-top:8px"><button class="btn small" id="delYes">Oui, tout supprimer</button><button class="btn ghost small" id="delNo">Annuler</button></div></div></section>`:""}`;
 }
 function weekView(){
@@ -285,16 +324,67 @@ function weekView(){
 }
 function viewDocs(){
   const back=`<button class="btn ghost small" id="back">Retour</button>`;
-  if(!S.docs) return `<div class="hero"><h1>Documentation</h1></div><section><p class="muted">Chargement…</p>${back}</section>`;
+  if(!S.docs) return `<div class="hero"><h1>Documentation</h1></div><section>${loader("Chargement…")}${back}</section>`;
   const cats=[...new Set(S.docs.map(d=>d.cat))];
   const fd=d=>new Date(d+"T12:00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
   return `<div class="hero"><h1>Documentation</h1><p class="muted">Réservée aux administrateurs. Chaque document est un PDF daté, mis à jour au fil du projet.</p></div>
   ${cats.map(c=>`<section><h2>${esc(c)}</h2>${S.docs.filter(d=>d.cat===c).map(d=>`<a class="card doc" href="/docs/${encodeURI(d.file)}" target="_blank" rel="noopener"><div class="row" style="justify-content:space-between;align-items:baseline"><b>${esc(d.title)}</b><span class="muted" style="font-size:12px">${fd(d.date)}</span></div><span class="muted" style="font-size:13px">${esc(d.desc)}</span><span class="label" style="color:var(--accent)">Ouvrir le PDF</span></a>`).join("")}</section>`).join("")}
   <section>${back}</section>`;
 }
+/* ---------- amis ---------- */
+let fTimer=null;
+function stopFriendsPoll(){ if(fTimer){clearInterval(fTimer);fTimer=null} }
+async function loadFriends(){ try{ S.friends=await api("GET","/api/friends") }catch(e){ if(!S.friends) S.err=e.message } }
+function openFriends(){ S.err=""; S.screen="friends"; render(); loadFriends().then(render); stopFriendsPoll();
+  fTimer=setInterval(()=>{ if(document.visibilityState!=="visible"||S.screen!=="friends") return; if(document.activeElement&&/INPUT/.test(document.activeElement.tagName)) return; loadFriends().then(render) },30000) }
+const inviteLink=()=>`${location.origin}/?ami=${S.friends?.code||""}`;
+function friendCard(f,i,now){
+  const L=f.live, color=COLORS[(i+1)%COLORS.length];
+  if(!L) return `<div class="lcard off"><div class="lhead">${avatar({id:f.id,color,cap:f.cap,sim:{cur:0,prev:0,peak:0},drinks:[]},50)}<div class="lname"><b>${esc(f.pseudo)}</b><span class="lstate muted">${f.share?"Pas en soirée":"Ne partage pas son taux"}</span></div></div><button class="link danger" data-unf="${f.id}" data-name="${esc(f.pseudo)}">Retirer</button></div>`;
+  const p={id:f.id,color,cap:f.cap,sim:{cur:L.cur,prev:L.prev,peak:L.peak,pts:L.pts},drinks:L.drinks};
+  const [lab,col]=stateOf(L.cur,+f.cap||0.8), tr=trendOf(p,now);
+  return `<div class="lcard"><div class="lhead">${avatar(p,58)}<div class="lname"><b>${esc(f.pseudo)}</b><span class="lstate" style="color:${col}">${L.sam?"Sam ce soir":lab}</span></div></div>
+    <div class="lrow"><span class="lnum" style="color:${col}">${fmt(L.cur)}<small>g/L</small></span><span class="ltr ${tr.k}${trendPrev["f"+f.id]&&trendPrev["f"+f.id]!==tr.k?" chg":""}" data-tk="f${f.id}|${tr.k}">${tr.k==="up"?"▲":tr.k==="down"?"▼":"■"} ${tr.txt}</span></div>
+    ${spark(p,now,color)}
+    <div class="ltitle ${L.last?L.last.kind:""}">${L.last?`${esc(L.last.title)} <span class="muted">· ${hm(L.last.t)}</span>`:`<span class="muted">Pas encore de titre</span>`}</div></div>`;
+}
+function viewFriends(){
+  const F=S.friends, back=`<button class="btn ghost small" id="back">Retour</button>`;
+  if(!F) return `<div class="hero"><h1>Mes amis</h1></div><section>${loader("Chargement…")}${back}</section>`;
+  const now=Date.now(), on=F.friends.filter(f=>f.live).sort((a,b)=>b.live.cur-a.live.cur), off=F.friends.filter(f=>!f.live);
+  const pre=ls.get("yd_ami","")||"";
+  return `<div class="hero"><h1>Mes amis</h1><p class="muted">Leur taux en direct quand ils sont en soirée, leur avatar, leur tendance et leur dernier titre.</p></div>
+  ${S.err?`<div class="banner">${esc(S.err)}</div>`:""}
+  <section><div class="card fcode"><span class="label">Mon code ami</span><div class="row" style="justify-content:space-between"><b class="code">${esc(F.code)}</b><button class="btn small" id="shareLink">Partager mon lien</button></div>
+  <label class="toggle" style="margin-top:4px"><span>Mes amis voient mon taux en direct pendant mes soirées</span><input type="checkbox" id="shareT" ${F.share?"checked":""}></label></div>
+  <div class="row"><div class="field" style="flex:1;min-width:140px"><span class="label">Ajouter un ami avec son code</span><input id="fCode" maxlength="7" autocapitalize="characters" placeholder="ABC123" value="${esc(pre)}" style="text-transform:uppercase;letter-spacing:.15em"></div><button class="btn${pre?" pulse":""}" id="fAdd" style="align-self:flex-end">Ajouter</button></div></section>
+  ${F.incoming.length?`<section><h2>Demandes reçues</h2>${F.incoming.map(r=>`<div class="item req"><div class="grow"><b>${esc(r.pseudo)}</b> <span class="muted">veut vous ajouter</span></div><button class="btn small" data-acc="${r.id}">Accepter</button><button class="btn ghost small" data-dec="${r.id}">Refuser</button></div>`).join("")}</section>`:""}
+  <section><h2>En soirée${on.length?` (${on.length})`:""}</h2>${on.length?`<div class="live">${on.map((f,i)=>friendCard(f,i,now)).join("")}</div>`:`<p class="muted">Aucun ami en soirée pour l'instant. Leur taux apparaîtra ici dès qu'ils rejoindront une soirée.</p>`}</section>
+  ${off.length?`<section><h2>Les autres</h2><div class="live">${off.map((f,i)=>friendCard(f,i+on.length,now)).join("")}</div></section>`:""}
+  ${F.outgoing.length?`<section><h2>En attente</h2>${F.outgoing.map(r=>`<div class="item req"><div class="grow"><b>${esc(r.pseudo)}</b> <span class="muted">n'a pas encore accepté</span></div><button class="btn ghost small" data-dec="${r.id}">Annuler</button></div>`).join("")}</section>`:""}
+  ${!F.friends.length&&!F.incoming.length&&!F.outgoing.length?`<section><p class="muted">Pas encore d'amis. Partagez votre lien ou demandez leur code à vos potes.</p></section>`:""}
+  <section>${back}</section>`;
+}
+function bindFriends(){
+  const on=(id,f)=>{const el=$("#"+id); if(el) el.onclick=f};
+  on("shareLink",async()=>{ const txt=`Ajoute-moi sur Alamb'hic : ${inviteLink()}`;
+    try{ if(navigator.share){await navigator.share({title:"Alamb'hic",text:txt});return} await navigator.clipboard.writeText(txt); snack("Lien copié","Envoie-le à tes potes") }catch(e){ snack("Mon lien ami",inviteLink()) } });
+  on("fAdd",async()=>{ const c=$("#fCode").value; try{ const r=await api("POST","/api/friends",{code:c}); ls.set("yd_ami","");
+      snack(r.state==="accepted"?`${r.pseudo} et vous êtes amis`:r.state==="already"?`Déjà ami avec ${r.pseudo}`:r.state==="pending"?"Demande déjà envoyée":`Demande envoyée à ${r.pseudo}`, r.state==="sent"?"Elle apparaîtra dès qu'il accepte":"");
+      buzz(25); await loadFriends(); render() }catch(e){ snack("Ajout impossible",e.message,{err:1}) } });
+  const sh=$("#shareT"); if(sh) sh.onchange=async()=>{ try{ await api("PUT","/api/me/share",{share:sh.checked}); S.friends.share=sh.checked; snack(sh.checked?"Partage activé":"Partage désactivé",sh.checked?"Vos amis voient votre taux pendant vos soirées":"Vos amis ne voient plus votre taux") }catch(e){ snack("Réglage non enregistré",e.message,{err:1}) } };
+  document.querySelectorAll("[data-acc]").forEach(b=>b.onclick=async()=>{ b.disabled=true; try{ await api("POST",`/api/friends/${b.dataset.acc}/accept`); snack("Ami ajouté"); buzz(25); await loadFriends(); render() }catch(e){ b.disabled=false; snack("Impossible",e.message,{err:1}) } });
+  document.querySelectorAll("[data-dec]").forEach(b=>b.onclick=async()=>{ b.disabled=true; try{ await api("DELETE",`/api/friends/${b.dataset.dec}`); snack("Demande retirée"); await loadFriends(); render() }catch(e){ b.disabled=false; snack("Impossible",e.message,{err:1}) } });
+  document.querySelectorAll("[data-unf]").forEach(b=>b.onclick=async()=>{
+    if(b.dataset.sure!=="1"){ b.dataset.sure="1"; b.textContent=`Retirer ${b.dataset.name} ?`; setTimeout(()=>{ if(b.isConnected){b.dataset.sure="";b.textContent="Retirer"} },3000); return }
+    try{ await api("DELETE",`/api/friends/${b.dataset.unf}`); snack(`${b.dataset.name} retiré de vos amis`); await loadFriends(); render() }catch(e){ snack("Impossible",e.message,{err:1}) } });
+  document.querySelectorAll("[data-tk]").forEach(e=>{const [id,k]=e.dataset.tk.split("|");trendPrev[id]=k});
+}
+
 function viewHome(){
   return `<div class="hero"><h1>Salut ${esc(S.user.pseudo)} !</h1><p class="muted">Créez une soirée et partagez son code, ou rejoignez celle de vos amis.</p></div>
   <section><button class="btn" id="create">Créer une soirée</button>
+  <div class="row"><button class="btn ghost" id="friendsBtn2" style="flex:1">Mes amis</button><button class="btn ghost" id="demoBtn3" style="flex:1">Voir la démo</button></div>
   <div class="row"><div class="field" style="flex:1;min-width:120px"><span class="label">Rejoindre avec un code</span><input id="joinCode" maxlength="4" autocapitalize="characters" placeholder="ABCD" style="text-transform:uppercase;letter-spacing:.2em"></div><button class="btn ghost" id="join" style="align-self:flex-end">Rejoindre</button></div>
   ${S.err?`<div class="banner">${esc(S.err)}</div>`:""}</section>${S.week?weekView():""}`;
 }
@@ -302,14 +392,17 @@ function viewHome(){
 /* ---------- rendu ---------- */
 function render(){
   const app=$("#app"), inParty=demo||(S.screen==="party"&&S.code);
-  $("#nav").hidden=!inParty; $("#codeChip").hidden=!inParty; $("#demoHdr").hidden=demo;
-  $("#profBtn").hidden=demo||!S.user||!profileReady(S.user)||S.screen==="profile";
-  $("#docsBtn").hidden=demo||!S.user?.admin||S.screen==="docs";
-  if(!inParty||(S.screen==="profile"||S.screen==="docs")&&!demo){
-    if(S.screen==="boot") app.innerHTML=`<section><p class="muted">Chargement…</p></section>`;
+  const ready=!!S.user&&profileReady(S.user);
+  $("#nav").hidden=!inParty; $("#codeChip").hidden=!inParty; $("#demoHdr").hidden=demo||(ready&&!!S.code);
+  $("#profBtn").hidden=demo||!ready||S.screen==="profile";
+  $("#friendsBtn").hidden=demo||!ready||S.screen==="friends";
+  if(S.screen!=="friends") stopFriendsPoll();
+  if(!inParty||(S.screen==="profile"||S.screen==="docs"||S.screen==="friends")&&!demo){
+    if(S.screen==="boot") app.innerHTML=`<section>${loader("Chargement…")}</section>`;
     else if(S.screen==="auth") app.innerHTML=viewAuth();
     else if(S.screen==="profile") app.innerHTML=viewProfile();
     else if(S.screen==="docs") app.innerHTML=viewDocs();
+    else if(S.screen==="friends") app.innerHTML=viewFriends();
     else app.innerHTML=viewHome();
     bindOut(); if(S.screen==="auth") mountGoogle(); return;
   }
@@ -322,7 +415,7 @@ function render(){
   if(S.tab==="fil") feedUnread=0;
   $("#feedN").hidden=!feedUnread; $("#feedN").textContent=feedUnread;
   let h=S.err?`<div class="banner" style="margin-top:14px">${esc(S.err)}</div>`:"";
-  if(!demo&&!S.snap) h+=`<section><p class="muted">Chargement de la soirée…</p></section>`;
+  if(!demo&&!S.snap) h+=`<section>${loader("Chargement de la soirée…")}</section>`;
   else{
     if(S.tab==="moi") h+= meP?viewMe(meP,now):"";
     if(S.tab==="courbes") h+=viewChart(list,now);
@@ -353,6 +446,7 @@ function bindOut(){
   on("demoBtn",startDemo);
   on("saveProf",()=>run(async()=>{ const r=await api("PUT","/api/me",readProfile()); S.user=r.user; await loadWeek(); S.screen=S.code?"party":"home"; render(); if(S.code) refresh() }));
   on("back",()=>{S.err="";S.screen=S.code?"party":"home";render()});
+  on("openDocs",openDocs); on("friendsBtn2",openFriends); on("demoBtn2",startDemo); on("demoBtn3",startDemo); bindFriends();
   on("logout",()=>run(async()=>{ await api("POST","/api/auth/logout"); closeWs(); Object.assign(S,{user:null,code:null,snap:null,screen:"auth"}); render() }));
   on("leave",()=>run(async()=>{ await api("POST",`/api/parties/${S.code}/leave`); closeWs(); S.code=null; S.snap=null; S.screen="home"; render() }));
   on("delAcc",()=>{$("#delConfirm").hidden=false}); on("delNo",()=>{$("#delConfirm").hidden=true});
@@ -363,23 +457,24 @@ function bindOut(){
 /* Ajout d'un verre : état « envoi » immédiat, coche verte quand c'est enregistré, puis bandeau avec Annuler. */
 const pend={};
 function setPend(k,v,ms){ if(v) pend[k]=v; else delete pend[k]; render(); if(ms) setTimeout(()=>{ if(pend[k]===v){ delete pend[k]; render() } },ms) }
-async function addDrink(d,key){
+async function addDrink(d,key,rect){
   key=key??d.l; if(pend[key]==="sending") return;
   const a=ago, when=NOW()-a*MIN;
   if(demo){ const p=demoPlayers[S.me]; p.drinks=[...p.drinks,{id:when,t:when,l:d.l,ml:d.ml,abv:d.abv,...(d.water?{water:1}:{})}]; ago=0;
-    buzz(25); setPend(key,"ok",1300); snack("Verre enregistré",`${d.l} · ${hm(when)}`,{undo:()=>{p.drinks=p.drinks.filter(x=>x.id!==when);render();snack("Verre retiré")}}); return }
+    buzz(25); setPend(key,"ok",1300); if(!d.water) flyDrop(rect); snack("Verre enregistré",`${d.l} · ${hm(when)}`,{undo:()=>{p.drinks=p.drinks.filter(x=>x.id!==when);render();snack("Verre retiré")}}); return }
   setPend(key,"sending");
   try{
     const r=await api("POST",`/api/parties/${S.code}/drinks`,{label:d.l,ml:d.ml,abv:d.abv,agoMin:a});
-    ago=0; buzz(25); setPend(key,"ok",1300);
+    ago=0; buzz(25); setPend(key,"ok",1300); if(!d.water) flyDrop(rect);
     snack("Verre enregistré",`${d.l} · ${hm(r.t||when)}`,{undo:async()=>{ try{ await api("DELETE",`/api/parties/${S.code}/drinks/${r.id}?undo=1`); snack("Verre retiré"); refresh() }catch(e){ snack("Impossible d'annuler",e.message,{err:1}) } }});
     refresh();
   }catch(e){ setPend(key,null); snack("Verre non enregistré",e.message,{err:1}); buzz([40,60,40]) }
 }
 function bindMain(){
-  document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>addDrink(PRESETS[+b.dataset.p],"p"+b.dataset.p));
+  document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>addDrink(PRESETS[+b.dataset.p],"p"+b.dataset.p,b.getBoundingClientRect()));
   document.querySelectorAll("#ago button").forEach(b=>b.onclick=()=>{ago=+b.dataset.v;render()});
-  bindMeals();
+  bindMeals(); animateGauge();
+  document.querySelectorAll("[data-tk]").forEach(e=>{const [id,k]=e.dataset.tk.split("|");trendPrev[id]=k});
   document.querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{S.rankMode=b.dataset.rm;render()});
   const ca=$("#cadd"); if(ca) ca.onclick=()=>{const ml=parseFloat($("#cml").value.replace(",","."))*10, abv=parseFloat($("#cabv").value.replace(",","."));if(!(ml>0&&ml<=1000&&abv>=0&&abv<=80)){flash("Verre incomplet","Indiquez un volume en cl et un degré entre 0 et 80 %.");return}addDrink({l:abv?"Verre perso":"Sans alcool",ml,abv,water:abv?0:1},"perso")};
   document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ const id=+b.dataset.del;
@@ -426,6 +521,7 @@ async function afterLogin(){
   loadWeek().then(()=>{ if(S.screen==="home") render() });
   const c=await api("GET","/api/parties/current");
   if(c.code) enterParty(c.code); else { S.screen="home"; render() }
+  if(ls.get("yd_ami","")){ openFriends(); snack("Invitation d'un ami","Touchez « Ajouter » pour l'ajouter") }
 }
 
 /* ---------- démo ---------- */
@@ -457,11 +553,13 @@ $("#demoQuit").onclick=()=>{ stopPlay(); demo=false; $("#demoBar").hidden=true; 
   S.me=demoSaved.me; S.tab=demoSaved.tab; feedUnread=0; clearToasts(); hideSnack(); render() };
 
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;render();window.scrollTo(0,0)});
-$("#docsBtn").onclick=()=>{S.err="";S.screen="docs";render();api("GET","/api/docs").then(d=>{S.docs=d;render()}).catch(e=>{S.err=e.message;S.screen=S.code?"party":"home";render()})};
+function openDocs(){S.err="";S.screen="docs";render();api("GET","/api/docs").then(d=>{S.docs=d;render()}).catch(e=>{S.err=e.message;S.screen=S.code?"party":"home";render()})}
+$("#friendsBtn").onclick=openFriends;
 $("#profBtn").onclick=()=>{S.err="";S.screen="profile";loadWeek().then(render);render()};
 setInterval(()=>{ if(document.activeElement&&/INPUT|SELECT/.test(document.activeElement.tagName)) return; if(S.screen==="party"||demo) render() },30000);
 if("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(()=>{});
 
+try{ const a=new URLSearchParams(location.search).get("ami"); if(a){ ls.set("yd_ami",a.toUpperCase().slice(0,6)); history.replaceState(null,"","/") } }catch(e){}
 (async function init(){
   render();
   try{ S.cfg=await api("GET","/api/config") }catch(e){}

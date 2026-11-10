@@ -55,6 +55,7 @@ ch("Le taux estimé", """<p>Alamb’hic estime votre taux minute par minute avec
 <tr><td>Interdit de conduire</td><td>à partir de 0,5 g/L</td></tr><tr><td>Au-dessus du plafond</td><td>à partir de votre plafond</td></tr>
 <tr><td>Alerte</td><td>à partir de 1,5 g/L</td></tr></table>
 <p>L'écran Moi montre aussi le pic de la soirée, le nombre de verres standard et l'heure estimée du retour à 0.</p>
+<p><b>La jauge en alambic</b> : le taux s'affiche dans un tuyau en serpentin qui se remplit de potion, avec les repères 0,5, plafond et 1,2 g/L. La potion avance doucement à chaque changement et prend la couleur de l'état ; des bulles remontent quand le taux monte et redescendent quand il baisse. À chaque verre d'alcool, une goutte vole du bouton touché jusqu'à l'entrée du tuyau.</p>
 <div class="note warn"><b>Une estimation, jamais une autorisation de conduire.</b> L'écart avec un éthylotest peut dépasser 0,2 g/L. Après avoir bu, on ne prend pas le volant.</div>""")
 
 ch("Courbes, potes et fil", f"""<div class="shots">{shot("demo-courbes", "Courbes de la soirée")}{shot("demo-classement", "Classement")}{shot("demo-fil", "Fil de la soirée")}</div>
@@ -80,6 +81,7 @@ ch("Titres, points et gages", """<table><tr><th>Titre</th><th>Condition</th><th>
 
 ch("Notifications", f"""<div class="split"><div>
 <p>Chaque titre et chaque seuil apparaît en haut de l'écran sur tous les téléphones de la soirée, <b>une notification à la fois</b> : les suivantes attendent leur tour (le compteur « +2 » l'indique). Chaque notification a une icône et une couleur par type (doré pour un titre, rouge pour une honte, orange pour une alerte), et une barre qui montre le temps restant ; un toucher la ferme. Les alertes vibrent deux fois et restent 12 secondes.</p>
+<p>Quand un titre est débloqué, l'icône de la notification fait « hic ! » avec quelques étincelles dorées. Sur l'écran Potes, la flèche de tendance clignote quand elle change de sens. Les animations sont coupées si « réduire les animations » est activé sur le téléphone.</p>
 <p>Les confirmations de vos propres actions (verre, repas, invitation copiée, erreur) s'affichent à part, dans un bandeau en bas de l'écran, pour ne jamais se mélanger aux notifications des amis.</p>
 <ul><li><b>Titres</b> : message moqueur.</li><li><b>Honte</b> : gage et passage à l'eau.</li>
 <li><b>1,5 g/L</b> : « apportez-lui de l'eau et gardez un œil sur lui ».</li><li><b>2 g/L</b> : rester avec la personne ; si elle vomit, ne répond plus ou respire mal, appeler le 15.</li></ul>
@@ -116,13 +118,20 @@ ch("Fiabilité et anti-triche", """<p>Le classement récompense la modération :
 <li>Sam ne peut noter que des boissons sans alcool, et ne peut pas devenir Sam après avoir bu.</li></ul>
 <p>À venir (étape 3) : éthylotest Bluetooth et recalibrage personnel, validation des verres par les amis, photo du verre, indice de fiabilité ; puis gorgées détectées par la montre (étape 4).</p>""")
 
+ch("Les amis", f"""<div class="split"><div>
+<p>Le bouton <b>Amis</b>, en haut de l'écran, ouvre la liste de vos amis, en soirée ou non.</p>
+<h3>Ajouter un ami</h3><p>Chaque joueur a un <b>code ami</b> de 6 caractères. « Partager mon lien » envoie un lien d'invitation : la personne qui l'ouvre se connecte, son écran Amis s'ouvre avec votre code déjà saisi, et il lui suffit de toucher « Ajouter ». On peut aussi taper le code à la main. L'autre doit accepter la demande (« Demandes reçues ») ; si les deux s'ajoutent, l'amitié est immédiate.</p>
+<h3>Vos amis en direct</h3><p>Pour chaque ami en soirée : son avatar, son taux, sa tendance façon bourse, une mini-courbe des 2 dernières heures et son dernier titre. Les autres apparaissent dans « Les autres ». La liste se met à jour toutes les 30 secondes. La soirée de vos amis (son code, les autres joueurs) n'est jamais montrée.</p>
+<h3>Confidentialité</h3><p>« Mes amis voient mon taux en direct pendant mes soirées » est activé par défaut et se coupe d'un geste ; seuls les amis acceptés en profitent. « Retirer » (deux touches pour confirmer) supprime un ami.</p>
+</div>{shot("amis", "Mes amis")}</div>""")
+
 ch("Compte et données", """<ul><li><b>Se déconnecter</b> : Profil → « Me déconnecter ».</li>
 <li><b>Supprimer son compte</b> : Profil → « Supprimer mon compte et toutes mes données », puis confirmer. Profil, verres et titres sont effacés définitivement.</li>
 <li><b>Données gardées</b> : e-mail, mot de passe chiffré, profil, verres, repas, titres. Hébergement Render à Francfort (Union européenne).</li>
 <li><b>Consentement</b> : à la création du compte, une case à cocher confirme l'âge (18 ans et plus) et l'accord pour le traitement des consommations, qui sont des données de santé. Avec Google, la même mention s'affiche sous le bouton.</li>
 <li><b>Pages publiques</b> : <code>/confidentialite</code> (données, sous-traitants, durée, droits, CNIL) et <code>/conditions</code> (un jeu et pas une mesure, 18 ans, modération, responsabilité), liées depuis l'écran de connexion. L'adresse de contact vient de la variable Render <code>CONTACT_EMAIL</code>.</li></ul>""")
 
-ch("Administration", """<ul><li><b>Comptes admin</b> : variable Render <code>ADMIN_EMAILS</code> (adresses séparées par des virgules). Un admin voit le bouton « Docs » en haut de l'écran.</li>
+ch("Administration", """<ul><li><b>Comptes admin</b> : variable Render <code>ADMIN_EMAILS</code> (adresses séparées par des virgules). Un admin voit le bouton « Documentation » dans sa page Profil.</li>
 <li><b>Documentation</b> : PDF du dossier <code>docs/</code> listés dans <code>docs/index.json</code> (titre, description, date, catégorie), accessibles aux seuls admins. Sources dans <code>docs-src/</code>, régénérées par <code>docs-src/build.sh</code>.</li>
 <li><b>Déploiement</b> : chaque envoi sur la branche <code>main</code> de <code>Kiki78test/Youdrink</code> redéploie le service Render.</li>
 <li><b>Variables</b> : <code>DATABASE_URL</code> et <code>SESSION_SECRET</code> (automatiques), <code>GOOGLE_CLIENT_ID</code> (facultatif), <code>ADMIN_EMAILS</code>.</li></ul>""")

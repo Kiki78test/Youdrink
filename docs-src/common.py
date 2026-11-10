@@ -9,6 +9,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 # Historique des versions : une ligne par lot important (la plus récente en haut)
 HISTORIQUE = [
+    ("10/11/2026", "0.7", "Animations : jauge en serpentin d'alambic qui se remplit de potion, goutte qui vole du bouton au tuyau, titre qui fait « hic ! », tendance qui clignote, fiole de chargement. Amis : code ami et lien d'invitation, demandes à accepter, amis en direct (taux, tendance, mini-courbe, dernier titre), partage désactivable. En-tête : Amis et Profil ; Documentation et Démo dans le profil."),
     ("10/11/2026", "0.6", "Notifications refaites (une à la fois, file d'attente, icône, barre de temps) ; confirmation de chaque action (bouton qui passe au vert, bandeau « Verre enregistré » avec Annuler) ; écran « Potes » en direct avec tendance façon bourse, mini-courbe et dernier titre."),
     ("10/11/2026", "0.5", "L'appli devient Alamb’hic (YouDrink déjà pris par une appli américaine)  : nom, logo « potion » bleu et blanc, icônes, thème bleu de l'appli, pages légales et documentation. Les noms techniques (dépôt, Render, adresse onrender) restent « youdrink »."),
     ("10/11/2026", "0.4", "Pages publiques « Politique de confidentialité » et « Conditions d'utilisation » ; consentement explicite à la création du compte ; connexion Google active."),
