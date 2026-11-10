@@ -23,10 +23,12 @@ FAIT = [
     ("ok", "<b>Suppression du compte</b> avec effacement de toutes les données (RGPD)."),
     ("ok", "<b>Appli installable</b> sur le téléphone (icône, plein écran, fonctionne hors ligne pour l'interface)."),
     ("ok", "<b>Repas</b> (10/11) : repas du jour demandés avant le premier verre (heure et type, ou « rien mangé »), ajout d'un repas à tout moment, question « avez-vous mangé ? » à l'heure des repas ; quatre types de repas qui ralentissent l'absorption et baissent le pic. Remplace l'option « J'ai mangé »."),
+    ("ok", "<b>Connexion Google</b> (10/11) : projet Google Cloud « YouDrink », client OAuth Web, <code>GOOGLE_CLIENT_ID</code> sur Render ; bouton « Continuer avec Google » vérifié en ligne."),
     ("ok", "<b>Onglet Documentation</b> (10/11) réservé aux admins : présentation complète, guide complet, check-list, services externes."),
 ]
 A_TESTER = [
     ("test", "<b>Variable Render <code>ADMIN_EMAILS</code></b> : y mettre votre adresse e-mail pour voir le bouton « Docs »."),
+    ("test", "<b>Connexion Google</b> : se connecter avec « Continuer avec Google » depuis le téléphone."),
     ("test", "<b>Création de compte et profil</b> sur youdrink.onrender.com, depuis le téléphone puis l'ordinateur."),
     ("test", "<b>Repas</b> : en entrant dans la soirée, renseigner les repas du jour (heure et type) avant le premier verre ; ajouter un repas en cours de soirée ; vérifier la question « avez-vous dîné ? » entre 19 h et 22 h 30."),
     ("test", "<b>Soirée à deux téléphones</b> : créer une soirée, la rejoindre avec le code, noter des verres des deux côtés et vérifier que courbes, classement et notifications arrivent chez l'autre."),
@@ -37,7 +39,6 @@ A_TESTER = [
 ]
 A_FAIRE = [
     ("todo", "<b>Nom de domaine</b> (youdrink.fr ou .app) sur Cloudflare, puis branchement sur Render."),
-    ("todo", "<b>Connexion Google</b> : créer l'identifiant OAuth dans Google Cloud et le mettre dans <code>GOOGLE_CLIENT_ID</code>."),
     ("todo", "<b>Mot de passe oublié</b> par e-mail (Resend, comme Airmony)."),
     ("todo", "<b>Étape 2 — APK Android</b> : notifications push Firebase appli fermée, widget écran d'accueil."),
     ("todo", "<b>Étape 3 — Fiabilité</b> : saisie d'un éthylotest et recalibrage personnel, éthylotest Bluetooth, validation des verres par les amis, indice de fiabilité."),
