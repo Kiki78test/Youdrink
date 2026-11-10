@@ -1,4 +1,4 @@
-# Services externes Youdrink — source de docs/01-pilotage/services-externes.pdf (à tenir à jour à chaque changement de service)
+# Services externes Alamb’hic — source de docs/01-pilotage/services-externes.pdf (à tenir à jour à chaque changement de service)
 from common import A4, D, band, write
 
 ACTIFS = [
@@ -21,10 +21,10 @@ def table(rows):
         f"<tr><td><b>{a}</b></td><td>{b}</td><td>{c}</td><td>{d}</td><td>{e}</td></tr>" for a, b, c, d, e in rows) + "</table>"
 
 body = f"""<div class="page">{band("Services externes", "Pilotage du projet")}
-<p class="lead">Youdrink tourne aujourd'hui sur des services gratuits : GitHub, le service web et la base Render, et la connexion Google. Coût actuel : 0 €.</p>
+<p class="lead">Alamb’hic tourne aujourd'hui sur des services gratuits : GitHub, le service web et la base Render, et la connexion Google. Coût actuel : 0 €.</p>
 <h2>En service</h2>{table(ACTIFS)}
 <h2>Prévus</h2>{table(PREVUS)}
 <div class="note warn"><b>Données sensibles.</b> Les consommations d'alcool sont des données de santé au sens du RGPD. Tous les sous-traitants qui les reçoivent devront être listés dans la politique de confidentialité avant l'ouverture publique.</div>
-<div class="foot"><span>Youdrink · Services externes</span><span>{D}</span></div></div>"""
+<div class="foot"><span>Alamb’hic · Services externes</span><span>{D}</span></div></div>"""
 
-write("services.html", f"<style>{A4}</style></head><body>{body}</body></html>", "Services externes Youdrink")
+write("services.html", f"<style>{A4}</style></head><body>{body}</body></html>", "Services externes Alamb’hic")

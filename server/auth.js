@@ -130,7 +130,7 @@ function routes(app) {
     const age = Math.round(+b.age), height = Math.round(+b.height), weight = Math.round(+b.weight);
     const cap = [0.5, 0.6, 0.8, 1.0].includes(+b.cap) ? +b.cap : 0.8;
     if (!pseudo) return res.status(400).json({ error: "Choisissez un pseudo." });
-    if (!(age >= 18 && age <= 99)) return res.status(400).json({ error: "Youdrink est réservé aux 18 ans et plus : indiquez votre âge." });
+    if (!(age >= 18 && age <= 99)) return res.status(400).json({ error: "Alamb'hic est réservé aux 18 ans et plus : indiquez votre âge." });
     if (!(height >= 130 && height <= 220)) return res.status(400).json({ error: "Indiquez une taille entre 130 et 220 cm." });
     if (!(weight >= 35 && weight <= 200)) return res.status(400).json({ error: "Indiquez un poids entre 35 et 200 kg." });
     const { rows } = await q(`UPDATE users SET pseudo=$2, sex=$3, age=$4, height=$5, weight=$6, cap=$7 WHERE id=$1 RETURNING ${PUBLIC_USER}`,

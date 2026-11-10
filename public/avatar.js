@@ -1,4 +1,4 @@
-/* Youdrink — avatar qui évolue avec le taux estimé. Dépend de NOW() et MIN (app.js). */
+/* Alamb'hic — avatar qui évolue avec le taux estimé. Dépend de NOW() et MIN (app.js). */
 "use strict";
 /* ---------- avatar ---------- */
 let AVN=0;

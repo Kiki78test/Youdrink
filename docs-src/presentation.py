@@ -1,4 +1,4 @@
-# Présentation complète Youdrink — source de docs/02-presentation/presentation-complete.pdf
+# Présentation complète Alamb’hic — source de docs/02-presentation/presentation-complete.pdf
 # Organisée par sujet (les nouveautés vont dans leur chapitre), avec une courte annexe « Historique des versions ».
 from common import FONTS, TOKENS, D, HISTORIQUE, write
 
@@ -50,7 +50,7 @@ def img(n, cls="phone"): return f'<img class="{cls}" src="img/{n}.png">'
 N = [0]
 def slide(inner, cls=""):
     N[0] += 1
-    return f'<section class="s {cls}">{inner}<span class="num">Youdrink · {N[0]}</span></section>'
+    return f'<section class="s {cls}">{inner}<span class="num">Alamb’hic · {N[0]}</span></section>'
 
 S = []
 S.append(slide(f"""<img class="logo" src="../public/logo.png"><div class="k">Présentation complète · {D}</div>
@@ -59,7 +59,7 @@ S.append(slide(f"""<img class="logo" src="../public/logo.png"><div class="k">Pr�
 
 S.append(slide("""<div class="k">Le concept</div><h2>La modération rapporte, l'excès coûte</h2>
 <div class="cards" style="grid-template-columns:repeat(3,1fr)">
-<div class="card"><b>Chacun note ses verres</b><span>Bière, vin, shot, cocktail ou eau, en un geste. Youdrink estime le taux de chacun minute par minute.</span></div>
+<div class="card"><b>Chacun note ses verres</b><span>Bière, vin, shot, cocktail ou eau, en un geste. Alamb’hic estime le taux de chacun minute par minute.</span></div>
 <div class="card"><b>On se chambre</b><span>Titres à débloquer, avatars qui changent de tête, classement et notifications moqueuses chez tous les amis.</span></div>
 <div class="card"><b>Le groupe veille</b><span>Au-delà du plafond, le titre devient une honte avec gage sans alcool. À 1,5 g/L, les amis sont alertés.</span></div>
 </div>
@@ -69,7 +69,7 @@ S.append(slide(f"""<div class="cols"><div><div class="k">Démarrer</div><h2>Un c
 <ul><li><b>Compte</b> par e-mail et mot de passe, Google ensuite.</li>
 <li><b>Profil</b> : sexe, âge, taille, poids et plafond perso. Ces mesures servent au calcul et ne sont jamais montrées aux autres.</li>
 <li><b>Soirée</b> : l'un crée un code de 4 lettres, les autres le saisissent. Le bouton « Copier l'invitation » l'envoie au groupe.</li>
-<li><b>Appli installable</b> depuis le navigateur, avec l'icône Youdrink.</li></ul></div>
+<li><b>Appli installable</b> depuis le navigateur, avec l'icône Alamb’hic.</li></ul></div>
 <div class="phones">{img("auth")}{img("soiree-moi")}</div></div>"""))
 
 S.append(slide(f"""<div class="cols"><div><div class="k">L'écran Moi</div><h2>Son taux, son avatar, ses verres</h2>
@@ -163,4 +163,4 @@ SCRIPT = """<script>const MIN=60000;const NOW=()=>1e12;</script><script src="../
 el.innerHTML=avatar({cap:0.8,color:['#f7941d','#5ab0ff','#5bc88a','#e879f9','#f2c94c','#ff7a6e'][i],sim:{cur:b,prev:b+(b>=0.8&&b<1.5?0.05:-0.05),peak:1.8},
 drinks:b>0&&b<1.5?[{t:1e12-5*MIN,l:['Bière','Vin','Cocktail','Shot'][i%4],abv:5}]:[]},150)});</script>"""
 
-write("presentation.html", f"<style>{CSS}</style></head><body>{''.join(S)}{SCRIPT}</body></html>", "Présentation Youdrink")
+write("presentation.html", f"<style>{CSS}</style></head><body>{''.join(S)}{SCRIPT}</body></html>", "Présentation Alamb’hic")

@@ -1,4 +1,4 @@
-# Youdrink — éléments communs aux sources de la documentation (styles, date du jour, historique des versions)
+# Alamb’hic — éléments communs aux sources de la documentation (styles, date du jour, historique des versions)
 import datetime as _dt, zoneinfo as _zi, os
 
 _n = _dt.datetime.now(_zi.ZoneInfo("Europe/Paris"))
@@ -9,6 +9,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 # Historique des versions : une ligne par lot important (la plus récente en haut)
 HISTORIQUE = [
+    ("10/11/2026", "0.5", "L'appli devient Alamb’hic (YouDrink déjà pris par une appli américaine) : nom, logo provisoire, icônes, pages légales et documentation. Les noms techniques (dépôt, Render, adresse onrender) restent « youdrink »."),
     ("10/11/2026", "0.4", "Pages publiques « Politique de confidentialité » et « Conditions d'utilisation » ; consentement explicite à la création du compte ; connexion Google active."),
     ("10/11/2026", "0.3", "Repas : saisie des repas du jour avant le premier verre, ajout d'un repas à tout moment, question « avez-vous mangé ? » aux heures des repas ; le type de repas module l'absorption et le pic."),
     ("10/11/2026", "0.2", "Onglet Documentation réservé aux admins (présentation, guide, check-list, services externes) ; en-tête compacté."),
@@ -70,7 +71,7 @@ tr,li,.note,figure{break-inside:avoid}
 """
 
 def band(title, sub=""):
-    return f"""<div class="band"><div><img src="../public/logo.png" alt="Youdrink"><h1>{title}</h1></div>
+    return f"""<div class="band"><div><img src="../public/logo.png" alt="Alamb’hic"><h1>{title}</h1></div>
 <div class="meta">{sub}<br>Mis à jour le {D}</div></div>"""
 
 def hist_table():

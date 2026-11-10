@@ -1,4 +1,4 @@
-# Check-list Youdrink — source de docs/01-pilotage/check-list.pdf (à régénérer à chaque mise à jour importante)
+# Check-list Alamb’hic — source de docs/01-pilotage/check-list.pdf (à régénérer à chaque mise à jour importante)
 from common import A4, D, band, write
 
 ICON = {"ok": "✔", "test": "◷", "todo": "○"}
@@ -25,6 +25,7 @@ FAIT = [
     ("ok", "<b>Repas</b> (10/11) : repas du jour demandés avant le premier verre (heure et type, ou « rien mangé »), ajout d'un repas à tout moment, question « avez-vous mangé ? » à l'heure des repas ; quatre types de repas qui ralentissent l'absorption et baissent le pic. Remplace l'option « J'ai mangé »."),
     ("ok", "<b>Connexion Google</b> (10/11) : projet Google Cloud « YouDrink », client OAuth Web, <code>GOOGLE_CLIENT_ID</code> sur Render ; bouton « Continuer avec Google » vérifié en ligne ; application <b>publiée en production</b> (ouverte à tout compte Google)."),
     ("ok", "<b>Pages légales</b> (10/11) : politique de confidentialité et conditions d'utilisation publiques, case de consentement à la création du compte (données de santé)."),
+    ("ok", "<b>Nouveau nom : Alamb’hic</b> (10/11) : « YouDrink » est déjà une appli américaine (youdrink.com) ; Godet écarté (marque GODET de Godet Frères Cognac en classe 33), Alambix écarté (personnage d'Astérix). Logo provisoire et icônes en place."),
     ("ok", "<b>Onglet Documentation</b> (10/11) réservé aux admins : présentation complète, guide complet, check-list, services externes."),
 ]
 A_TESTER = [
@@ -40,7 +41,10 @@ A_TESTER = [
     ("test", "<b>Vraie soirée entre amis</b> : validation de l'étape 1 avant de passer à l'APK."),
 ]
 A_FAIRE = [
-    ("todo", "<b>Nom de domaine</b> (youdrink.fr ou .app) sur Cloudflare, puis branchement sur Render ; l'ajouter aux origines du client Google et, dans Branding, remettre page d'accueil, confidentialité, conditions et domaine autorisé."),
+    ("todo", "<b>Marque Alamb’hic</b> : export INPI sur « alambic » et « alambhic » (classes 9, 41, 42), puis dépôt INPI ; choisir l'écriture définitive (Alamb’hic / AlambHic)."),
+    ("todo", "<b>Logo définitif</b> : choisir parmi les pistes A à D (brand/propositions-logo.png) ou fournir le vôtre."),
+    ("todo", "<b>Google</b> : Branding → nom de l'application « Alamb’hic » (le projet peut garder son nom)."),
+    ("todo", "<b>Nom de domaine</b> (alambhic.app, .fr ou .com) sur Cloudflare, puis branchement sur Render ; l'ajouter aux origines du client Google et, dans Branding, remettre page d'accueil, confidentialité, conditions et domaine autorisé."),
     ("todo", "<b>Mot de passe oublié</b> par e-mail (Resend, comme Airmony)."),
     ("todo", "<b>Étape 2 — APK Android</b> : notifications push Firebase appli fermée, widget écran d'accueil."),
     ("todo", "<b>Étape 3 — Fiabilité</b> : saisie d'un éthylotest et recalibrage personnel, éthylotest Bluetooth, validation des verres par les amis, indice de fiabilité."),
@@ -69,6 +73,6 @@ body = f"""<div class="page">{band("Check-list", "Pilotage du projet")}
 {sec("À tester par vous", A_TESTER)}
 {sec("À faire", A_FAIRE)}
 {sec("Fait", FAIT)}
-<div class="foot"><span>Youdrink · Check-list</span><span>{D}</span></div></div>"""
+<div class="foot"><span>Alamb’hic · Check-list</span><span>{D}</span></div></div>"""
 
-write("checklist.html", f"<style>{CSS}</style></head><body>{body}</body></html>", "Check-list Youdrink")
+write("checklist.html", f"<style>{CSS}</style></head><body>{body}</body></html>", "Check-list Alamb’hic")

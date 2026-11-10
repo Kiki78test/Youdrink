@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122 120" role="img" aria-label="Alamb'hic">
+  <!-- Alambic : ballon (avec la jauge du taux), col de cygne, bulle « hic ! » -->
+  <path d="M52 30 C52 22 58 18 66 18 C80 18 92 22 99 34 L101 38" fill="none" stroke="#f7f1ea" stroke-width="5" stroke-linecap="round"/>
+  <rect x="45" y="26" width="14" height="22" rx="3" fill="#f7f1ea"/>
+  <circle cx="52" cy="76" r="33" fill="#f7f1ea"/>
+  <clipPath id="b"><circle cx="52" cy="76" r="27"/></clipPath>
+  <circle cx="52" cy="76" r="27" fill="#2b2118"/>
+  <g clip-path="url(#b)">
+    <path d="M20 80 Q36 72 52 80 T84 80 V112 H20 Z" fill="#f7941d"/>
+    <circle cx="44" cy="92" r="3" fill="#ffd79a"/><circle cx="58" cy="98" r="2.2" fill="#ffd79a"/><circle cx="64" cy="88" r="1.6" fill="#ffd79a"/>
+  </g>
+  <path d="M30 62 l6 2 M30 70 l6 1" stroke="#f7f1ea" stroke-width="2" stroke-linecap="round" opacity=".55"/>
+  <g transform="translate(82 26)">
+    <path d="M0 10 C0 3 6 -2 14 -2 H22 C30 -2 34 3 34 10 C34 17 30 22 22 22 H12 L6 28 L7 21 C2 19 0 15 0 10 Z" fill="#f7941d"/>
+    <text x="17" y="15" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="13" fill="#1a1006">hic!</text>
+  </g>
+</svg>

@@ -1,4 +1,4 @@
-# Guide complet Youdrink — source de docs/02-presentation/guide-complet.pdf
+# Guide complet Alamb’hic — source de docs/02-presentation/guide-complet.pdf
 # Organisé par sujet : chaque nouveauté est intégrée à son chapitre, les passages dépassés sont corrigés ; annexe « Historique des versions ».
 from common import A4, D, band, hist_table, write
 
@@ -9,14 +9,14 @@ def shot(n, cap=""): return f'<figure><img src="img/{n}.png"><figcaption>{cap}</
 ch("Démarrer", f"""<div class="split"><div>
 <h3>Créer un compte</h3><p>Ouvrez <b>youdrink.onrender.com</b>, choisissez « Créer un compte », saisissez votre e-mail et un mot de passe d'au moins 8 caractères. La connexion reste active 60 jours sur l'appareil. La connexion Google arrivera quand l'identifiant sera configuré.</p>
 <h3>Compléter son profil</h3><p>Pseudo, sexe biologique, âge, taille et poids : ces mesures servent uniquement à estimer votre taux. Les autres joueurs voient votre pseudo, vos verres et vos taux, jamais vos mesures.</p>
-<p>Youdrink est <b>réservé aux 18 ans et plus</b> : un âge inférieur est refusé.</p>
+<p>Alamb’hic est <b>réservé aux 18 ans et plus</b> : un âge inférieur est refusé.</p>
 <h3>Choisir son plafond</h3><p>0,5 ; 0,6 ; 0,8 (conseillé) ou 1,0 g/L. Au-delà, les titres positifs s'arrêtent et chaque excès devient un titre de honte avec gage.</p>
-<h3>Installer l'appli</h3><p>Dans le navigateur du téléphone : menu → « Ajouter à l'écran d'accueil ». Youdrink s'ouvre alors en plein écran avec son icône.</p>
+<h3>Installer l'appli</h3><p>Dans le navigateur du téléphone : menu → « Ajouter à l'écran d'accueil ». Alamb’hic s'ouvre alors en plein écran avec son icône.</p>
 <div class="note">Sur l'offre gratuite de Render, le serveur s'endort après 15 minutes sans visite : la première ouverture prend alors 30 à 50 secondes.</div>
 </div>{shot("auth", "Écran d'accueil")}</div>""")
 
 ch("Les soirées", """<h3>Créer une soirée</h3><p>Sur l'écran d'accueil, « Créer une soirée » génère un code de 4 lettres (sans I, L ni O pour éviter les confusions). Il s'affiche en haut de l'écran et dans la carte « Code de la soirée ».</p>
-<h3>Inviter</h3><p>« Copier l'invitation » ouvre le partage du téléphone, ou copie le message « Rejoins ma soirée Youdrink avec le code … » à coller dans le groupe.</p>
+<h3>Inviter</h3><p>« Copier l'invitation » ouvre le partage du téléphone, ou copie le message « Rejoins ma soirée Alamb’hic avec le code … » à coller dans le groupe.</p>
 <h3>Rejoindre</h3><p>Saisissez le code dans « Rejoindre avec un code ». Rejoindre une soirée vous fait quitter automatiquement la précédente : on ne joue qu'à une soirée à la fois.</p>
 <h3>Quitter</h3><p>Profil → « Quitter la soirée ». Vos verres restent comptés dans votre suivi personnel.</p>
 <h3>Temps réel</h3><p>Chaque verre ajouté, chaque titre et chaque seuil est diffusé immédiatement à tous les joueurs. Le serveur renvoie aussi l'état de la soirée chaque minute, pour que les taux et les titres de redescente avancent même quand personne ne boit.</p>""")
@@ -33,7 +33,7 @@ ch("Noter ses verres", f"""<div class="split"><div>
 <p><b>Supprimer un verre</b> : la croix à droite, pendant 3 h. Chaque suppression apparaît dans le fil de la soirée.</p>
 </div>{shot("soiree-moi", "Écran Moi")}</div>""")
 
-ch("Les repas", f"""<div class="shots">{shot("repas-avant", "Avant le premier verre")}{shot("repas-liste", "Mes repas en cours de soirée")}<figure></figure></div><p>Un repas ralentit le passage de l'alcool dans le sang et baisse le pic : Youdrink tient compte de vos repas pour chaque verre bu de 30 minutes avant le repas jusqu'à la fin de son effet.</p>
+ch("Les repas", f"""<div class="shots">{shot("repas-avant", "Avant le premier verre")}{shot("repas-liste", "Mes repas en cours de soirée")}<figure></figure></div><p>Un repas ralentit le passage de l'alcool dans le sang et baisse le pic : Alamb’hic tient compte de vos repas pour chaque verre bu de 30 minutes avant le repas jusqu'à la fin de son effet.</p>
 <table><tr><th>Type de repas</th><th>Exemples</th><th>Absorption</th><th>Effet pendant</th><th>Alcool qui passe</th></tr>
 <tr><td>À jeun</td><td>—</td><td>30 min</td><td>—</td><td>100 %</td></tr>
 <tr><td>Grignotage</td><td>apéritif, encas</td><td>45 min</td><td>1 h 30</td><td>95 %</td></tr>
@@ -42,9 +42,9 @@ ch("Les repas", f"""<div class="shots">{shot("repas-avant", "Avant le premier ve
 <tr><td>Repas copieux</td><td>repas de fête</td><td>90 min</td><td>5 h</td><td>80 %</td></tr></table>
 <h3>Avant le premier verre</h3><p>En entrant dans une soirée, une carte « Qu'avez-vous mangé aujourd'hui ? » propose les repas déjà passés de la journée (petit-déjeuner 8 h, déjeuner 12 h 30, goûter 16 h 30, dîner 20 h) : corrigez l'heure et le type, ou choisissez « Rien ». « Valider mes repas » ou « Rien mangé » débloque les boissons alcoolisées ; l'eau reste toujours disponible.</p>
 <h3>Ajouter un repas en cours de soirée</h3><p>Section « Mes repas » de l'écran Moi : heure, type, « Ajouter un repas ». La croix supprime un repas noté par erreur. Les repas des dernières 24 h sont pris en compte, dans toutes vos soirées.</p>
-<h3>La question à l'heure des repas</h3><p>Entre 12 h et 15 h, 16 h et 18 h, puis 19 h et 22 h 30, si aucun repas n'est noté, Youdrink demande « Avez-vous déjeuné ? », « Avez-vous mangé quelque chose ? » ou « Avez-vous dîné ? ». Un bouton par type de repas l'enregistre à l'heure actuelle ; « Pas encore » repose la question 45 minutes plus tard, « Je ne mangerai pas » la fait taire jusqu'au repas suivant.</p>""")
+<h3>La question à l'heure des repas</h3><p>Entre 12 h et 15 h, 16 h et 18 h, puis 19 h et 22 h 30, si aucun repas n'est noté, Alamb’hic demande « Avez-vous déjeuné ? », « Avez-vous mangé quelque chose ? » ou « Avez-vous dîné ? ». Un bouton par type de repas l'enregistre à l'heure actuelle ; « Pas encore » repose la question 45 minutes plus tard, « Je ne mangerai pas » la fait taire jusqu'au repas suivant.</p>""")
 
-ch("Le taux estimé", """<p>Youdrink estime votre taux minute par minute avec la <b>formule de Widmark</b> et l'<b>eau corporelle de Watson</b> :</p>
+ch("Le taux estimé", """<p>Alamb’hic estime votre taux minute par minute avec la <b>formule de Widmark</b> et l'<b>eau corporelle de Watson</b> :</p>
 <ul><li><b>Alcool d'un verre</b> : volume × degré × 0,789 g/ml (10 g = un verre standard).</li>
 <li><b>Eau corporelle</b> : selon le sexe, l'âge, la taille et le poids.</li>
 <li><b>Absorption</b> progressive sur 30 min à jeun, jusqu'à 90 min après un repas copieux, avec une part d'alcool réduite (voir « Les repas »).</li>
@@ -127,7 +127,7 @@ ch("Administration", """<ul><li><b>Comptes admin</b> : variable Render <code>ADM
 
 toc = "<ol class='toc'>" + "".join(f"<li><span class='n'>{i+1}</span>{t}</li>" for i, (t, _) in enumerate(CH)) + "<li><span class='n'>A</span>Historique des versions</li></ol>"
 body = f"""<div>{band("Guide complet", "Présentation et guides")}
-<p class="lead">Mode d'emploi de toutes les fonctions de Youdrink, rangé par sujet.</p>{toc}</div>""" + "".join(
+<p class="lead">Mode d'emploi de toutes les fonctions de Alamb’hic, rangé par sujet.</p>{toc}</div>""" + "".join(
     f'<div style="{"page-break-before:always" if i == 0 else "margin-top:9mm"}"><h2><span class="n">{i+1}</span>{t}</h2>{b}</div>' for i, (t, b) in enumerate(CH)) + \
     f'<div style="page-break-before:always"><h2><span class="n">A</span>Historique des versions</h2>{hist_table()}</div>'
 
@@ -137,4 +137,4 @@ SCRIPT = """<script>const MIN=60000;const NOW=()=>1e12;</script><script src="../
 <script>document.querySelectorAll('.av').forEach((el,i)=>{const b=+el.dataset.b;
 el.innerHTML=avatar({cap:0.8,color:['#f7941d','#5ab0ff','#5bc88a','#e879f9','#f2c94c','#ff7a6e'][i],sim:{cur:b,prev:b+(b>=0.8&&b<1.5?0.05:-0.05),peak:1.8},
 drinks:b>0&&b<1.5?[{t:1e12-5*MIN,l:['Bière','Vin','Cocktail','Shot'][i%4],abv:5}]:[]},120)});</script>"""
-write("guide.html", f"<style>{CSS}</style></head><body>{body}{SCRIPT}</body></html>", "Guide complet Youdrink")
+write("guide.html", f"<style>{CSS}</style></head><body>{body}{SCRIPT}</body></html>", "Guide complet Alamb’hic")

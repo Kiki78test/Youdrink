@@ -1,4 +1,4 @@
-/* Youdrink — interface. Le serveur calcule les taux et les titres ; le mode démo calcule localement. */
+/* Alamb'hic — interface. Le serveur calcule les taux et les titres ; le mode démo calcule localement. */
 "use strict";
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -180,7 +180,7 @@ const flash=(title,text,kind="info")=>toast({title,text,kind});
 function viewAuth(){
   const reg=S.authMode==="register";
   return `<div class="hero"><h1>On trinque, on se chambre, on se surveille.</h1>
-  <p class="muted">Chacun note ses verres. Youdrink estime les taux, trace les courbes de tout le groupe et prévient les autres quand quelqu'un débloque un titre ou franchit un seuil.</p></div>
+  <p class="muted">Chacun note ses verres. Alamb'hic estime les taux, trace les courbes de tout le groupe et prévient les autres quand quelqu'un débloque un titre ou franchit un seuil.</p></div>
   <section>
   <div class="seg tabs2"><button id="mLogin" aria-pressed="${!reg}">Connexion</button><button id="mReg" aria-pressed="${reg}">Créer un compte</button></div>
   <form id="authForm" class="field" style="gap:10px" novalidate>
@@ -269,7 +269,7 @@ function render(){
     if(S.tab==="courbes") h+=viewChart(list,now);
     if(S.tab==="classement") h+=viewRank(list,now);
     if(S.tab==="fil") h+=viewFeed(list,log);
-    if(S.tab==="moi"&&!demo) h+=`<section><div class="card"><span class="label">Code de la soirée</span><div class="row" style="justify-content:space-between;margin-top:6px"><b style="font-family:var(--display);font-size:30px;letter-spacing:.15em">${esc(S.code)}</b><button class="btn ghost small" id="copyCode">Copier l'invitation</button></div><p class="muted" style="font-size:13px;margin:8px 0 0">Vos amis ouvrent Youdrink et entrent ce code.</p></div></section>`;
+    if(S.tab==="moi"&&!demo) h+=`<section><div class="card"><span class="label">Code de la soirée</span><div class="row" style="justify-content:space-between;margin-top:6px"><b style="font-family:var(--display);font-size:30px;letter-spacing:.15em">${esc(S.code)}</b><button class="btn ghost small" id="copyCode">Copier l'invitation</button></div><p class="muted" style="font-size:13px;margin:8px 0 0">Vos amis ouvrent Alamb'hic et entrent ce code.</p></div></section>`;
   }
   h+=`<p class="note">Taux estimé par la formule de Widmark (eau corporelle de Watson). L'écart avec un éthylotest peut dépasser 0,2 g/L. Ce n'est jamais une autorisation de conduire : après avoir bu, on ne prend pas le volant.</p>`;
   app.innerHTML=h; bindMain();
@@ -315,8 +315,8 @@ function bindMain(){
     if(demo){const p=demoPlayers[S.me];p.drinks=p.drinks.filter(d=>d.id!==id);render();return}
     run(async()=>{ await api("DELETE",`/api/parties/${S.code}/drinks/${id}`); await refresh() }) });
   const sm=$("#samT"); if(sm) sm.onchange=()=>run(async()=>{ await api("PUT",`/api/parties/${S.code}/me`,{sam:sm.checked}); await refresh() });
-  const cc=$("#copyCode"); if(cc) cc.onclick=async()=>{ const txt=`Rejoins ma soirée Youdrink avec le code ${S.code} : ${location.origin}`;
-    try{ if(navigator.share){await navigator.share({title:"Youdrink",text:txt});return} await navigator.clipboard.writeText(txt); flash("Invitation copiée","Collez-la dans votre groupe.") }catch(e){ flash("Code de la soirée",txt) } };
+  const cc=$("#copyCode"); if(cc) cc.onclick=async()=>{ const txt=`Rejoins ma soirée Alamb'hic avec le code ${S.code} : ${location.origin}`;
+    try{ if(navigator.share){await navigator.share({title:"Alamb'hic",text:txt});return} await navigator.clipboard.writeText(txt); flash("Invitation copiée","Collez-la dans votre groupe.") }catch(e){ flash("Code de la soirée",txt) } };
 }
 
 /* ---------- soirée en direct ---------- */

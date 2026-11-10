@@ -1,4 +1,4 @@
-/* Youdrink — moteur de calcul partagé (navigateur + serveur).
+/* Alamb'hic — moteur de calcul partagé (navigateur + serveur).
    Estimation du taux par la formule de Widmark avec l'eau corporelle de Watson.
    Ce n'est qu'une estimation : jamais une autorisation de conduire. */
 (function (root) {

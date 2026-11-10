@@ -1,6 +1,6 @@
-# Youdrink
+# Alamb'hic
 
-Jeu de soirée entre amis : chacun note ses verres, Youdrink estime les taux d'alcoolémie, trace les courbes de tout le groupe, fait évoluer un avatar et prévient les autres quand quelqu'un débloque un titre ou franchit un seuil. La modération rapporte des points, l'excès en fait perdre.
+Jeu de soirée entre amis : chacun note ses verres, Alamb'hic estime les taux d'alcoolémie, trace les courbes de tout le groupe, fait évoluer un avatar et prévient les autres quand quelqu'un débloque un titre ou franchit un seuil. La modération rapporte des points, l'excès en fait perdre.
 
 > Les taux sont des estimations (formule de Widmark, eau corporelle de Watson). Ce n'est jamais une autorisation de conduire.
 

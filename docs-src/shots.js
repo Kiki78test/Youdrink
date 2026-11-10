@@ -27,7 +27,7 @@ const out = n => require('path').join(__dirname, 'img', n + '.png');
   await tab('moi'); await at(60); await p.waitForTimeout(100); await at(95); await p.waitForTimeout(300); await p.screenshot({ path: out('demo-notifs') });
   await p.click('#demoQuit');
   // nouveau joueur : repas avant le premier verre
-  await p.click('#mReg'); await p.fill('#email', 'demo' + Date.now() + '@exemple.invalid'); await p.fill('#pass', 'motdepasse-demo');
+  await p.click('#mReg'); await p.fill('#email', 'demo' + Date.now() + '@exemple.invalid'); await p.fill('#pass', 'motdepasse-demo'); await p.check('#consent');
   await p.click('#authForm button[type=submit]'); await p.waitForTimeout(1200);
   await p.fill('#pseudo', 'Sacha'); await p.fill('#age', '29'); await p.fill('#height', '172'); await p.fill('#weight', '66');
   await p.click('#saveProf'); await p.waitForTimeout(900); await p.click('#create'); await p.waitForTimeout(1500);

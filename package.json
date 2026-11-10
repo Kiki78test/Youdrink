@@ -2,7 +2,7 @@
   "name": "youdrink",
   "version": "0.1.0",
   "private": true,
-  "description": "Youdrink : jeu de soirée entre amis autour du taux d'alcoolémie estimé",
+  "description": "Alamb'hic : jeu de soirée entre amis autour du taux d'alcoolémie estimé",
   "main": "server/index.js",
   "scripts": {
     "start": "node server/index.js",
