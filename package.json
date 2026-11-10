@@ -1,0 +1,20 @@
+{
+  "name": "youdrink",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Youdrink : jeu de soirée entre amis autour du taux d'alcoolémie estimé",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^5.1.0",
+    "pg": "^8.13.1",
+    "ws": "^8.18.0"
+  }
+}
