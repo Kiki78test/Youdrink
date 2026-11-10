@@ -102,8 +102,8 @@ ch("L'avatar", AVS + """<p>Chaque joueur a un avatar en portrait dans un cercle,
 <tr><td>7 · Ça tourne</td><td>1,0</td><td>regard vague, grimace, sueur, spirale au-dessus de la tête</td></tr>
 <tr><td>8 · Les étoiles</td><td>1,2</td><td>bouche grande ouverte, langue pendante, couronne d'étoiles qui tourne</td></tr>
 <tr><td>9 · KO</td><td>1,5</td><td>tête affaissée, yeux fermés, bave, « z z », verre d'eau à côté</td></tr></table>
-<p>Rougeurs, nez rouge et teint rouge augmentent en continu à l'intérieur de chaque stade.</p>
-<p><b>Avatar vivant</b> : il se balance de plus en plus à mesure que le taux monte. À chaque changement d'état (sobre, pompette, interdit de conduire, au-dessus du plafond, alerte), il sursaute et une bulle annonce son nouvel état, sur l'écran Moi, l'écran Potes et la liste d'amis.</p>
+<p>Les seuils sont <b>les mêmes pour tous</b> : le plafond perso ne change pas l'avatar (il sert aux titres et aux points). Rougeurs, nez rouge et teint rouge augmentent en continu à l'intérieur de chaque stade.</p>
+<p><b>Avatar vivant</b> : il se balance de plus en plus à mesure que le taux monte. À chaque changement de stade, il sursaute et une bulle annonce le nouveau stade, sur l'écran Moi, l'écran Potes et la liste d'amis.</p>
 <p>Pendant 25 minutes après chaque verre, l'avatar tient le bon modèle (bière avec mousse, vin rouge, flûte, shot, cocktail ou eau). Quand le taux redescend, il tient un verre d'eau.</p>""")
 
 ch("Le mode démo", """<p>Le bouton « Démo » en haut de l'écran lance une soirée fictive, même sans compte : Léa (raisonnable, c'est vous), Max (qui dérape), Tom (modéré) et Inès (Sam).</p>

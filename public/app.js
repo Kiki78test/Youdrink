@@ -126,9 +126,9 @@ function flyDrop(rect){
 /* Fiole qui se remplit, à la place de « Chargement… ». */
 const loader=t=>`<div class="loader"><svg viewBox="0 0 40 48" aria-hidden="true"><path d="M15 4h10M17 4v12L7 34a8 8 0 0 0 7 12h12a8 8 0 0 0 7-12L23 16V4" class="lf"/><clipPath id="lc"><path d="M17 16L7 34a8 8 0 0 0 7 12h12a8 8 0 0 0 7-12L23 16z"/></clipPath><g clip-path="url(#lc)"><rect x="0" y="20" width="40" height="30" class="ll"/></g></svg><span>${t}</span></div>`;
 let trendPrev={}, statePrev={};
-/* Avatar vivant : il se balance d'autant plus que le taux est haut ; à chaque changement d'état, il sursaute et annonce son nouvel état. */
-function avx(p,size,lab,key){
-  key=key||p.id; const old=statePrev[key], now=Date.now();
+/* Avatar vivant : il se balance d'autant plus que le taux est haut ; à chaque changement de stade (seuils fixes, pas le plafond perso), il sursaute et annonce son nouveau stade. */
+function avx(p,size,_lab,key){
+  key=key||p.id; const lab=AV_NAMES[avStage(Math.max(0,p.sim?.cur||0))]; const old=statePrev[key], now=Date.now();
   const at=old?(old.lab!==lab?now:old.at):0, el=now-at, changed=!!at&&el<2200&&!REDUCE;   // l'animation continue au fil des rafraîchissements
   const sw=Math.min(1.4,Math.max(0,p.sim?.cur||0))*4.5;
   return `<span class="avw${changed?" avchg":""}${sw<0.4?" still":""}" style="--sw:${sw.toFixed(2)}deg;--el:-${el}ms" data-st="${esc(key)}|${at}|${esc(lab)}">${avatar(p,size)}${changed?`<em class="avbub">${esc(lab)}</em>`:""}</span>`;

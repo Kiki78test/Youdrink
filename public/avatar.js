@@ -6,6 +6,8 @@ const cl=(v,a=0,z=1)=>Math.max(a,Math.min(z,v));
 /* seuils des stades 1 à 9 (g/L) ; stade 9 = KO (≥ 1,5) */
 const AV_T=[0.05,0.2,0.35,0.5,0.65,0.8,1.0,1.2,1.5];
 const AV_RING=["#3fbf8a","#8fc63a","#cfd03c","#f2b233","#f28a2a","#f2662a","#ee4436","#e83a52","#e5386b","#e0306f"];
+/* noms des stades, identiques pour tous les joueurs (indépendants du plafond perso) */
+const AV_NAMES=["En forme","Premier verre","Détendu","Pompette","Éméché","Fou rire","Hilare","Ça tourne","Les étoiles","KO"];
 function avStage(b){ let s=0; for(const t of AV_T) if(b>=t) s++; return s }
 function drinkKind(d){
   if(!d) return null; if(d.water) return "water";

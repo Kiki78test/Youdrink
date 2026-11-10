@@ -126,8 +126,9 @@ function update(silent,since){
     const last=p.drinks.filter(d=>d.t<=now).pop(), hold=last&&now-last.t<25*MIN?last.l:"", sig=sim.cur.toFixed(2)+hold+(sim.cur<sim.prev-0.004?"d":"");
     if(lastAv[i]!==sig){ lastAv[i]=sig; el.querySelector(".avwrap").innerHTML=avatar({...p,sim},124) }
     el.querySelector(".avwrap").style.setProperty("--sw",(Math.min(1.4,sim.cur)*4.5).toFixed(2)+"deg");
-    if(prevState[i]&&prevState[i]!==lab&&!silent){ const b=el.querySelector(".avbox"); b.querySelector(".avbub").textContent=lab; b.classList.remove("jolt"); void b.offsetWidth; b.classList.add("jolt"); setTimeout(()=>b.classList.remove("jolt"),2200) }
-    prevState[i]=lab;
+    const stg=AV_NAMES[avStage(sim.cur)];
+    if(prevState[i]&&prevState[i]!==stg&&!silent){ const b=el.querySelector(".avbox"); b.querySelector(".avbub").textContent=stg; b.classList.remove("jolt"); void b.offsetWidth; b.classList.add("jolt"); setTimeout(()=>b.classList.remove("jolt"),2200) }
+    prevState[i]=stg;
     const past=sim.pts.filter(x=>x[0]<=now-15*MIN).pop(), rate=past?(sim.cur-past[1])*4:0, tr=el.querySelector(".ltr");
     if(sim.cur<0.01&&(!past||past[1]<0.01)||Math.abs(rate)<0.02){tr.className="ltr flat";tr.textContent="■ stable"} else if(rate>0){tr.className="ltr up";tr.textContent=`▲ +${fmt(rate)}/h`} else {tr.className="ltr down";tr.textContent=`▼ −${fmt(-rate)}/h`}
     el.querySelector(".info").textContent=`Pic ${fmt(sim.peak)} · ${(sim.grams/10).toFixed(1).replace(".",",")} verres standard`+(sim.cur>0&&sim.zeroT?` · retour à 0 vers ${hm(sim.zeroT)}`:"");
