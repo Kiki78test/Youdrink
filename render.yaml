@@ -1,6 +1,6 @@
 # Blueprint Render : service web + base PostgreSQL, offre gratuite pour les tests.
 databases:
-  - name: youdrink-db
+  - name: alambhic-db
     plan: free
     region: frankfurt
     databaseName: youdrink
@@ -20,7 +20,7 @@ services:
         value: production
       - key: DATABASE_URL
         fromDatabase:
-          name: youdrink-db
+          name: alambhic-db
           property: connectionString
       - key: SESSION_SECRET
         generateValue: true
