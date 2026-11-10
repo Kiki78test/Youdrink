@@ -24,10 +24,13 @@ FAIT = [
     ("ok", "<b>Appli installable</b> sur le téléphone (icône, plein écran, fonctionne hors ligne pour l'interface)."),
     ("ok", "<b>Repas</b> (10/11) : repas du jour demandés avant le premier verre (heure et type, ou « rien mangé »), ajout d'un repas à tout moment, question « avez-vous mangé ? » à l'heure des repas ; quatre types de repas qui ralentissent l'absorption et baissent le pic. Remplace l'option « J'ai mangé »."),
     ("ok", "<b>Connexion Google</b> (10/11) : projet Google Cloud « YouDrink », client OAuth Web, <code>GOOGLE_CLIENT_ID</code> sur Render ; bouton « Continuer avec Google » vérifié en ligne."),
+    ("ok", "<b>Pages légales</b> (10/11) : politique de confidentialité et conditions d'utilisation publiques, case de consentement à la création du compte (données de santé)."),
     ("ok", "<b>Onglet Documentation</b> (10/11) réservé aux admins : présentation complète, guide complet, check-list, services externes."),
 ]
 A_TESTER = [
     ("test", "<b>Variable Render <code>ADMIN_EMAILS</code></b> : y mettre votre adresse e-mail pour voir le bouton « Docs »."),
+    ("test", "<b>Google : publier l'application</b> : Branding → page d'accueil <code>https://youdrink.onrender.com</code>, confidentialité <code>/confidentialite</code>, conditions <code>/conditions</code>, domaine autorisé <code>youdrink.onrender.com</code>, e-mail du développeur ; puis Audience → « Publier l'application ». En attendant, ajouter les comptes Google des testeurs dans Audience → Utilisateurs test."),
+    ("test", "<b>Variable <code>CONTACT_EMAIL</code></b> sur Render : adresse de contact affichée dans les pages légales."),
     ("test", "<b>Connexion Google</b> : se connecter avec « Continuer avec Google » depuis le téléphone."),
     ("test", "<b>Création de compte et profil</b> sur youdrink.onrender.com, depuis le téléphone puis l'ordinateur."),
     ("test", "<b>Repas</b> : en entrant dans la soirée, renseigner les repas du jour (heure et type) avant le premier verre ; ajouter un repas en cours de soirée ; vérifier la question « avez-vous dîné ? » entre 19 h et 22 h 30."),

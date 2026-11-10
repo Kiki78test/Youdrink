@@ -184,15 +184,16 @@ function viewAuth(){
   <section>
   <div class="seg tabs2"><button id="mLogin" aria-pressed="${!reg}">Connexion</button><button id="mReg" aria-pressed="${reg}">Créer un compte</button></div>
   <form id="authForm" class="field" style="gap:10px" novalidate>
-   <div class="field"><span class="label">E-mail</span><input id="email" type="email" autocomplete="email" required></div>
+   <div class="field"><span class="label">E-mail</span><input id="email" type="email" autocomplete="email" required value="${esc(S.fEmail||"")}"></div>
    <div class="field"><span class="label">Mot de passe${reg?" (8 caractères minimum)":""}</span><input id="pass" type="password" autocomplete="${reg?"new-password":"current-password"}" required></div>
+   ${reg?`<label class="toggle consent"><input type="checkbox" id="consent" required ${S.fConsent?"checked":""}><span>J'ai 18 ans ou plus, j'accepte les <a href="/conditions" target="_blank">conditions d'utilisation</a> et le traitement de mes consommations décrit dans la <a href="/confidentialite" target="_blank">politique de confidentialité</a>.</span></label>`:""}
    ${S.err?`<div class="banner">${esc(S.err)}</div>`:""}
    <button class="btn" type="submit">${reg?"Créer mon compte":"Me connecter"}</button>
   </form>
-  ${S.cfg.googleClientId?`<div class="or">ou</div><div class="google" id="gbtn"></div>`:""}
+  ${S.cfg.googleClientId?`<div class="or">ou</div><div class="google" id="gbtn"></div><p class="muted" style="font-size:12px;margin:0;text-align:center">En continuant avec Google, vous confirmez avoir 18 ans ou plus et acceptez les <a href="/conditions" target="_blank">conditions</a> et la <a href="/confidentialite" target="_blank">politique de confidentialité</a>.</p>`:""}
   <div class="or">pour découvrir</div>
   <button class="btn ghost" id="demoBtn">Voir la démo : une soirée fictive en accéléré</button>
-  <p class="note">Réservé aux 18 ans et plus. Les taux affichés sont des estimations, jamais une autorisation de conduire.</p>
+  <p class="note">Réservé aux 18 ans et plus. Les taux affichés sont des estimations, jamais une autorisation de conduire. <a href="/confidentialite">Confidentialité</a> · <a href="/conditions">Conditions</a></p>
   </section>`;
 }
 function viewProfile(){
@@ -285,8 +286,11 @@ async function loadWeek(){ try{ S.week=await api("GET","/api/me/week") }catch(e)
 function bindOut(){
   const on=(id,f)=>{const el=$("#"+id); if(el) el.onclick=f};
   on("mLogin",()=>{S.authMode="login";S.err="";render()}); on("mReg",()=>{S.authMode="register";S.err="";render()});
-  const f=$("#authForm"); if(f) f.onsubmit=e=>{e.preventDefault(); run(async()=>{
-    await api("POST",S.authMode==="register"?"/api/auth/register":"/api/auth/login",{email:$("#email").value,password:$("#pass").value}); await afterLogin() })};
+  const f=$("#authForm"); if(f){ f.oninput=()=>{S.fEmail=$("#email").value;S.fConsent=!!$("#consent")?.checked}; f.onchange=f.oninput }
+  if(f) f.onsubmit=e=>{e.preventDefault(); S.fEmail=$("#email").value; S.fConsent=!!$("#consent")?.checked; const pw=$("#pass").value;
+    if(S.authMode==="register"&&!S.fConsent){ flash("Case à cocher","Cochez la case d'acceptation pour créer votre compte."); $("#consent").focus(); return }
+    run(async()=>{
+    await api("POST",S.authMode==="register"?"/api/auth/register":"/api/auth/login",{email:S.fEmail,password:pw}); await afterLogin() })};
   on("demoBtn",startDemo);
   on("saveProf",()=>run(async()=>{ const r=await api("PUT","/api/me",readProfile()); S.user=r.user; await loadWeek(); S.screen=S.code?"party":"home"; render(); if(S.code) refresh() }));
   on("back",()=>{S.err="";S.screen=S.code?"party":"home";render()});

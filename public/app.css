@@ -120,3 +120,4 @@ body.isdemo{padding-bottom:200px}
 .mrow input,.mrow select{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:9px 8px;color:var(--fg);font:inherit;font-size:14px;min-width:0;width:100%}
 .drinks.locked .drink:not(.water){opacity:.35;pointer-events:none}
 @media (max-width:380px){.mrow{grid-template-columns:1fr 1fr}.mrow b{grid-column:1/-1}.mrow.add{grid-template-columns:1fr 1fr}.mrow.add button{grid-column:1/-1}}
+.consent{align-items:flex-start;justify-content:flex-start;font-size:13px;line-height:1.45}.consent input{flex:none;margin-top:2px}.consent a,.note a,#app .muted a{color:var(--accent)}

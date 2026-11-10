@@ -23,6 +23,7 @@ app.get("/healthz", (req, res) => res.send("ok"));
 // Les erreurs des routes async remontent ici (Express 5).
 auth.routes(app);
 parties.routes(app);
+require("./legal").routes(app);
 
 /* Documentation (réservée aux administrateurs) : docs/index.json + PDF */
 const DOCS = path.join(__dirname, "..", "docs");

@@ -9,6 +9,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 # Historique des versions : une ligne par lot important (la plus récente en haut)
 HISTORIQUE = [
+    ("10/11/2026", "0.4", "Pages publiques « Politique de confidentialité » et « Conditions d'utilisation » ; consentement explicite à la création du compte ; connexion Google active."),
     ("10/11/2026", "0.3", "Repas : saisie des repas du jour avant le premier verre, ajout d'un repas à tout moment, question « avez-vous mangé ? » aux heures des repas ; le type de repas module l'absorption et le pic."),
     ("10/11/2026", "0.2", "Onglet Documentation réservé aux admins (présentation, guide, check-list, services externes) ; en-tête compacté."),
     ("10/11/2026", "0.1", "Socle web en ligne sur Render : comptes, soirées par code en temps réel, calcul serveur des taux et des titres, avatar, mode démo, suivi 7 jours, appli installable, premières règles anti-triche."),

@@ -28,3 +28,5 @@ services:
         sync: false
       - key: ADMIN_EMAILS
         sync: false
+      - key: CONTACT_EMAIL
+        sync: false

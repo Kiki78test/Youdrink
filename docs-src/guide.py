@@ -116,7 +116,9 @@ ch("Fiabilité et anti-triche", """<p>Le classement récompense la modération :
 
 ch("Compte et données", """<ul><li><b>Se déconnecter</b> : Profil → « Me déconnecter ».</li>
 <li><b>Supprimer son compte</b> : Profil → « Supprimer mon compte et toutes mes données », puis confirmer. Profil, verres et titres sont effacés définitivement.</li>
-<li><b>Données gardées</b> : e-mail, mot de passe chiffré, profil, verres, titres. Hébergement Render à Francfort (Union européenne).</li></ul>""")
+<li><b>Données gardées</b> : e-mail, mot de passe chiffré, profil, verres, repas, titres. Hébergement Render à Francfort (Union européenne).</li>
+<li><b>Consentement</b> : à la création du compte, une case à cocher confirme l'âge (18 ans et plus) et l'accord pour le traitement des consommations, qui sont des données de santé. Avec Google, la même mention s'affiche sous le bouton.</li>
+<li><b>Pages publiques</b> : <code>/confidentialite</code> (données, sous-traitants, durée, droits, CNIL) et <code>/conditions</code> (un jeu et pas une mesure, 18 ans, modération, responsabilité), liées depuis l'écran de connexion. L'adresse de contact vient de la variable Render <code>CONTACT_EMAIL</code>.</li></ul>""")
 
 ch("Administration", """<ul><li><b>Comptes admin</b> : variable Render <code>ADMIN_EMAILS</code> (adresses séparées par des virgules). Un admin voit le bouton « Docs » en haut de l'écran.</li>
 <li><b>Documentation</b> : PDF du dossier <code>docs/</code> listés dans <code>docs/index.json</code> (titre, description, date, catégorie), accessibles aux seuls admins. Sources dans <code>docs-src/</code>, régénérées par <code>docs-src/build.sh</code>.</li>
