@@ -55,7 +55,7 @@ ch("Le taux estimé", """<p>Alamb’hic estime votre taux minute par minute avec
 <tr><td>Interdit de conduire</td><td>à partir de 0,5 g/L</td></tr><tr><td>Au-dessus du plafond</td><td>à partir de votre plafond</td></tr>
 <tr><td>Alerte</td><td>à partir de 1,5 g/L</td></tr></table>
 <p>L'écran Moi montre aussi le pic de la soirée, le nombre de verres standard et l'heure estimée du retour à 0.</p>
-<p><b>La jauge en alambic</b> : le taux s'affiche dans un tuyau en serpentin qui se remplit de potion, avec les repères 0,5, plafond et 1,2 g/L. La potion avance doucement à chaque changement et prend la couleur de l'état ; des bulles remontent quand le taux monte et redescendent quand il baisse. À chaque verre d'alcool, une goutte vole du bouton touché jusqu'à l'entrée du tuyau.</p>
+<p><b>La jauge en spirale</b> : à côté de l'avatar, un serpentin d'alambic en spirale se remplit de potion à mesure que le taux monte. Elle est volontairement indicative, sans graduation : le chiffre exact reste affiché à côté. La potion prend la couleur de l'état, des bulles remontent quand le taux monte et redescendent quand il baisse. À chaque verre d'alcool, une goutte vole du bouton touché jusqu'à l'entrée de la spirale.</p>
 <div class="note warn"><b>Une estimation, jamais une autorisation de conduire.</b> L'écart avec un éthylotest peut dépasser 0,2 g/L. Après avoir bu, on ne prend pas le volant.</div>""")
 
 ch("Courbes, potes et fil", f"""<div class="shots">{shot("demo-courbes", "Courbes de la soirée")}{shot("demo-classement", "Classement")}{shot("demo-fil", "Fil de la soirée")}</div>

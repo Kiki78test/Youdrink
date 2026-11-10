@@ -53,8 +53,7 @@ function viewMe(p,now){
   return `${needMeals?viewMealsFirst():mealQuestion()}<section>
   <div class="card" style="display:flex;flex-direction:column;gap:12px">
     <div class="row" style="justify-content:space-between"><span class="label">${esc(my.pseudo)} · taux estimé</span><span class="state" style="color:${col}">${lab}</span></div>
-    <div class="row" style="gap:16px;flex-wrap:nowrap">${avx(p,96,lab,"me")}<div class="bac">${fmt(s.cur)}<small>g/L</small></div></div>
-    ${gauge(s.cur,maxB,cap,col,s.cur<s.prev-0.004)}
+    <div class="row merow">${avx(p,88,lab,"me")}${gauge(s.cur,maxB,cap,col,s.cur<s.prev-0.004)}<div class="bac">${fmt(s.cur)}<small>g/L</small></div></div>
     <div class="muted" style="font-size:13px">${sub}. Plafond perso : ${fmt(cap)} g/L.</div>
   </div></section>
   <section><h2>${my.sam?"Sam boit de l'eau":"Ajouter un verre"}</h2>
@@ -95,23 +94,19 @@ function viewChart(list,now){
 }
 /* ---------- animations ---------- */
 const REDUCE=(()=>{try{return matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){return false}})();
-/* Jauge en serpentin d'alambic : la potion avance dans le tuyau avec le taux. */
-const GX0=10, GX1=300, GY=26, GA=9, GP=46;
-const gy=x=>GY+GA*Math.sin(2*Math.PI*(x-GX0)/GP);
-const GPATH=(()=>{let d=`M${GX0} ${gy(GX0).toFixed(1)}`;for(let x=GX0+3;x<=GX1;x+=3)d+=`L${x} ${gy(x).toFixed(1)}`;return d})();
+/* Jauge en spirale d'alambic : le serpentin se remplit de potion, sans graduation (indicatif). */
+const SPIRAL=(()=>{const cx=34,cy=34,turns=2.6,r0=29,r1=7,n=140;let d="";
+  for(let k=0;k<=n;k++){const t=k/n, a=-Math.PI/2+t*turns*2*Math.PI, r=r0-(r0-r1)*t; d+=(k?"L":"M")+(cx+r*Math.cos(a)).toFixed(2)+" "+(cy+r*Math.sin(a)).toFixed(2)}
+  return d})();
 let gaugePrev=null;
 function gauge(cur,maxB,cap,col,down){
   const r=Math.max(0,Math.min(1,cur/maxB)), from=gaugePrev===null?r:gaugePrev; gaugePrev=r;
-  const fx=GX0+r*(GX1-GX0), ticks=[0.5,cap,1.2].filter((v,i,a)=>a.indexOf(v)===i&&v<maxB);
-  const bub=r>0.02?[0,1,2].map(i=>`<circle class="gb" cx="${(fx-6-i*9).toFixed(1)}" cy="${gy(Math.max(GX0,fx-6-i*9)).toFixed(1)}" r="${2.2-i*0.4}" style="animation-delay:${i*0.35}s"/>`).join(""):"";
-  return `<div class="gauge${down?" down":""}"><svg viewBox="0 0 320 58" role="img" aria-label="Jauge du taux : ${fmt(cur)} g/L">
-    <path d="${GPATH}" class="gt"/><path d="${GPATH}" class="gi"/>
-    <path d="${GPATH}" class="pot" pathLength="100" stroke="${col}" style="stroke-dashoffset:${(100-from*100).toFixed(2)}" data-to="${(100-r*100).toFixed(2)}"/>
-    <path d="${GPATH}" class="gs" transform="translate(0 -2.2)"/>
-    <g class="gbs">${bub}</g>
-    <circle cx="${GX1+8}" cy="${gy(GX1).toFixed(1)}" r="7" class="gend"/>
-    ${ticks.map(v=>{const x=GX0+(v/maxB)*(GX1-GX0);return `<line x1="${x}" x2="${x}" y1="${GY-GA-6}" y2="${GY-GA-1}" class="gk"/><text x="${x}" y="54" class="gl">${fmt(v)}</text>`}).join("")}
-  </svg></div>`;
+  return `<div class="gauge spiral${down?" down":""}"><svg viewBox="0 0 68 68" role="img" aria-label="Jauge indicative du taux">
+    <path d="M34 -6 V5" class="gt"/><path d="M34 -6 V5" class="gi"/>
+    <path d="${SPIRAL}" class="gt"/><path d="${SPIRAL}" class="gi"/>
+    <path d="${SPIRAL}" class="pot" pathLength="100" stroke="${col}" style="stroke-dashoffset:${(100-from*100).toFixed(2)}" data-to="${(100-r*100).toFixed(2)}"/>
+    <circle cx="34" cy="34" r="4.2" class="gend"/>
+  </svg>${r>0.02?'<i class="gbub b1"></i><i class="gbub b2"></i>':""}</div>`;
 }
 function animateGauge(){
   document.querySelectorAll(".gauge .pot").forEach(p=>{ if(REDUCE){p.style.strokeDashoffset=p.dataset.to;return}
@@ -121,7 +116,7 @@ function animateGauge(){
 function flyDrop(rect){
   if(REDUCE||!rect) return;
   const go=()=>{ const g=document.querySelector(".gauge svg"); if(!g) return; const t=g.getBoundingClientRect();
-    const x0=rect.left+rect.width/2, y0=rect.top+rect.height/2, x1=t.left+t.width*0.04, y1=t.top+t.height*0.42;
+    const x0=rect.left+rect.width/2, y0=rect.top+rect.height/2, x1=t.left+t.width*0.5, y1=t.top-2;
     const d=document.createElement("div"); d.className="dropfx"; document.body.appendChild(d);
     const mx=(x0+x1)/2, my=Math.min(y0,y1)-90;
     const a=d.animate([{transform:`translate(${x0}px,${y0}px) scale(.6)`,opacity:0},{transform:`translate(${mx}px,${my}px) scale(1)`,opacity:1,offset:.45},{transform:`translate(${x1}px,${y1}px) scale(.8)`,opacity:1}],{duration:700,easing:"cubic-bezier(.4,0,.2,1)"});
