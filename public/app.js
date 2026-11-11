@@ -168,7 +168,11 @@ function viewRank(list,now){
 const {MEALS,MEAL_ORDER}=YD;
 const SLOTS=[{k:"matin",l:"Petit-déjeuner",h:"08:00",def:"light",from:6,to:10.5},{k:"midi",l:"Déjeuner",h:"12:30",def:"full",from:11.5,to:15},
   {k:"gouter",l:"Goûter",h:"16:30",def:"snack",from:15.5,to:18},{k:"soir",l:"Dîner",h:"20:00",def:"full",from:18.5,to:22.5}];
+/* La question « avez-vous mangé ? » ne s'affiche que sur les vrais créneaux de repas (déjeuner 12 h-14 h 30, dîner 19 h 30-22 h). */
+const ASK={midi:[12,14.5],soir:[19.5,22]};
 const myMeals=()=>demo?(demoPlayers[S.me]?.meals||[]):(S.meals||[]);
+/* heure saisie dans le futur (au-delà de 15 min) : refusée plutôt que reportée à la veille */
+const futureHM=hmS=>{const [h,m]=hmS.split(":").map(Number);const d=new Date(NOW());d.setHours(h,m,0,0);return d.getTime()>NOW()+15*MIN&&d.getHours()>=6};
 const atHM=hmS=>{const [h,m]=hmS.split(":").map(Number);const d=new Date(NOW());d.setHours(h,m,0,0);if(d.getTime()>NOW()+15*MIN)d.setDate(d.getDate()-1);return d.getTime()};
 const hourNow=()=>{const d=new Date(NOW());return d.getHours()+d.getMinutes()/60};
 function kindSelect(id,val,withNone){return `<select id="${id}">${withNone?`<option value="">Rien</option>`:""}${MEAL_ORDER.map(k=>`<option value="${k}" ${val===k?"selected":""}>${MEALS[k].l}</option>`).join("")}</select>`}
@@ -176,12 +180,12 @@ function viewMealsFirst(){
   const h=hourNow(), past=SLOTS.filter(x=>x.from<=h);
   return `<section><div class="card meals1"><span class="label" style="color:var(--accent)">Avant votre premier verre</span>
   <h2>Qu'avez-vous mangé aujourd'hui ?</h2>
-  <p class="muted" style="margin:0;font-size:13px">Un repas ralentit le passage de l'alcool dans le sang et baisse le pic. Corrigez l'heure si besoin.</p>
-  ${(past.length?past:SLOTS.slice(0,1)).map(x=>`<div class="mrow"><b>${x.l}</b><input type="time" id="mt-${x.k}" value="${x.h}" aria-label="Heure du ${x.l}">${kindSelect("mk-"+x.k,x.def,true)}</div>`).join("")}
+  <p class="muted" style="margin:0;font-size:13px">Un repas ralentit le passage de l'alcool dans le sang et baisse le pic. Pour chaque repas pris, indiquez son type et son heure.</p>
+  ${(past.length?past:SLOTS.slice(0,1)).map(x=>`<div class="mrow"><b>${x.l}</b><input type="time" id="mt-${x.k}" value="" aria-label="Heure du ${x.l}" placeholder="${x.h}">${kindSelect("mk-"+x.k,x.def,true)}</div>`).join("")}
   <div class="row"><button class="btn" id="mealsOk">Valider mes repas</button><button class="btn ghost" id="mealsNone">Rien mangé</button></div></div></section>`;
 }
 function mealSlotNow(){
-  const h=hourNow(); const sl=SLOTS.find(x=>x.k!=="matin"&&h>=x.from+0.5&&h<=x.to); if(!sl) return null;
+  const h=hourNow(); const sl=SLOTS.find(x=>ASK[x.k]&&h>=ASK[x.k][0]&&h<=ASK[x.k][1]); if(!sl) return null;
   const since=atHM(String(Math.floor(sl.from-1)).padStart(2,"0")+":00");
   if(myMeals().some(m=>m.t>=since)) return null;
   const key=`yd_mq_${new Date(NOW()).toDateString()}_${sl.k}`, until=ls.get(key,0);
@@ -191,14 +195,14 @@ function mealSlotNow(){
 function mealQuestion(){
   if(demo) return ""; const sl=mealSlotNow(); if(!sl) return "";
   return `<section><div class="card mq"><span class="label" style="color:var(--care)">Il est ${hm(NOW())}</span><h2>${sl.k==="soir"?"Avez-vous dîné ?":sl.k==="midi"?"Avez-vous déjeuné ?":"Avez-vous mangé quelque chose ?"}</h2>
-  <div class="row">${MEAL_ORDER.map(k=>`<button class="btn small" data-mq="${k}">Oui : ${MEALS[k].l.toLowerCase()}</button>`).join("")}</div>
+  <div class="mrow"><b>Oui, à</b><input type="time" id="mqT" value="" aria-label="Heure du repas" placeholder="${sl.h}">${kindSelect("mqK",sl.def,false)}<button class="btn small" id="mqOk">Valider</button></div>
   <div class="row"><button class="btn ghost small" data-mqno="45">Pas encore</button><button class="btn ghost small" data-mqno="-1">Je ne mangerai pas</button></div></div></section>`;
 }
 function viewMeals(){
   const ms=myMeals().slice().sort((a,b)=>b.t-a.t);
   return `<section><h2>Mes repas</h2>
   ${ms.length?`<div class="list">${ms.map(m=>`<div class="item"><span class="t">${hm(m.t)}</span><div class="grow"><b>${MEALS[m.kind]?.l||m.kind}</b> <span class="muted">${MEALS[m.kind]?.d||""}</span></div><button class="x" data-mdel="${m.id??m.t}" aria-label="Supprimer ce repas">×</button></div>`).join("")}</div>`:`<p class="muted" style="margin:0">Aucun repas noté ces dernières 24 h : l'alcool est compté à jeun.</p>`}
-  <div class="mrow add"><input type="time" id="mAddT" value="${new Date(NOW()).toTimeString().slice(0,5)}" aria-label="Heure du repas">${kindSelect("mAddK","full",false)}<button class="btn small" id="mAdd">Ajouter un repas</button></div></section>`;
+  <div class="mrow add"><input type="time" id="mAddT" value="" aria-label="Heure du repas">${kindSelect("mAddK","full",false)}<button class="btn small" id="mAdd">Ajouter un repas</button></div></section>`;
 }
 async function addMeals(list){
   if(demo){ const p=demoPlayers[S.me]; p.meals=[...(p.meals||[]),...list]; render(); return }
@@ -209,13 +213,17 @@ async function addMeals(list){
 async function loadMeals(){ if(demo) return; try{ S.meals=(await api("GET","/api/me/meals")).meals }catch(e){} }
 function bindMeals(){
   const ok=$("#mealsOk"); if(ok) ok.onclick=()=>run(async()=>{
-    const list=SLOTS.filter(x=>$("#mk-"+x.k)&&$("#mk-"+x.k).value).map(x=>({kind:$("#mk-"+x.k).value,t:atHM($("#mt-"+x.k).value||x.h)}));
+    const chosen=SLOTS.filter(x=>$("#mk-"+x.k)&&$("#mk-"+x.k).value), miss=chosen.find(x=>!$("#mt-"+x.k).value);
+    if(miss) throw new Error(`Indiquez l'heure du ${miss.l.toLowerCase()}.`);
+    const fut=chosen.find(x=>futureHM($("#mt-"+x.k).value)); if(fut) throw new Error(`L'heure du ${fut.l.toLowerCase()} n'est pas encore passée.`);
+    const list=chosen.map(x=>({kind:$("#mk-"+x.k).value,t:atHM($("#mt-"+x.k).value)}));
     if(list.some(m=>m.t>NOW()+15*MIN)) throw new Error("Un repas ne peut pas être dans le futur.");
     await addMeals(list); flash("Repas enregistrés",list.length?list.map(m=>`${MEALS[m.kind].l} à ${hm(m.t)}`).join(", "):"Aucun repas : l'alcool sera compté à jeun.") });
   const none=$("#mealsNone"); if(none) none.onclick=()=>run(async()=>{ await addMeals([]); });
-  document.querySelectorAll("[data-mq]").forEach(b=>b.onclick=()=>run(async()=>{ await addMeals([{kind:b.dataset.mq,t:NOW()}]); flash("Bon appétit","Repas noté : l'alcool passera plus lentement.") }));
+  const mq=$("#mqOk"); if(mq) mq.onclick=()=>run(async()=>{ const v=$("#mqT").value; if(!v) throw new Error("Indiquez l'heure du repas."); if(futureHM(v)) throw new Error("Cette heure n'est pas encore passée.");
+    const t=atHM(v); await addMeals([{kind:$("#mqK").value,t}]); flash("Bon appétit",`${MEALS[$("#mqK")?.value||"full"]?.l||"Repas"} noté à ${hm(t)} : l'alcool passera plus lentement.`) });
   document.querySelectorAll("[data-mqno]").forEach(b=>b.onclick=()=>{ const sl=mealSlotNow(); if(sl) ls.set(sl.key,+b.dataset.mqno<0?-1:NOW()+45*MIN); render() });
-  const ad=$("#mAdd"); if(ad) ad.onclick=()=>run(async()=>{ const t=atHM($("#mAddT").value||"12:00"); await addMeals([{kind:$("#mAddK").value,t}]); flash("Repas ajouté",`${MEALS[$("#mAddK")?.value||"full"]?.l||"Repas"} à ${hm(t)}`) });
+  const ad=$("#mAdd"); if(ad) ad.onclick=()=>run(async()=>{ const v=$("#mAddT").value; if(!v) throw new Error("Indiquez l'heure du repas."); if(futureHM(v)) throw new Error("Cette heure n'est pas encore passée."); const t=atHM(v); await addMeals([{kind:$("#mAddK").value,t}]); flash("Repas ajouté",`${MEALS[$("#mAddK")?.value||"full"]?.l||"Repas"} à ${hm(t)}`) });
   document.querySelectorAll("[data-mdel]").forEach(b=>b.onclick=()=>run(async()=>{ const id=+b.dataset.mdel;
     if(demo){const p=demoPlayers[S.me];p.meals=p.meals.filter(m=>m.t!==id);render();return}
     await api("DELETE","/api/me/meals/"+id); await loadMeals(); await refresh() }));

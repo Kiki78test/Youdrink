@@ -47,7 +47,7 @@ A_TESTER = [
     ("test", "<b>Amis</b> : s'ajouter mutuellement avec le lien d'invitation, voir le taux de l'autre pendant une soirée, couper le partage."),
     ("test", "<b>Connexion Google</b> : se connecter avec « Continuer avec Google » depuis le téléphone."),
     ("test", "<b>Création de compte et profil</b> sur alambhic.onrender.com, depuis le téléphone puis l'ordinateur."),
-    ("test", "<b>Repas</b> : en entrant dans la soirée, renseigner les repas du jour (heure et type) avant le premier verre ; ajouter un repas en cours de soirée ; vérifier la question « avez-vous dîné ? » entre 19 h et 22 h 30."),
+    ("test", "<b>Repas</b> : en entrant dans la soirée, renseigner les repas du jour (heure et type) avant le premier verre ; ajouter un repas en cours de soirée ; vérifier la question « avez-vous dîné ? » entre 19 h 30 et 22 h (et « avez-vous déjeuné ? » entre 12 h et 14 h 30), avec l'heure du repas à indiquer."),
     ("test", "<b>Installation</b> : menu du navigateur → « Ajouter à l'écran d'accueil »."),
     ("test", "<b>Mode démo</b> : curseur et lecture, déblocage des titres, évolution des avatars."),
     ("test", "<b>Réveil du serveur gratuit</b> : après 15 min sans visite, la première ouverture prend environ 30 à 50 s."),
