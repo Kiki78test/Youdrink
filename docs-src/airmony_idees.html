@@ -1,0 +1,60 @@
+<!doctype html><html lang='fr'><head><meta charset='utf-8'><title>Idées venues d'Airmony</title><style>
+@font-face{font-family:'Bricolage';font-weight:600;src:url(fonts/bricolage-grotesque-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Bricolage';font-weight:800;src:url(fonts/bricolage-grotesque-latin-800-normal.woff2) format('woff2')}
+
+:root{--bg:#0a1626;--surface:#10233b;--surface2:#16304f;--line:#24446e;--fg:#f4f8ff;--muted:#9fb3cc;
+--accent:#2f8cff;--ink:#ffffff;--ok:#5bc88a;--warn:#ffd34d;--bad:#ff6b6b;--care:#ff9f43;
+--paper:#f7faff;--paper2:#e8f1fc;--text:#0d2747;--soft:#4f6685;--rule:#d3e1f2;--deep:#1c6fe0}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,'DejaVu Sans',sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+h1,h2,h3{font-family:'Bricolage','Inter Display',Inter,sans-serif;font-weight:800;letter-spacing:-.01em;margin:0;text-wrap:balance}
+b{font-weight:600}
+code{font-family:'DejaVu Sans Mono',monospace;font-size:.88em;background:rgba(47,140,255,.12);padding:1px 5px;border-radius:4px}
+
+@page{size:210mm 297mm;margin:14mm 16mm 17mm}
+body{background:var(--paper);color:var(--text);font-size:10.2pt;line-height:1.5}
+.page{page-break-after:always}
+.page:last-child{page-break-after:auto}
+.band{background:var(--bg);color:var(--fg);border-radius:4mm;margin:0 0 8mm;padding:8mm 9mm 7mm;display:flex;justify-content:space-between;align-items:flex-end;gap:10mm}
+.band img{height:12mm;display:block}
+.band .meta{text-align:right;color:var(--muted);font-size:9pt;line-height:1.4}
+.band h1{color:var(--fg);font-size:22pt;margin-top:4mm}
+.lead{font-size:12pt;color:var(--soft);max-width:160mm;margin:0 0 8mm}
+h2{font-size:16pt;margin:8mm 0 3mm;color:var(--text);display:flex;align-items:baseline;gap:3mm}
+h2 .n{font-family:'Bricolage',sans-serif;color:var(--deep);font-size:12pt}
+h3{font-size:11.5pt;margin:5mm 0 1.5mm}
+p{margin:0 0 2.5mm}
+ul{margin:0 0 3mm;padding-left:5mm}
+li{margin:0 0 1.2mm}
+table{width:100%;border-collapse:collapse;margin:2mm 0 4mm;font-size:9.4pt}
+th{text-align:left;font-weight:600;color:var(--soft);text-transform:uppercase;letter-spacing:.06em;font-size:7.8pt;border-bottom:1.4px solid var(--text);padding:1.6mm 2mm}
+td{border-bottom:1px solid var(--rule);padding:1.8mm 2mm;vertical-align:top}
+.note{border-left:3px solid var(--accent);background:var(--paper2);padding:3mm 4mm;margin:3mm 0 4mm;font-size:9.6pt}
+.warn{border-left-color:var(--bad)}
+.shots{display:flex;gap:5mm;margin:3mm 0 4mm;align-items:flex-start}
+.shots figure{margin:0;flex:1}
+.shots img{width:100%;border-radius:3.5mm;border:1px solid #000;display:block}
+.shots figcaption{font-size:8.4pt;color:var(--soft);margin-top:1.5mm}
+.split{display:grid;grid-template-columns:1fr 52mm;gap:7mm;align-items:start}
+.split img{width:100%;border-radius:3.5mm;border:1px solid #000}
+.foot{display:none}
+h2,h3{break-after:avoid}
+tr,li,.note,figure{break-inside:avoid}
+.toc{columns:2;column-gap:10mm;margin:0;padding-left:0;list-style:none}
+.toc li{display:flex;gap:3mm;break-inside:avoid;padding:1.4mm 0;border-bottom:1px solid var(--rule)}
+.toc .n{font-family:'Bricolage',sans-serif;color:var(--deep);width:7mm}
+.hist td:first-child{white-space:nowrap;font-variant-numeric:tabular-nums}
+
+table.f{width:100%;border-collapse:collapse;font-size:8.6pt;margin-bottom:5mm}
+table.f th{background:var(--paper2);text-align:left;padding:2mm;font-weight:600}
+table.f td{padding:2mm;border-bottom:1px solid var(--rule);vertical-align:top}
+table.f td.n{font-family:'Bricolage',sans-serif;font-weight:800;font-size:12pt;width:7mm}
+table.f td.dec{width:22mm;border-left:1px dashed var(--rule)}
+table.f tr{break-inside:avoid}
+.prio{font-weight:600}
+</style></head><body><div class="page"><div class="band"><div><img src="../public/logo.png" alt="Alamb’hic"><h1>Idées venues d'Airmony</h1></div>
+<div class="meta">Pilotage du projet<br>Mis à jour le 11 novembre 2026</div></div>
+<p class="lead">Douze fonctions déjà construites dans Airmony qu'on peut reprendre dans Alamb’hic. À trancher plus tard : la colonne « Décision » est laissée vide.</p>
+<div class="note"><b>Recommandation</b> : commencer par 1 (badges long terme) et 2 (notifications push), qui apportent le plus au jeu, puis 5 (mot de passe oublié) et 4 (sécurité), presque gratuits. Les efforts sont des estimations, code d'Airmony réutilisé.</div>
+<h2>Rapide</h2><table class='f'><tr><th></th><th style='width:34mm'>Fonction</th><th>Dans Airmony</th><th>Pour Alamb’hic</th><th style='width:17mm'>Effort</th><th style='width:20mm'>Priorité proposée</th><th>Décision</th></tr><tr><td class='n'>1</td><td><b>Badges à paliers bronze, argent, or</b></td><td>28 badges à paliers calculés à partir de compteurs (<code>lib/badges.js</code>).</td><td>Trophées sur la durée en plus des titres de soirée : Chameau d'or (50 verres d'eau), Sam fidèle (5 soirées en Sam), soirées sans honte d'affilée, Habitué. Sert le suivi long terme pour réduire sa consommation.</td><td>1 à 2 jours</td><td class='prio'>Haute</td><td class='dec'></td></tr><tr><td class='n'>2</td><td><b>Notifications push du navigateur</b></td><td>Web Push, e-mail et cloche, avec catégories réglables par l'utilisateur (<code>lib/notify.js</code>).</td><td>Alertes copains, titres des amis et rappels « avez-vous mangé ? » reçus appli fermée, sans attendre l'APK.</td><td>1 jour</td><td class='prio'>Haute</td><td class='dec'></td></tr><tr><td class='n'>3</td><td><b>Garde-fou sur les messages</b></td><td>Détection des insultes et coordonnées, même déguisées (<code>lib/guard.js</code>).</td><td>Filtre pour un futur tchat ou des commentaires dans le fil de soirée.</td><td>½ jour</td><td class='prio'>Plus tard (avec le tchat)</td><td class='dec'></td></tr><tr><td class='n'>4</td><td><b>Sécurité automatique</b></td><td>Contrôle des dépendances chaque lundi sur GitHub, alerte UptimeRobot si le site tombe.</td><td>Copie presque à l'identique : fichier GitHub Actions et sonde sur <code>/healthz</code>.</td><td>1 heure</td><td class='prio'>Haute</td><td class='dec'></td></tr><tr><td class='n'>5</td><td><b>Mot de passe oublié par e-mail</b></td><td>Envoi d'e-mails par Resend (<code>lib/mail.js</code>).</td><td>Lien de réinitialisation par e-mail ; déjà prévu dans la check-list.</td><td>½ jour</td><td class='prio'>Haute</td><td class='dec'></td></tr></table><h2>Moyen</h2><table class='f'><tr><th></th><th style='width:34mm'>Fonction</th><th>Dans Airmony</th><th>Pour Alamb’hic</th><th style='width:17mm'>Effort</th><th style='width:20mm'>Priorité proposée</th><th>Décision</th></tr><tr><td class='n'>6</td><td><b>Assistant d'aide</b></td><td>Base de questions et réponses, enrichie par l'IA si une clé est configurée (<code>lib/helpkb.js</code>).</td><td>« Comment est calculé mon taux ? », « Pourquoi mon pic baisse après un repas ? », « Que veut dire tel titre ? ».</td><td>1 à 2 jours</td><td class='prio'>Moyenne</td><td class='dec'></td></tr><tr><td class='n'>7</td><td><b>Visite guidée</b></td><td>Visite guidée et découverte sans compte.</td><td>4 ou 5 bulles d'explication par-dessus le mode démo existant.</td><td>½ jour</td><td class='prio'>Moyenne</td><td class='dec'></td></tr><tr><td class='n'>8</td><td><b>Appli Android (APK)</b></td><td>Enveloppe Capacitor et fabrication automatique de l'APK sur GitHub Actions.</td><td>Voie la plus courte pour l'étape 2 : APK, widget « mes potes », notifications natives.</td><td>2 à 3 jours</td><td class='prio'>Moyenne (étape 2)</td><td class='dec'></td></tr><tr><td class='n'>9</td><td><b>Plusieurs langues</b></td><td>FR, EN, ES, PT avec détection de la langue du navigateur.</td><td>Utile avant l'ouverture publique, surtout pour les soirées internationales.</td><td>2 à 3 jours</td><td class='prio'>Basse</td><td class='dec'></td></tr></table><h2>Phase business</h2><table class='f'><tr><th></th><th style='width:34mm'>Fonction</th><th>Dans Airmony</th><th>Pour Alamb’hic</th><th style='width:17mm'>Effort</th><th style='width:20mm'>Priorité proposée</th><th>Décision</th></tr><tr><td class='n'>10</td><td><b>Paiements Stripe</b></td><td>Paiement par carte, empreinte bancaire, versements (<code>lib/pay.js</code>, <code>lib/stripe.js</code>).</td><td>Abonnement Premium et Pass soirée du business plan.</td><td>2 jours</td><td class='prio'>Avec le Premium</td><td class='dec'></td></tr><tr><td class='n'>11</td><td><b>Mode écran TV et télécommande</b></td><td>Le téléphone pilote, la TV diffuse.</td><td>« Soirée du bar » sur grand écran : courbes en direct, avatars, classement de la salle.</td><td>2 à 3 jours</td><td class='prio'>Avec les bars</td><td class='dec'></td></tr><tr><td class='n'>12</td><td><b>Page publique partageable</b></td><td>Page publique d'artiste et widget à intégrer.</td><td>Récapitulatif de soirée à partager (courbes, titres, avatars), moteur du bouche-à-oreille.</td><td>1 à 2 jours</td><td class='prio'>Moyenne</td><td class='dec'></td></tr></table>
+<div class="foot"><span>Alamb’hic · Idées venues d'Airmony</span><span>11 novembre 2026</span></div></div></body></html>

@@ -14,6 +14,13 @@
   "cat": "📋 Pilotage du projet"
  },
  {
+  "file": "01-pilotage/idees-airmony.pdf",
+  "title": "Idées venues d'Airmony",
+  "desc": "Douze fonctions d'Airmony transposables (badges, push, sécurité, aide, APK, Stripe, écran TV…), effort, priorité proposée, décision à prendre",
+  "date": "2026-11-11",
+  "cat": "📋 Pilotage du projet"
+ },
+ {
   "file": "02-presentation/presentation-complete.pdf",
   "title": "Présentation complète",
   "desc": "Le concept, l'appli en images, les titres, l'avatar, la fiabilité, la feuille de route",
@@ -25,6 +32,13 @@
   "title": "Guide complet",
   "desc": "Mode d'emploi détaillé de toutes les fonctions, par sujet, avec l'historique des versions",
   "date": "2026-11-10",
+  "cat": "🎤 Présentation et guides"
+ },
+ {
+  "file": "02-presentation/titres-et-expressions.pdf",
+  "title": "Titres et expressions",
+  "desc": "Les titres actuels (Chameau, Fusée…), les stades de l'avatar, les expressions proposées comme nouveaux titres et le lexique des expressions françaises",
+  "date": "2026-11-11",
   "cat": "🎤 Présentation et guides"
  },
  {
